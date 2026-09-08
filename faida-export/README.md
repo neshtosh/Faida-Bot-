@@ -186,7 +186,7 @@ Railway is the recommended way to run Faida 24/7. The bot includes an HTTP healt
 
 - A [Railway](https://railway.app) account (free tier works)
 - A GitHub repo with this project pushed (or deploy via Railway CLI)
-- Node.js 18+ (Railway detects this automatically via Nixpacks)
+- Node.js 22+ (required by Baileys and Supabase; set via `.nvmrc` / `nixpacks.toml`)
 
 ### Step 1 — Push to GitHub
 

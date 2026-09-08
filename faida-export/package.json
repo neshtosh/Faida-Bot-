@@ -19,6 +19,9 @@
   ],
   "author": "Munene <munene.dev>",
   "license": "MIT",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.124.0",
     "@hapi/boom": "^10.0.1",

@@ -1,0 +1,3 @@
+# Force Node 22 on Railway (default Nixpacks uses Node 18)
+[variables]
+NIXPACKS_NODE_VERSION = "22"
