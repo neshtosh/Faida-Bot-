@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Environment & secrets
+.env
+.env.local
+
+# WhatsApp session
+**/.auth/
+
+# Logs
+logs/
+**/*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Stray lockfile at repo root
+/package-lock.json

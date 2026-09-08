@@ -1,0 +1,865 @@
+[
+  {
+    "id": "hustler-fund-personal",
+    "name": "Hustler Fund — Personal Loan",
+    "provider": "Government of Kenya",
+    "category": "financial",
+    "emoji": "💰",
+    "description": "Instant mobile loan from the government via Safaricom. Borrow up to Ksh 50,000 at just 8% per year (0.002% per day). Repay in 14 days. 5% of every loan goes into a savings account in your name.",
+    "amount": "Ksh 500 – Ksh 50,000",
+    "howToApply": "1. Dial *254# on Safaricom\n2. Select 'Hustler Fund'\n3. Choose 'Personal Finance'\n4. Enter amount and confirm with M-Pesa PIN",
+    "documents": "Safaricom SIM registered in your name (Huduma Namba or National ID used during SIM registration)",
+    "deadline": "Rolling — available 24/7",
+    "link": "https://hustlerfund.go.ke",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 99,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": "any",
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false,
+      "safaricomRequired": true
+    }
+  },
+  {
+    "id": "yedf-loan",
+    "name": "Youth Enterprise Development Fund (YEDF)",
+    "provider": "Government of Kenya — State Department for Youth",
+    "category": "financial",
+    "emoji": "💰",
+    "description": "Low-interest loans for young Kenyans to start or grow businesses. Interest rates from 0–8% per year. Can apply as an individual or as a group. Specifically supports youth in technology, agriculture, manufacturing, and services.",
+    "amount": "Up to Ksh 5,000,000",
+    "howToApply": "1. Register on yedf.go.ke\n2. Fill in the online application form\n3. Attach required documents\n4. Visit your Sub-County Youth Development Office for verification\n5. Wait for approval (typically 2–4 weeks)",
+    "documents": "National ID, KRA PIN, Business registration certificate (if existing business), Business plan, Recent passport photo, Bank statement (3 months)",
+    "deadline": "Rolling — apply any time",
+    "link": "https://yedf.go.ke",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 34,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": "any",
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "uwezo-fund",
+    "name": "Uwezo Fund",
+    "provider": "Government of Kenya — NG-CDF",
+    "category": "financial",
+    "emoji": "💰",
+    "description": "Interest-free loans for registered groups of youth, women, and persons with disabilities. The government gives money at constituency level — your group applies through the local NG-CDF office.",
+    "amount": "Ksh 50,000 – Ksh 500,000 (interest-free)",
+    "howToApply": "1. Form or join a registered group (min 10 members)\n2. Register the group with Department of Social Services\n3. Visit your constituency NG-CDF office\n4. Fill application form with group records\n5. Group repays over 12–24 months",
+    "documents": "Group registration certificate, Group minutes and constitution, Members' National IDs, Group bank account details, Group business plan",
+    "deadline": "Rolling — check with your constituency NG-CDF office",
+    "link": "https://uwezo.go.ke",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 35,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": "any",
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": true
+    }
+  },
+  {
+    "id": "women-enterprise-fund",
+    "name": "Women Enterprise Fund (WEF)",
+    "provider": "Government of Kenya",
+    "category": "financial",
+    "emoji": "💰",
+    "description": "Loans and capacity-building support specifically for women entrepreneurs. Apply individually or as a women's group. Funds disbursed through Equity Bank, KCB, and Co-op Bank. Also accessible via *254# on Safaricom.",
+    "amount": "Up to Ksh 5,000,000 (group). Individual amounts vary.",
+    "howToApply": "1. Dial *254# on Safaricom OR visit wef.go.ke\n2. Select Women Enterprise Fund\n3. Apply individually or as a registered women's group\n4. Funds disbursed through partner banks",
+    "documents": "National ID, KRA PIN, Business registration (if applicable), Group registration certificate (for group applications), Passport photo",
+    "deadline": "Rolling",
+    "link": "https://wef.go.ke",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 99,
+      "gender": "female",
+      "employed": "any",
+      "businessOwner": "any",
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "agpo",
+    "name": "AGPO — Government Tenders (30% Reserved)",
+    "provider": "National Treasury of Kenya",
+    "category": "financial",
+    "emoji": "🏛️",
+    "description": "30% of ALL government tenders are reserved for youth, women, and persons with disabilities by law. Once AGPO-certified, you can bid on government contracts worth millions — websites, printing, supplies, construction, services. Massively underused.",
+    "amount": "Varies — tenders range from Ksh 50,000 to millions",
+    "howToApply": "1. Register your business (sole proprietor or company)\n2. Get KRA PIN and tax compliance certificate\n3. Apply for AGPO certificate at agpo.go.ke\n4. Once certified, browse and bid on tenders at tenders.go.ke",
+    "documents": "Business registration certificate, KRA PIN, National ID, Tax compliance certificate, Bank account in business name",
+    "deadline": "Apply for AGPO certificate any time. Tenders are listed continuously.",
+    "link": "https://agpo.go.ke",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 35,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": true,
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "kiep-250",
+    "name": "KIEP 250+ Grant (World Bank)",
+    "provider": "Kenya Industry & Entrepreneurship Project / World Bank",
+    "category": "financial",
+    "emoji": "🌍",
+    "description": "Ksh 7.5 billion World Bank programme providing performance-based grants, mentorship, and technical assistance to Kenyan SMEs. Cohort II is currently open. If you have a business that has been operating for at least 2 years, this is one of the largest grant opportunities available.",
+    "amount": "Grant amount varies based on business needs and growth plan",
+    "howToApply": "1. Visit kiep.go.ke\n2. Check eligibility (2+ years in operation)\n3. Fill online application\n4. Shortlisted businesses receive site visits and tailored support packages",
+    "documents": "Business registration, KRA PIN, Audited accounts or financial statements (2 years), Business plan, National ID of directors",
+    "deadline": "Cohort II — check kiep.go.ke for current deadline",
+    "link": "https://kiep.go.ke",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 99,
+      "gender": "any",
+      "employed": false,
+      "businessOwner": true,
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false,
+      "businessAgeMin": 2
+    }
+  },
+  {
+    "id": "widu-africa",
+    "name": "WIDU Africa Grant",
+    "provider": "WIDU Africa (German Government-backed)",
+    "category": "financial",
+    "emoji": "🌍",
+    "description": "Grants of up to EUR 3,000 (first application) and EUR 5,000 (subsequent rounds) for Kenyan entrepreneurs. Especially relevant if you have relatives in EU countries, Switzerland, or Norway. Also runs #GreenKenya grants for eco-friendly businesses.",
+    "amount": "EUR 3,000 – EUR 5,000 (~Ksh 480,000 – Ksh 800,000)",
+    "howToApply": "1. Visit widu.africa\n2. Create an account\n3. Submit business profile and growth plan\n4. If you have a sponsor (EU-based relative), link their profile",
+    "documents": "National ID, Business registration, Business plan, Bank account details, Sponsor details (if applicable)",
+    "deadline": "Rolling — check widu.africa for active calls",
+    "link": "https://widu.africa",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 99,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": true,
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "ward-sme-grant",
+    "name": "Ward SME Grant (Ksh 50,000)",
+    "provider": "Government of Kenya / World Bank — Ward Level",
+    "category": "financial",
+    "emoji": "🏘️",
+    "description": "The government committed Ksh 5 billion for 100,000 small businesses — Ksh 50,000 per business across all 1,450 wards. This money is distributed at ward level. Most people don't know it exists. Visit your ward office and ask specifically about this fund.",
+    "amount": "Ksh 50,000 (grant — does not need to be repaid)",
+    "howToApply": "1. Visit your Ward Administrator's office\n2. Ask about the 'SME Ward Grant' or 'World Bank SME fund'\n3. Fill application at the ward office\n4. Provide required business documents",
+    "documents": "National ID, Business registration OR evidence of business activity, KRA PIN, Passport photo",
+    "deadline": "Ongoing — visit your ward office this week",
+    "link": "https://devolution.go.ke",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 99,
+      "gender": "any",
+      "employed": false,
+      "businessOwner": true,
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "sha-registration",
+    "name": "SHA — Social Health Authority Cover",
+    "provider": "Government of Kenya",
+    "category": "health",
+    "emoji": "🏥",
+    "description": "Kenya's new national health insurance replacing NHIF. Covers outpatient and inpatient services at government and accredited private hospitals. Every Kenyan should register. As of 2025, 4.5 million Kenyans have already received medical services worth Ksh 41 billion.",
+    "amount": "Healthcare coverage (not a cash benefit)",
+    "howToApply": "1. Dial *147# on any network OR visit sha.go.ke\n2. Register yourself and dependants\n3. Pay monthly contributions based on your income\n4. Use SHA card at any accredited facility",
+    "documents": "National ID or birth certificate, Huduma Namba (if available)",
+    "deadline": "Rolling — register now",
+    "link": "https://sha.go.ke",
+    "eligibility": {
+      "minAge": 0,
+      "maxAge": 99,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": "any",
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "disability-fund",
+    "name": "National Fund for the Disabled of Kenya (NFDK)",
+    "provider": "Government of Kenya",
+    "category": "health",
+    "emoji": "♿",
+    "description": "Financial grants, assistive devices, and support for persons with disabilities. Covers mobility aids, hearing aids, visual aids, and rehabilitation. Also funds disability-led businesses and organisations.",
+    "amount": "Varies — assistive devices, rehabilitation funding, and business grants",
+    "howToApply": "1. Get a disability certificate from the National Council for Persons with Disabilities\n2. Apply at nfdk.go.ke\n3. Specify the type of support needed",
+    "documents": "National ID, Disability assessment certificate (from NCPWD), Medical report from a registered doctor",
+    "deadline": "Rolling",
+    "link": "https://nfdk.go.ke",
+    "eligibility": {
+      "minAge": 0,
+      "maxAge": 99,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": "any",
+      "disability": true,
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "google-hustle-academy",
+    "name": "Google Hustle Academy",
+    "provider": "Google Africa",
+    "category": "employment",
+    "emoji": "🎓",
+    "description": "Free AI-powered business training, mentorship, and access to Google's entrepreneurial network for Kenyan SMEs. No cost to apply. Gives you credibility, skills, and investor connections. Applications open for 2026 cohort.",
+    "amount": "Free training + mentorship (no cash)",
+    "howToApply": "1. Search 'Google Hustle Academy Kenya 2026' for current application link\n2. Fill in the online application (takes ~20 minutes)\n3. Describe your business and growth plans",
+    "documents": "None required for initial application",
+    "deadline": "Check google.com/hustleacademy for current deadline",
+    "link": "https://grow.google/hustleacademy/",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 99,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": true,
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "nys-recruitment",
+    "name": "National Youth Service (NYS) Recruitment",
+    "provider": "Government of Kenya",
+    "category": "employment",
+    "emoji": "💼",
+    "description": "Government programme that provides skills training, employment, and stipends for young Kenyans. Covers construction, agriculture, ICT, healthcare, and more. Offers a pathway to government employment and entrepreneurship.",
+    "amount": "Monthly stipend during training + skills certification",
+    "howToApply": "1. Check nys.go.ke for open recruitment periods\n2. Apply online during recruitment windows\n3. Attend physical selection at your county NYS office",
+    "documents": "National ID, KCSE certificate, Birth certificate, Passport photos",
+    "deadline": "Recruitment opens periodically — check nys.go.ke",
+    "link": "https://nys.go.ke",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 26,
+      "gender": "any",
+      "employed": false,
+      "businessOwner": false,
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "lsk-legal-aid",
+    "name": "LSK Legal Aid — Free Legal Representation",
+    "provider": "Law Society of Kenya",
+    "category": "legal",
+    "emoji": "⚖️",
+    "description": "Free legal advice and representation for Kenyans who cannot afford a lawyer. Covers civil matters, family law, employment disputes, land cases, and more. Available through LSK offices in major towns.",
+    "amount": "Free legal services (no charge)",
+    "howToApply": "1. Visit the LSK office in your county town\n2. Explain your legal issue to the receptionist\n3. You will be assessed for eligibility (based on income)\n4. Assigned a pro bono lawyer if you qualify",
+    "documents": "National ID, Any documents related to your legal issue",
+    "deadline": "Rolling — walk-in or call ahead",
+    "link": "https://lsk.or.ke",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 99,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": "any",
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "judiciary-legal-aid",
+    "name": "Judiciary Legal Aid Service",
+    "provider": "Judiciary of Kenya",
+    "category": "legal",
+    "emoji": "⚖️",
+    "description": "The Judiciary provides free legal aid at court stations for those who cannot afford representation. Available in high courts and magistrate courts across Kenya. Especially useful for criminal matters and family disputes.",
+    "amount": "Free legal representation in court",
+    "howToApply": "1. Visit the nearest court station\n2. Go to the Legal Aid desk\n3. Explain your case and financial situation\n4. Receive free representation if eligible",
+    "documents": "National ID, Any court documents or charge sheets related to your case",
+    "deadline": "Available any court day",
+    "link": "https://judiciary.go.ke",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 99,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": "any",
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "boma-yangu",
+    "name": "Boma Yangu — Affordable Housing",
+    "provider": "Government of Kenya",
+    "category": "housing",
+    "emoji": "🏠",
+    "description": "Government affordable housing programme. Register to be allocated low-cost housing units across Kenya. Monthly contributions from Ksh 1,000. Units priced far below market rate for registered members.",
+    "amount": "Subsidised housing units (from Ksh 1,000/month contribution)",
+    "howToApply": "1. Visit bomayangu.go.ke\n2. Register with National ID and phone number\n3. Choose preferred county and unit type\n4. Make monthly contributions via M-Pesa\n5. Wait for allocation balloting",
+    "documents": "National ID, Active phone number, M-Pesa account",
+    "deadline": "Rolling — register now",
+    "link": "https://bomayangu.go.ke",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 99,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": "any",
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "inua-jamii",
+    "name": "Inua Jamii Cash Transfer Programme",
+    "provider": "Government of Kenya — Ministry of Labour & Social Protection",
+    "category": "financial",
+    "emoji": "🤝",
+    "description": "Monthly cash transfers for Kenya's most vulnerable: older persons aged 70+, orphans and vulnerable children (OVC), and persons with severe disabilities. Payments are made via M-Pesa every two months. Over 1.3 million households are enrolled nationwide.",
+    "amount": "Ksh 2,000 – Ksh 4,000 per month (varies by category)",
+    "howToApply": "1. Visit your Sub-County Social Development Office\n2. Ask for Inua Jamii registration\n3. Fill the application form for your category (elderly, OVC, or disability)\n4. Provide required documents for verification\n5. If approved, payments start within 2–3 months via M-Pesa",
+    "documents": "National ID or birth certificate, Huduma Namba, Disability assessment certificate (for PWD category), Death certificate of parent/guardian (for OVC), Proof of age (for elderly 70+)",
+    "deadline": "Rolling — register at your Sub-County office",
+    "link": "https://labour.go.ke/inua-jamii",
+    "eligibility": {
+      "minAge": 0,
+      "maxAge": 99,
+      "gender": "any",
+      "employed": false,
+      "businessOwner": "any",
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "hsnp",
+    "name": "Hunger Safety Net Programme (HSNP)",
+    "provider": "Government of Kenya / World Bank — NDMA",
+    "category": "financial",
+    "emoji": "🌾",
+    "description": "Cash transfer programme for the poorest households in Kenya's arid and semi-arid lands (ASAL). Covers Turkana, Marsabit, Mandera, Wajir, Garissa, Tana River, Isiolo, and Samburu counties. Payments every two months via M-Pesa to help families buy food and essentials.",
+    "amount": "Ksh 5,400 every two months (~Ksh 2,700/month)",
+    "howToApply": "1. HSNP uses a community targeting process — no walk-in applications\n2. Community committees identify eligible households in your village\n3. If selected, you receive an SMS and M-Pesa registration visit\n4. Contact your county NDMA office to confirm if your household is enrolled\n5. Visit ndma.go.ke for county office contacts",
+    "documents": "National ID, Active Safaricom line for M-Pesa, Proof of residence in an HSNP county",
+    "deadline": "Rolling — community targeting ongoing in ASAL counties",
+    "link": "https://ndma.go.ke",
+    "eligibility": {
+      "minAge": 0,
+      "maxAge": 99,
+      "gender": "any",
+      "employed": false,
+      "businessOwner": false,
+      "disability": "any",
+      "counties": [
+        "Turkana",
+        "Marsabit",
+        "Mandera",
+        "Wajir",
+        "Garissa",
+        "Tana River",
+        "Isiolo",
+        "Samburu"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "ngcdf-bursary",
+    "name": "NG-CDF Bursary Scheme",
+    "provider": "National Government Constituencies Development Fund",
+    "category": "financial",
+    "emoji": "🎓",
+    "description": "Education bursaries funded through your MP's constituency office for secondary school, college, and university students from needy backgrounds. Each constituency allocates funds annually — amounts and deadlines vary by area. One of the most accessible education funds for ordinary Kenyans.",
+    "amount": "Ksh 10,000 – Ksh 50,000 per year (varies by constituency)",
+    "howToApply": "1. Visit your constituency NG-CDF office (find it via ngcdf.go.ke)\n2. Ask for the current bursary application form\n3. Fill in student and guardian details\n4. Attach required documents\n5. Submit before the constituency deadline (usually Jan–Mar each year)",
+    "documents": "National ID (student and parent/guardian), Admission letter or school fees structure, KCSE/KCPE results slip, Birth certificate, Recommendation letter from school principal",
+    "deadline": "Annual — typically January to March (check your constituency office)",
+    "deadlineDate": "03-31",
+    "deadlineAnnual": true,
+    "link": "https://ngcdf.go.ke",
+    "eligibility": {
+      "minAge": 14,
+      "maxAge": 30,
+      "gender": "any",
+      "employed": false,
+      "businessOwner": false,
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "kyep",
+    "name": "Kenya Youth Empowerment Project (KYEP)",
+    "provider": "Government of Kenya / World Bank",
+    "category": "employment",
+    "emoji": "💼",
+    "description": "Government programme providing skills training, internships, and stipends for unemployed youth. Covers sectors including construction, hospitality, ICT, and manufacturing. Combines classroom training with paid work placements at partner companies.",
+    "amount": "Monthly stipend during training + job placement support",
+    "howToApply": "1. Check kyep.go.ke or Ministry of Youth website for open cohorts\n2. Register online during recruitment windows\n3. Select your preferred training sector\n4. Attend orientation at your county youth office\n5. Complete training and internship placement",
+    "documents": "National ID, KCSE certificate, Birth certificate, Passport photos, Unemployment affidavit (if required)",
+    "deadline": "Recruitment opens periodically — check kyep.go.ke",
+    "link": "https://youth.go.ke",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 29,
+      "gender": "any",
+      "employed": false,
+      "businessOwner": false,
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "ajira-digital",
+    "name": "Ajira Digital Programme",
+    "provider": "Ministry of ICT — Kenya",
+    "category": "employment",
+    "emoji": "💻",
+    "description": "Free government programme training Kenyan youth for online digital jobs — data entry, transcription, virtual assistance, content writing, and software development. Access to Ajira Digital centres nationwide with free internet, mentorship, and links to global freelancing platforms.",
+    "amount": "Free training + access to online job platforms (earn Ksh 15,000–Ksh 80,000/month)",
+    "howToApply": "1. Visit ajiradigital.go.ke\n2. Register for an account\n3. Enrol in a training track (data, transcription, dev, etc.)\n4. Visit your nearest Ajira Digital centre for in-person support\n5. Complete certification and start bidding on online jobs",
+    "documents": "National ID, Active email address, KCSE certificate (for some tracks)",
+    "deadline": "Rolling — enrol any time",
+    "link": "https://ajiradigital.go.ke",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 35,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": "any",
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "tech",
+        "services"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "kenya-women-youth-fund",
+    "name": "Kenya Women and Youth Enterprise Fund",
+    "provider": "Government of Kenya — Ministry of Co-operatives & MSMEs",
+    "category": "financial",
+    "emoji": "💰",
+    "description": "Merged fund combining the Women Enterprise Fund and Youth Enterprise Development Fund. Provides affordable loans and business support for women and youth entrepreneurs. Disbursed through partner banks including Equity, KCB, and Co-operative Bank.",
+    "amount": "Up to Ksh 5,000,000 (terms vary by applicant profile)",
+    "howToApply": "1. Visit kwyef.go.ke or your nearest partner bank branch\n2. Register and complete the online application\n3. Attach business plan and required documents\n4. Visit Sub-County office for verification\n5. Loan disbursed through partner bank upon approval",
+    "documents": "National ID, KRA PIN, Business registration certificate, Business plan, Bank statements (3 months), Passport photo",
+    "deadline": "Rolling — apply any time",
+    "link": "https://wef.go.ke",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 35,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": true,
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "kcb-2jiajiri",
+    "name": "KCB 2Jiajiri Programme",
+    "provider": "Kenya Commercial Bank (KCB) Foundation",
+    "category": "employment",
+    "emoji": "🏦",
+    "description": "KCB Foundation's flagship youth programme providing skills training, business incubation, and market linkages for young Kenyans. Covers agribusiness, automotive, beauty, construction, and ICT. Graduates receive certification and access to KCB micro-loans to start businesses.",
+    "amount": "Free training + access to KCB Foundation loans (from Ksh 50,000)",
+    "howToApply": "1. Visit kcbgroup.com/2jiajiri or your nearest KCB branch\n2. Check open training cohorts in your county\n3. Apply online with personal and education details\n4. Attend selection interview\n5. Complete training and access loan facilities",
+    "documents": "National ID, KCSE certificate, Birth certificate, Passport photos, Business proposal (for loan track)",
+    "deadline": "Rolling — cohorts open throughout the year",
+    "link": "https://kcbgroup.com/2jiajiri",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 35,
+      "gender": "any",
+      "employed": false,
+      "businessOwner": "any",
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "county-youth-funds",
+    "name": "County Youth & Women Enterprise Funds",
+    "provider": "County Governments — Nairobi, Mombasa, Kisumu, Nakuru",
+    "category": "financial",
+    "emoji": "🏘️",
+    "description": "County-level funds providing loans and grants for youth and women entrepreneurs. Nairobi Hasira Fund, Mombasa Biashara Fund, Kisumu Oyugis Youth Fund, and Nakuru County Empowerment Fund offer locally administered financing with easier access than national programmes. Visit your county trade or youth office.",
+    "amount": "Ksh 50,000 – Ksh 500,000 (varies by county)",
+    "howToApply": "Nairobi: Visit City Hall Trade department or nairobi.go.ke\nMombasa: Visit Mombasa County Trade office\nKisumu: Visit Kisumu County Youth and Sports office\nNakuru: Visit Nakuru County Trade and Industrialisation office\nAll: Fill county application form, attach business plan, await ward-level vetting",
+    "documents": "National ID, KRA PIN, Business registration or business plan, Proof of county residence, Passport photo",
+    "deadline": "Rolling — check with your county office",
+    "link": "https://devolution.go.ke",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 35,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": true,
+      "disability": "any",
+      "counties": [
+        "Nairobi",
+        "Mombasa",
+        "Kisumu",
+        "Nakuru"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "equity-fanikisha",
+    "name": "Equity Bank Fanikisha Loan",
+    "provider": "Equity Bank Kenya",
+    "category": "financial",
+    "emoji": "🏦",
+    "description": "Micro-loans for small business owners and traders through Equity Bank. Available via Equitel, Equity mobile app, or branch. No collateral required for amounts under Ksh 100,000. One of the fastest ways to get business capital if you have an Equity Bank account.",
+    "amount": "Ksh 5,000 – Ksh 3,000,000",
+    "howToApply": "1. Open an Equity Bank account (if you don't have one)\n2. Dial *247# on Equitel OR use the Equity mobile app\n3. Select 'Loans' then 'Fanikisha'\n4. Enter amount and confirm\n5. Funds disbursed instantly to your account",
+    "documents": "National ID, Equity Bank account (6+ months active), KRA PIN (for larger amounts)",
+    "deadline": "Rolling — available 24/7 via mobile",
+    "link": "https://equitybank.co.ke/personal-banking/borrow/fanikisha/",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 99,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": true,
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "safaricom-spark",
+    "name": "Safaricom Spark Venture Fund",
+    "provider": "Safaricom / Spark Fund",
+    "category": "financial",
+    "emoji": "📱",
+    "description": "Investment fund for early-stage Kenyan tech startups building on mobile, fintech, agritech, and healthtech. Provides funding plus access to Safaricom's 40+ million customer base, technical mentorship, and market distribution. Highly competitive but transformative for qualifying startups.",
+    "amount": "USD 50,000 – USD 500,000 investment",
+    "howToApply": "1. Visit spark.co.ke or safaricom.co.ke/spark\n2. Review current investment themes and criteria\n3. Submit pitch deck and business plan online\n4. Shortlisted startups present to investment committee\n5. Due diligence and term sheet negotiation",
+    "documents": "Business registration, Pitch deck, Financial projections, Product demo or MVP, Founders' National IDs",
+    "deadline": "Rolling — applications reviewed quarterly",
+    "link": "https://spark.co.ke",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 45,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": true,
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "tech"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "google-startups-africa",
+    "name": "Google for Startups Africa",
+    "provider": "Google",
+    "category": "financial",
+    "emoji": "🌍",
+    "description": "Google's accelerator and funding programme for African startups. Provides equity-free support, Google Cloud credits (up to $100,000), mentorship from Google engineers, and access to investor networks. Kenya is a priority market with multiple Kenyan startups accepted each cohort.",
+    "amount": "Up to $100,000 in Google Cloud credits + mentorship (equity-free)",
+    "howToApply": "1. Visit startup.google.com/programs/accelerator/africa\n2. Check open application windows\n3. Submit startup profile, traction metrics, and team details\n4. Complete interview rounds if shortlisted\n5. Join 3-month accelerator programme if selected",
+    "documents": "Business registration, Pitch deck, Product URL or demo, Founders' LinkedIn profiles, Traction metrics",
+    "deadline": "Cohort applications — check startup.google.com for dates",
+    "link": "https://startup.google.com/programs/accelerator/africa/",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 99,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": true,
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "tech"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "developpp-ventures",
+    "name": "Developpp Ventures Grant",
+    "provider": "Developpp Ventures (Germany/Kenya)",
+    "category": "financial",
+    "emoji": "🌍",
+    "description": "Impact investment fund backing Kenyan startups solving social and environmental challenges. Focus areas include agriculture, clean energy, financial inclusion, and healthcare. Provides grant funding and hands-on venture building support for early-stage founders.",
+    "amount": "EUR 25,000 – EUR 150,000 grant funding",
+    "howToApply": "1. Visit developpp.vc\n2. Review current focus areas and portfolio\n3. Submit application with impact thesis and business model\n4. Pitch to investment team\n5. Due diligence and grant disbursement",
+    "documents": "Business registration, Impact measurement plan, Financial model, Founders' CVs, National IDs",
+    "deadline": "Rolling — check developpp.vc for active calls",
+    "link": "https://developpp.vc",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 99,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": true,
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "agriculture",
+        "tech",
+        "services"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "tef-grant",
+    "name": "Tony Elumelu Foundation Entrepreneurship Programme",
+    "provider": "Tony Elumelu Foundation",
+    "category": "financial",
+    "emoji": "🌍",
+    "description": "Africa's largest philanthropy-funded entrepreneurship programme. Provides USD 5,000 non-refundable seed capital plus 12 weeks of business training and mentorship to 1,000 African entrepreneurs annually. Kenyan founders are consistently among the top recipients.",
+    "amount": "USD 5,000 seed grant (~Ksh 650,000) + training",
+    "howToApply": "1. Visit tonyelumelufoundation.org during the annual application window (usually Jan–Mar)\n2. Create an account and complete the business profile\n3. Submit business idea and growth plan\n4. Complete online training modules if shortlisted\n5. Receive seed capital upon programme completion",
+    "documents": "National ID, Business registration (or business plan for new ventures), Bank account details, Passport photo",
+    "deadline": "Annual — typically January to March (check tonyelumelufoundation.org)",
+    "deadlineDate": "03-31",
+    "deadlineAnnual": true,
+    "link": "https://www.tonyelumelufoundation.org",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 55,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": true,
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "mastercard-scholars",
+    "name": "Mastercard Foundation Scholars Programme",
+    "provider": "Mastercard Foundation",
+    "category": "employment",
+    "emoji": "🎓",
+    "description": "Full scholarships for academically talented Kenyan students from economically disadvantaged backgrounds. Covers tuition, accommodation, books, and stipends at partner universities including University of Nairobi, Strathmore, and USIU. Also supports secondary school bursaries through partner NGOs.",
+    "amount": "Full tuition + accommodation + monthly stipend",
+    "howToApply": "1. Visit mastercardfdn.org/scholars for partner institutions\n2. Apply directly through the partner university during their intake period\n3. Complete financial need assessment\n4. Attend interview if shortlisted\n5. Scholarship awarded before academic year starts",
+    "documents": "KCSE results, National ID or birth certificate, Recommendation letters, Financial need statement, Admission letter (if available)",
+    "deadline": "Varies by partner university — typically August to October",
+    "deadlineDate": "10-31",
+    "deadlineAnnual": true,
+    "link": "https://mastercardfdn.org/scholars",
+    "eligibility": {
+      "minAge": 17,
+      "maxAge": 25,
+      "gender": "any",
+      "employed": false,
+      "businessOwner": false,
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
+  },
+  {
+    "id": "usaid-kenya-grants",
+    "name": "USAID Kenya Grants & Partnerships",
+    "provider": "USAID Kenya",
+    "category": "financial",
+    "emoji": "🌍",
+    "description": "US Government funding for Kenyan organisations working in health, agriculture, education, governance, and economic growth. Open to registered NGOs, social enterprises, and community-based organisations. Grants range from small community projects to multi-million dollar partnerships.",
+    "amount": "USD 10,000 – USD 5,000,000 (varies by opportunity)",
+    "howToApply": "1. Register on grants.gov (for US entities) or usaid.gov/kenya for local opportunities\n2. Monitor opportunity notices on usaid.gov/work-usaid/get-grant-or-contract\n3. Submit concept note or full proposal as specified\n4. Undergo technical and financial review\n5. Sign grant agreement upon award",
+    "documents": "Organisation registration certificate, KRA PIN, Audited financial statements, Project proposal and budget, Board resolution authorising application",
+    "deadline": "Rolling — new opportunities posted throughout the year",
+    "link": "https://www.usaid.gov/kenya",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 99,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": "any",
+      "disability": "any",
+      "counties": [
+        "any"
+      ],
+      "sectors": [
+        "agriculture",
+        "tech",
+        "services"
+      ],
+      "groupRequired": false
+    }
+  }
+]

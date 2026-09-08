@@ -1,0 +1,11 @@
+# Environment
+.env
+
+# WhatsApp auth session
+.auth/
+
+# Logs
+logs/
+
+# Dependencies
+node_modules/
