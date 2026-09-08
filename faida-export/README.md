@@ -89,7 +89,13 @@ All 17 tests should pass.
 ```bash
 npm start
 ```
-A QR code will appear in the terminal.
+A QR code will appear in the terminal **and** as a shareable link:
+
+```
+http://localhost:3000/qr
+```
+
+Open that link on your phone to scan easily.
 
 **To scan it:**
 1. Open WhatsApp on your phone
@@ -255,8 +261,13 @@ Railway uses this endpoint (`healthcheckPath: /health` in `railway.json`) to mon
 Baileys uses QR scan to link WhatsApp. On Railway:
 
 1. Open **Deployments → View Logs**
-2. Look for the QR code in the build logs (ASCII art)
-3. Scan it from your phone: **WhatsApp → Settings → Linked Devices → Link a Device**
+2. Look for the **shareable link**, e.g. `https://your-service.up.railway.app/qr`
+3. Open that link on your phone (or share it with someone who needs to scan)
+4. Scan the QR on the page: **WhatsApp → Settings → Linked Devices → Link a Device**
+
+The terminal still shows an ASCII QR as a backup. The web page auto-refreshes every 15 seconds while waiting for a scan.
+
+Direct image link (optional): `https://your-service.up.railway.app/qr.png`
 
 > **Important:** Railway containers are ephemeral. If the container restarts, you may need to re-scan unless you persist the `.auth` folder using a [Railway Volume](https://docs.railway.app/reference/volumes) mounted at `/app/.auth`.
 

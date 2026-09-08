@@ -22,7 +22,7 @@ const { getOrCreate } = require("../lib/session");
 const { startReminderScheduler } = require("../lib/reminders");
 const { logIncoming, logReply, logError, logger } = require("../lib/logger");
 const { validateEnv } = require("../lib/env");
-const { startHealthServer, setBotStatus } = require("../lib/health");
+const { startHealthServer, setBotStatus, setCurrentQr, clearCurrentQr, getQrPageUrl } = require("../lib/health");
 const { startOpportunityScheduler } = require("../lib/opportunities");
 
 const AUTH_FOLDER = path.join(__dirname, "../../.auth");
@@ -59,16 +59,19 @@ async function startBot() {
 
     if (qr) {
       setBotStatus("awaiting_qr_scan");
+      setCurrentQr(qr);
+      const qrLink = getQrPageUrl();
+
       console.clear();
       console.log("╔══════════════════════════════════════════════╗");
       console.log("║     🌿  FAIDA BOT — Scan to Connect          ║");
       console.log("╚══════════════════════════════════════════════╝\n");
       qrcode.generate(qr, { small: true });
-      console.log("\n📱 Steps to scan:");
-      console.log("   1. Open WhatsApp on your phone");
-      console.log("   2. Go to Settings → Linked Devices → Link a Device");
-      console.log("   3. Point camera at the QR code above\n");
-      console.log("⏳ QR code expires in 60 seconds — scan quickly!\n");
+      console.log("\n🔗 Scan from your phone (shareable link):");
+      console.log(`   ${qrLink}\n`);
+      console.log("📱 Or scan the QR above in this terminal.");
+      console.log("   WhatsApp → Settings → Linked Devices → Link a Device\n");
+      console.log("⏳ QR expires in ~60 seconds — page auto-refreshes with a new one.\n");
     }
 
     if (connection === "close") {
@@ -80,12 +83,14 @@ async function startBot() {
         console.log("🔄 Reconnecting...\n");
         setTimeout(startBot, 3000);
       } else {
+        clearCurrentQr();
         logger.warn({ event: "logged_out" }, "Bot logged out");
         console.log("🚫 Logged out. Delete the .auth folder and restart.\n");
       }
     }
 
     if (connection === "open") {
+      clearCurrentQr();
       console.clear();
       console.log("╔══════════════════════════════════════════════╗");
       console.log("║     ✅  FAIDA BOT IS LIVE!                   ║");
