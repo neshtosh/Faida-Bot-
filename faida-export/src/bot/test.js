@@ -12,6 +12,9 @@ const { isAiAvailable } = require("../lib/ai");
 const { formatOpportunitiesList } = require("../lib/opportunities");
 const { isVerifiedUrl } = require("../lib/sources");
 const { mapMtajiRow } = require("../lib/mtaji");
+const { searchVerifiedCatalog } = require("../lib/websearch");
+const { getSubmissionSupport } = require("../lib/submit");
+const { answerCurrentField, formatWebFormDocument } = require("../lib/formassist");
 
 let passed = 0;
 let failed = 0;
@@ -155,12 +158,16 @@ test("Young woman sees more matches than older man (more targeted funds)", () =>
 
 console.log("\n💬 Conversation Flow Tests\n");
 
+function replyText(result) {
+  return typeof result === "string" ? result : result?.reply || "";
+}
+
 async function runFlowTests() {
   const userId = "test-user-001";
 
   await test("Welcome message triggers on 'hi'", async () => {
     const session = createSession(userId);
-    const reply = await handleMessage(userId, "hi", session);
+    const reply = replyText(await handleMessage(userId, "hi", session));
     expect(reply).toContain("Welcome to Faida");
   });
 
@@ -170,28 +177,28 @@ async function runFlowTests() {
     let sess2 = await getOrCreate(userId);
     await handleMessage(userId, "1", sess2);
     sess2 = await getOrCreate(userId);
-    const reply = await handleMessage(userId, "twenty five", sess2);
+    const reply = replyText(await handleMessage(userId, "twenty five", sess2));
     expect(reply).toContain("valid age");
   });
 
   await test("MENU command works at any step", async () => {
     createSession(userId);
     const sess = await getOrCreate(userId);
-    const reply = await handleMessage(userId, "MENU", sess);
+    const reply = replyText(await handleMessage(userId, "MENU", sess));
     expect(reply).toContain("Main Menu");
   });
 
   await test("HELP command returns how Faida works", async () => {
     createSession(userId);
     const sess = await getOrCreate(userId);
-    const reply = await handleMessage(userId, "HELP", sess);
+    const reply = replyText(await handleMessage(userId, "HELP", sess));
     expect(reply).toContain("How Faida works");
   });
 
   await test("SHARE command returns share message", async () => {
     createSession(userId);
     const sess = await getOrCreate(userId);
-    const reply = await handleMessage(userId, "SHARE", sess);
+    const reply = replyText(await handleMessage(userId, "SHARE", sess));
     expect(reply).toContain("share");
   });
 
@@ -221,7 +228,7 @@ async function runFlowTests() {
     await handleMessage(flowId, "2", sess);
 
     sess = await getOrCreate(flowId);
-    const reply = await handleMessage(flowId, "6", sess);
+    const reply = replyText(await handleMessage(flowId, "6", sess));
 
     expect(reply).toContain("Great news");
   });
@@ -230,7 +237,7 @@ async function runFlowTests() {
     const reminderUser = "test-reminders-001";
     createSession(reminderUser);
     const sess = await getOrCreate(reminderUser);
-    const reply = await handleMessage(reminderUser, "REMINDERS ON", sess);
+    const reply = replyText(await handleMessage(reminderUser, "REMINDERS ON", sess));
     expect(reply).toContain("reminders turned ON");
     const updated = await getOrCreate(reminderUser);
     expect(updated.remindersOptIn).toBe(true);
@@ -242,7 +249,7 @@ async function runFlowTests() {
     let sess = await getOrCreate(reminderUser);
     await handleMessage(reminderUser, "REMINDERS ON", sess);
     sess = await getOrCreate(reminderUser);
-    const reply = await handleMessage(reminderUser, "REMINDERS OFF", sess);
+    const reply = replyText(await handleMessage(reminderUser, "REMINDERS OFF", sess));
     expect(reply).toContain("reminders turned OFF");
     const updated = await getOrCreate(reminderUser);
     expect(updated.remindersOptIn).toBe(false);
@@ -252,7 +259,7 @@ async function runFlowTests() {
     const chatUser = "test-chat-001";
     createSession(chatUser);
     const sess = await getOrCreate(chatUser);
-    const reply = await handleMessage(chatUser, "CHAT", sess);
+    const reply = replyText(await handleMessage(chatUser, "CHAT", sess));
     if (isAiAvailable()) {
       expect(reply).toContain("AI Assistant");
     } else {
@@ -264,7 +271,7 @@ async function runFlowTests() {
     const oppUser = "test-opportunities-001";
     createSession(oppUser);
     const sess = await getOrCreate(oppUser);
-    const reply = await handleMessage(oppUser, "OPPORTUNITIES", sess);
+    const reply = replyText(await handleMessage(oppUser, "OPPORTUNITIES", sess));
     expect(
       reply.includes("verified") ||
         reply.includes("vilivyothibitishwa") ||
@@ -315,6 +322,33 @@ async function runFlowTests() {
       listing_status: "draft",
     });
     expect(opp).toBe(null);
+  });
+
+  await test("Verified catalog search finds youth-related benefits", () => {
+    const hits = searchVerifiedCatalog("youth");
+    expect(hits.length).toBeGreaterThan(0);
+  });
+
+  await test("Web form assistant tracks answers", () => {
+    const webForm = {
+      fields: [{ key: "fullName", label: "Full name", type: "text", required: true }],
+      answers: {},
+      currentFieldIndex: 0,
+      title: "Test",
+      sourceUrl: "https://www.m-taji.co.ke/opportunities/x",
+      refCode: "WEB-ABC",
+    };
+    const result = answerCurrentField(webForm, "Jane Doe");
+    expect(result.ok).toBe(true);
+    expect(result.webForm.answers.fullName).toBe("Jane Doe");
+    const doc = formatWebFormDocument(result.webForm, "en");
+    expect(doc).toContain("Jane Doe");
+  });
+
+  await test("M-Taji submission support is detected", () => {
+    const support = getSubmissionSupport("https://www.m-taji.co.ke/opportunities/abc-123");
+    expect(support.supported).toBe(true);
+    expect(support.partner).toBe("m-taji");
   });
 }
 

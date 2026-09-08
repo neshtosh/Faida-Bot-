@@ -29,10 +29,13 @@ console.log("─".repeat(50));
 
 async function chat(userInput) {
   const session = await getOrCreate(TEST_USER);
-  const reply = await handleMessage(TEST_USER, userInput, session);
+  const result = await handleMessage(TEST_USER, userInput, session);
+  const reply = typeof result === "string" ? result : result?.reply || "";
   console.log("\n🤖 Faida:\n");
-  // Format for terminal (remove WhatsApp markdown)
   console.log(reply.replace(/\*/g, "").replace(/_/g, ""));
+  if (result?.document?.fileName) {
+    console.log(`\n[PDF attached: ${result.document.fileName}]`);
+  }
   console.log("\n" + "─".repeat(50));
 }
 

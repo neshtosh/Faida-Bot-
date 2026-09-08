@@ -64,6 +64,7 @@ function buildDefaultSession() {
     remindersOptIn: false,
     remindersSent: {},
     aiHistory: [],
+    webForm: null,
     application: {
       benefitId: null,
       currentFieldIndex: 0,

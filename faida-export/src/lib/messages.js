@@ -102,8 +102,11 @@ const MESSAGES_EN = {
 
   aiWelcome: () =>
     `🤖 *Faida AI Assistant*\n\n` +
-    `Ask me anything about government grants, NGO programmes, or how to apply.\n\n` +
-    `I only use verified official sources — I won't invent programmes or links.\n\n` +
+    `Ask me about grants, find verified opportunities, or get help filling forms.\n\n` +
+    `• *FORM https://...* — fetch & fill a verified application page\n` +
+    `• *PDF* — export your filled form for printing\n` +
+    `• *SUBMIT* — submit on partner sites (where supported)\n\n` +
+    `I only use verified official sources.\n\n` +
     `Type *MENU* anytime to exit chat.`,
 
   aiUnavailable: () =>
@@ -121,6 +124,29 @@ const MESSAGES_EN = {
     `✅ *Verified opportunities updated!*\n\n` +
     `Found *${count}* listing${count === 1 ? "" : "s"} from official sources.\n\n` +
     `Type *OPPORTUNITIES* to see them · *CHAT* to ask questions · *MENU* for more.`,
+
+  formStartHelp: () =>
+    `📋 *Form assistant*\n\nSend a verified link after FORM, for example:\n*FORM https://www.m-taji.co.ke/opportunities/...*`,
+
+  formFetched: (title, fieldCount) =>
+    `📋 *Form loaded:* ${title}\nFound *${fieldCount}* field${fieldCount === 1 ? "" : "s"}. I'll help you fill it.`,
+
+  formCompleteHelp: () =>
+    `✅ *Form complete!*\n\n` +
+    `• *PDF* — download printable copy\n` +
+    `• *SUBMIT* — submit on partner site (where supported)\n` +
+    `• *MENU* — exit`,
+
+  formFieldError: (msg) => `⚠️ ${msg}\n\nPlease try again.`,
+
+  formNoActive: () => `No active form. Use *FORM https://...* or ask in *CHAT*.`,
+
+  formPdfReady: (ref) => `📄 *PDF ready!* Reference: *${ref}*\n\nAttached for printing.`,
+
+  formFetchFailed: () =>
+    `Could not load that page. Use a verified link (.go.ke, m-taji.co.ke, etc.) or try again later.`,
+
+  formError: () => `Something went wrong with the form assistant. Type *MENU* to continue.`,
 
   rateLimited: () =>
     `⏳ You're sending messages very quickly!\n\n` +
@@ -397,9 +423,35 @@ const MESSAGES_SW = {
 
   aiWelcome: () =>
     `🤖 *Msaidizi wa AI wa Faida*\n\n` +
-    `Niulize chochote kuhusu ruzuku za serikali, programu za NGO, au jinsi ya kuomba.\n\n` +
-    `Ninatumi tu vyanzo rasmi vilivyothibitishwa — sitabuni fursa au viungo.\n\n` +
+    `Niulize kuhusu ruzuku, tafuta fursa zilizothibitishwa, au nikusaidie kujaza fomu.\n\n` +
+    `• *FORM https://...* — pakua na jaza fomu kutoka tovuti rasmi\n` +
+    `• *PDF* — pakua nakala ya kuchapisha\n` +
+    `• *SUBMIT* — wasilisha kwenye tovuti za washirika\n\n` +
+    `Ninatumi tu vyanzo vilivyothibitishwa.\n\n` +
     `Andika *MENU* wakati wowote kutoka.`,
+
+  formStartHelp: () =>
+    `📋 *Msaidizi wa fomu*\n\nTuma kiungo kilichothibitishwa baada ya FORM, mfano:\n*FORM https://www.m-taji.co.ke/opportunities/...*`,
+
+  formFetched: (title, fieldCount) =>
+    `📋 *Fomu imepakuliwa:* ${title}\nImepata sehemu *${fieldCount}*. Nitakusaidia kujaza.`,
+
+  formCompleteHelp: () =>
+    `✅ *Fomu imekamilika!*\n\n` +
+    `• *PDF* — pakua nakala ya kuchapisha\n` +
+    `• *SUBMIT* — wasilisha kwenye tovuti ya mshirika\n` +
+    `• *MENU* — toka`,
+
+  formFieldError: (msg) => `⚠️ ${msg}\n\nJaribu tena.`,
+
+  formNoActive: () => `Hakuna fomu hai. Tumia *FORM https://...* au uliza kwenye *CHAT*.`,
+
+  formPdfReady: (ref) => `📄 *PDF iko tayari!* Msimbo: *${ref}*\n\nImeambatishwa kwa ajili ya kuchapisha.`,
+
+  formFetchFailed: () =>
+    `Imeshindwa kupakia ukurasa huo. Tumia kiungo kilichothibitishwa (.go.ke, m-taji.co.ke, nk.)`,
+
+  formError: () => `Kuna tatizo na msaidizi wa fomu. Andika *MENU* kuendelea.`,
 
   aiUnavailable: () =>
     `🤖 Msaidizi wa AI haupatikani kwa sasa.\n\n` +

@@ -141,10 +141,20 @@ async function startBot() {
 
       try {
         const session = await getOrCreate(userId);
-        const reply = await handleMessage(userId, messageContent, session, { isVoice });
-        if (!reply) continue;
-        await sock.sendMessage(userId, { text: reply });
-        logReply(userId, reply);
+        const result = await handleMessage(userId, messageContent, session, { isVoice });
+        const payload = typeof result === "string" ? { reply: result } : result || {};
+        if (payload.reply) {
+          await sock.sendMessage(userId, { text: payload.reply });
+          logReply(userId, payload.reply);
+        }
+        if (payload.document?.path) {
+          await sock.sendMessage(userId, {
+            document: fs.readFileSync(payload.document.path),
+            mimetype: payload.document.mimetype || "application/pdf",
+            fileName: payload.document.fileName || "faida-form.pdf",
+          });
+          console.log(`📎 Sent PDF: ${payload.document.fileName}\n`);
+        }
         console.log(`✅ Replied\n`);
       } catch (err) {
         logError(err, { userId, event: "message_handler" });

@@ -26,6 +26,16 @@ const {
   formatOpportunitiesList,
   refreshOpportunities,
 } = require("../lib/opportunities");
+const { isVerifiedUrl } = require("../lib/sources");
+const {
+  startWebFormFromUrl,
+  findNextFieldIndex,
+  answerCurrentField,
+  formatWebFormDocument,
+  isWebFormComplete,
+} = require("../lib/formassist");
+const { generateFormPdf } = require("../lib/pdfexport");
+const { submitFilledForm } = require("../lib/submit");
 
 const RATE_LIMIT_MAX = 20;
 const RATE_LIMIT_WINDOW_MS = 5 * 60 * 1000;
@@ -76,6 +86,9 @@ const REMINDERS_OFF_TRIGGERS = ["reminders off", "reminder off", "kumbusho off"]
 const CHAT_TRIGGERS = ["chat", "ask", "ai", "uliza", "msaidizi"];
 const OPPORTUNITIES_TRIGGERS = ["opportunities", "fursa", "latest", "new grants"];
 const REFRESH_TRIGGERS = ["refresh", "update", "sasisha"];
+const PDF_TRIGGERS = ["pdf", "export", "print", "pakua"];
+const SUBMIT_TRIGGERS = ["submit", "wasilisha", "tuma"];
+const FORM_TRIGGERS = ["form", "fomu", "fetch"];
 const IDK_TRIGGERS = ["0", "i don't know", "i dont know", "idk", "don't know", "dont know", "sijui", "unknown"];
 
 const APPLY_CANCEL_TRIGGERS = ["cancel", "stop", "sitisha", "cha", "acha"];
@@ -88,50 +101,118 @@ const APPLY_BACK_TRIGGERS = ["back", "rudi", "prev", "previous", "karibu"];
  */
 async function handleMessage(userId, text, session, meta = {}) {
   const input = (text || "").trim().toLowerCase();
+  const rawText = (text || "").trim();
   const msgs = () => getMessages(session.language);
+
+  // ── Web form filling (async) ──
+  if (session.step === "web_form") {
+    if (MENU_TRIGGERS.includes(input) || APPLY_CANCEL_TRIGGERS.includes(input)) {
+      updateSession(userId, { step: "menu", webForm: null });
+      return { reply: msgs().menu() };
+    }
+    if (PDF_TRIGGERS.includes(input)) {
+      return exportWebFormPdf(session);
+    }
+    if (SUBMIT_TRIGGERS.includes(input)) {
+      return submitWebForm(session);
+    }
+    try {
+      const result = await handleWebFormAnswer(session, rawText);
+      updateSession(userId, { step: "web_form", webForm: result.webForm });
+      const payload = { reply: result.reply };
+      if (result.document) payload.document = result.document;
+      return payload;
+    } catch (err) {
+      logError(err, { userId, event: "web_form" });
+      return { reply: msgs().formError() };
+    }
+  }
+
+  // ── PDF / SUBMIT shortcuts when form data exists ──
+  if (PDF_TRIGGERS.includes(input) && session.webForm) {
+    return exportWebFormPdf(session);
+  }
+  if (SUBMIT_TRIGGERS.includes(input) && session.webForm) {
+    return submitWebForm(session);
+  }
+
+  // ── FORM <url> — fetch verified page and start guided fill ──
+  if (FORM_TRIGGERS.some((t) => input === t || input.startsWith(`${t} `))) {
+    const url = extractUrlFromText(rawText);
+    if (!url) {
+      return {
+        reply:
+          msgs().formStartHelp() +
+          "\n\nExample:\n*FORM https://www.m-taji.co.ke/opportunities/your-id*",
+      };
+    }
+    try {
+      const started = await beginWebForm(session, url);
+      updateSession(userId, { step: "web_form", webForm: started.webForm });
+      return { reply: started.reply };
+    } catch (err) {
+      logError(err, { userId, event: "form_start", url });
+      return { reply: msgs().formFetchFailed() };
+    }
+  }
 
   // ── AI chat mode (async — handled before sync processMessage) ──
   if (session.step === "ai_chat") {
     if (MENU_TRIGGERS.includes(input) || ["exit", "quit", "stop", "toka"].includes(input)) {
       updateSession(userId, { step: "menu" });
-      return msgs().menu();
+      return { reply: msgs().menu() };
     }
     if (!isAiAvailable()) {
-      return msgs().aiUnavailable();
+      return { reply: msgs().aiUnavailable() };
     }
     try {
-      const { reply, history } = await chatWithFaida(session, text.trim());
+      const { reply, history, startWebFormUrl } = await chatWithFaida(session, rawText);
       updateSession(userId, { step: "ai_chat", aiHistory: history });
-      return reply;
+
+      if (startWebFormUrl) {
+        try {
+          const started = await beginWebForm(session, startWebFormUrl);
+          updateSession(userId, {
+            step: "web_form",
+            webForm: started.webForm,
+            aiHistory: history,
+          });
+          return { reply: `${reply}\n\n━━━━━━━━━━━━━━━━━━━━\n${started.reply}` };
+        } catch (err) {
+          logError(err, { userId, event: "ai_form_start" });
+        }
+      }
+
+      return { reply };
     } catch (err) {
       logError(err, { userId, event: "ai_chat" });
-      return msgs().aiError();
+      return { reply: msgs().aiError() };
     }
   }
 
   if (CHAT_TRIGGERS.includes(input)) {
-    if (!isAiAvailable()) return msgs().aiUnavailable();
+    if (!isAiAvailable()) return { reply: msgs().aiUnavailable() };
     updateSession(userId, { step: "ai_chat", aiHistory: [] });
-    return msgs().aiWelcome();
+    return { reply: msgs().aiWelcome() };
   }
 
   if (OPPORTUNITIES_TRIGGERS.includes(input)) {
     try {
       const opps = await getLiveOpportunities(false);
-      return formatOpportunitiesList(opps, session.language);
+      return { reply: formatOpportunitiesList(opps, session.language) };
     } catch (err) {
       logError(err, { userId, event: "opportunities_list" });
-      return msgs().aiError();
+      return { reply: msgs().aiError() };
     }
   }
 
   if (REFRESH_TRIGGERS.includes(input)) {
     try {
       const result = await refreshOpportunities();
-      return msgs().opportunitiesRefreshed(result.count);
+      return { reply: msgs().opportunitiesRefreshed(result.count) };
     } catch (err) {
       logError(err, { userId, event: "opportunities_refresh" });
-      return msgs().aiError();
+      return { reply: msgs().aiError() };
     }
   }
 
@@ -188,7 +269,144 @@ async function handleMessage(userId, text, session, meta = {}) {
       }
     }
   }
-  return reply;
+  return { reply };
+}
+
+/**
+ * Extracts the first https URL from a message.
+ */
+function extractUrlFromText(text) {
+  const match = (text || "").match(/https?:\/\/[^\s]+/i);
+  if (!match) return null;
+  return match[0].replace(/[>,)\]]+$/, "");
+}
+
+/**
+ * Builds profile object for web form prefilling.
+ */
+function profileForWebForm(session) {
+  const p = session.profile || {};
+  const appAnswers = session.application?.answers || {};
+  return {
+    ...p,
+    fullName: appAnswers.fullName,
+    idNumber: appAnswers.idNumber,
+    phoneNumber: appAnswers.phoneNumber,
+    email: appAnswers.email,
+    county: p.county || appAnswers.county,
+  };
+}
+
+/**
+ * Starts guided form filling from a verified URL.
+ */
+async function beginWebForm(session, url) {
+  if (!isVerifiedUrl(url)) {
+    throw new Error("Unverified URL");
+  }
+
+  const webForm = await startWebFormFromUrl(url, profileForWebForm(session));
+  const msgs = getMessages(session.language);
+  const idx = findNextFieldIndex(webForm);
+
+  if (idx >= webForm.fields.length || isWebFormComplete(webForm)) {
+    return {
+      webForm,
+      reply:
+        msgs().formFetched(webForm.title, webForm.fields.length) +
+        "\n\n" +
+        formatWebFormDocument(webForm, session.language) +
+        "\n\n" +
+        msgs().formCompleteHelp(),
+    };
+  }
+
+  const field = webForm.fields[idx];
+  return {
+    webForm: { ...webForm, currentFieldIndex: idx },
+    reply:
+      msgs().formFetched(webForm.title, webForm.fields.length) +
+      "\n\n" +
+      buildWebFormQuestion(field, idx + 1, webForm.fields.length, session.language),
+  };
+}
+
+/**
+ * Formats the current web form question for WhatsApp.
+ */
+function buildWebFormQuestion(field, num, total, lang) {
+  const required = field.required ? "" : lang === "sw" ? " _(si lazima)_" : " _(optional)_";
+  return `*${num}/${total}* — ${field.label}${required}`;
+}
+
+/**
+ * Handles one answer while filling a web form.
+ */
+async function handleWebFormAnswer(session, text) {
+  const msgs = getMessages(session.language);
+  const result = answerCurrentField(session.webForm, text);
+
+  if (!result.ok) {
+    return { reply: msgs().formFieldError(result.error), webForm: session.webForm };
+  }
+
+  const webForm = result.webForm;
+  if (result.complete || isWebFormComplete(webForm)) {
+    return {
+      webForm,
+      reply: formatWebFormDocument(webForm, session.language) + "\n\n" + msgs().formCompleteHelp(),
+    };
+  }
+
+  const idx = findNextFieldIndex(webForm);
+  const field = webForm.fields[idx];
+  return {
+    webForm: { ...webForm, currentFieldIndex: idx },
+    reply: buildWebFormQuestion(field, idx + 1, webForm.fields.length, session.language),
+  };
+}
+
+/**
+ * Generates and returns a PDF attachment for the current web form.
+ */
+async function exportWebFormPdf(session) {
+  const msgs = getMessages(session.language);
+  const webForm = session.webForm;
+
+  if (!webForm) {
+    return { reply: msgs().formNoActive() };
+  }
+
+  const filePath = await generateFormPdf({
+    title: webForm.title,
+    sourceUrl: webForm.sourceUrl,
+    refCode: webForm.refCode,
+    fields: webForm.fields,
+    answers: webForm.answers,
+    lang: session.language,
+  });
+
+  return {
+    reply: msgs().formPdfReady(webForm.refCode),
+    document: {
+      path: filePath,
+      mimetype: "application/pdf",
+      fileName: `faida-${webForm.refCode}.pdf`,
+    },
+  };
+}
+
+/**
+ * Prepares partner submission instructions for a filled web form.
+ */
+async function submitWebForm(session) {
+  const msgs = getMessages(session.language);
+  if (!session.webForm) {
+    return { reply: msgs().formNoActive() };
+  }
+
+  const result = await submitFilledForm(session.webForm, session.profile || {});
+  return { reply: result.reply };
 }
 
 /**

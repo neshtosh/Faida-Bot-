@@ -13,9 +13,11 @@ const staticBenefits = require("../db/benefits");
 const { getCachedOpportunitiesAsBenefits } = require("./opportunities");
 const { isVerifiedUrl } = require("./sources");
 const { logger } = require("./logger");
+const { OPENAI_TOOLS, executeAiTool } = require("./ai-tools");
 
 const MAX_HISTORY = 8;
 const MAX_REPLY_CHARS = 3800;
+const MAX_TOOL_ROUNDS = 4;
 
 /**
  * Returns the configured AI provider: "openai", "anthropic", or null.
@@ -68,6 +70,11 @@ function buildSystemPrompt(session) {
     `- Keep answers concise for WhatsApp (under 600 words).\n` +
     `- Cite official links when mentioning a specific programme.\n` +
     `- Faida is free and confidential.\n\n` +
+    `FORM TOOLS (you have access via tools):\n` +
+    `- search_verified_catalog: find grants/benefits/opportunities\n` +
+    `- fetch_verified_page: read a verified application page\n` +
+    `- start_form_assistance: begin guided form filling for a verified URL\n` +
+    `- User commands: FORM <url>, PDF (export), SUBMIT (partner sites only)\n\n` +
     `USER PROFILE:\n${JSON.stringify(profile, null, 2)}\n\n` +
     `USER'S LAST MATCHES:\n${matchSummary}\n\n` +
     `VERIFIED LIVE OPPORTUNITIES (from official RSS feeds):\n${liveSummary}\n\n` +
@@ -85,41 +92,85 @@ function trimHistory(history) {
 }
 
 /**
- * Calls OpenAI Chat Completions API.
+ * Calls OpenAI with tool support (search, fetch, form assist).
  */
 async function chatWithOpenAI(session, userMessage, history) {
   const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
   const system = buildSystemPrompt(session);
 
-  const messages = [
+  let messages = [
     { role: "system", content: system },
     ...history.map((m) => ({ role: m.role, content: m.content })),
     { role: "user", content: userMessage },
   ];
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model,
-      max_tokens: 1024,
-      messages,
-    }),
-  });
+  let startWebFormUrl = null;
 
-  if (!response.ok) {
-    const errBody = await response.text();
-    throw new Error(`OpenAI API error ${response.status}: ${errBody.slice(0, 200)}`);
+  for (let round = 0; round < MAX_TOOL_ROUNDS; round++) {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model,
+        max_tokens: 1024,
+        messages,
+        tools: OPENAI_TOOLS,
+        tool_choice: "auto",
+      }),
+    });
+
+    if (!response.ok) {
+      const errBody = await response.text();
+      throw new Error(`OpenAI API error ${response.status}: ${errBody.slice(0, 200)}`);
+    }
+
+    const data = await response.json();
+    const choice = data.choices?.[0]?.message;
+    if (!choice) {
+      return { text: "Sorry, I couldn't generate a response. Type MENU to continue.", startWebFormUrl };
+    }
+
+    if (choice.tool_calls?.length) {
+      messages.push({
+        role: "assistant",
+        content: choice.content || null,
+        tool_calls: choice.tool_calls,
+      });
+
+      for (const call of choice.tool_calls) {
+        let args = {};
+        try {
+          args = JSON.parse(call.function.arguments || "{}");
+        } catch (_) {}
+
+        const result = await executeAiTool(call.function.name, args);
+        if (call.function.name === "start_form_assistance" && isVerifiedUrl(args.url)) {
+          startWebFormUrl = args.url;
+        }
+
+        messages.push({
+          role: "tool",
+          tool_call_id: call.id,
+          content: result,
+        });
+      }
+      continue;
+    }
+
+    return {
+      text:
+        choice.content?.trim() || "Sorry, I couldn't generate a response. Type MENU to continue.",
+      startWebFormUrl,
+    };
   }
 
-  const data = await response.json();
-  return (
-    data.choices?.[0]?.message?.content?.trim() ||
-    "Sorry, I couldn't generate a response. Type MENU to continue."
-  );
+  return {
+    text: "I need a bit more time for that search. Try FORM followed by a verified link, or type OPPORTUNITIES.",
+    startWebFormUrl,
+  };
 }
 
 /**
@@ -161,9 +212,12 @@ async function chatWithFaida(session, userMessage) {
 
   const history = trimHistory(session.aiHistory || []);
   let reply;
+  let startWebFormUrl = null;
 
   if (provider === "openai") {
-    reply = await chatWithOpenAI(session, userMessage, history);
+    const result = await chatWithOpenAI(session, userMessage, history);
+    reply = result.text;
+    startWebFormUrl = result.startWebFormUrl;
   } else {
     reply = await chatWithAnthropic(session, userMessage, history);
   }
@@ -178,7 +232,7 @@ async function chatWithFaida(session, userMessage) {
 
   logger.info({ event: "ai_chat_reply", provider, chars: safeReply.length }, "AI reply sent");
 
-  return { reply: safeReply, history: newHistory };
+  return { reply: safeReply, history: newHistory, startWebFormUrl: startWebFormUrl || null };
 }
 
 /**
