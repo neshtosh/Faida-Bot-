@@ -8,6 +8,9 @@ process.env.NODE_ENV = "test";
 const { matchBenefits } = require("../lib/eligibility");
 const { handleMessage } = require("./handler");
 const { createSession, getOrCreate } = require("../lib/session");
+const { isAiAvailable } = require("../lib/ai");
+const { formatOpportunitiesList } = require("../lib/opportunities");
+const { isVerifiedUrl } = require("../lib/sources");
 
 let passed = 0;
 let failed = 0;
@@ -242,6 +245,49 @@ async function runFlowTests() {
     expect(reply).toContain("reminders turned OFF");
     const updated = await getOrCreate(reminderUser);
     expect(updated.remindersOptIn).toBe(false);
+  });
+
+  await test("CHAT without API key shows unavailable message", async () => {
+    const chatUser = "test-chat-001";
+    createSession(chatUser);
+    const sess = await getOrCreate(chatUser);
+    const reply = await handleMessage(chatUser, "CHAT", sess);
+    if (isAiAvailable()) {
+      expect(reply).toContain("AI Assistant");
+    } else {
+      expect(reply).toContain("isn't available");
+    }
+  });
+
+  await test("OPPORTUNITIES command returns verified sources message", async () => {
+    const oppUser = "test-opportunities-001";
+    createSession(oppUser);
+    const sess = await getOrCreate(oppUser);
+    const reply = await handleMessage(oppUser, "OPPORTUNITIES", sess);
+    expect(
+      reply.includes("verified") ||
+        reply.includes("vilivyothibitishwa") ||
+        reply.includes("No new opportunities")
+    ).toBe(true);
+  });
+
+  await test("Verified URL allowlist accepts .go.ke domains", () => {
+    expect(isVerifiedUrl("https://www.socialprotection.go.ke/program")).toBe(true);
+    expect(isVerifiedUrl("https://random-scam-site.com/grant")).toBe(false);
+  });
+
+  await test("formatOpportunitiesList shows verified footer", () => {
+    const sample = [
+      {
+        emoji: "🆕",
+        name: "Test Grant",
+        sourceName: "World Bank",
+        link: "https://www.worldbank.org/en/news/test",
+      },
+    ];
+    const formatted = formatOpportunitiesList(sample, "en");
+    expect(formatted).toContain("verified official sources");
+    expect(formatted).toContain("World Bank");
   });
 }
 

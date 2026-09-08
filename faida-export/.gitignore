@@ -6,6 +6,7 @@
 
 # Logs
 logs/
+data/
 
 # Dependencies
 node_modules/

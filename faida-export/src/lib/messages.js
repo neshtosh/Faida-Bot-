@@ -81,6 +81,8 @@ const MESSAGES_EN = {
     `*Faida Main Menu* 🌿\n\n` +
     `*START* — Check your benefits again\n` +
     `*RESULTS* — See your last matches\n` +
+    `*CHAT* — Ask the AI assistant about benefits\n` +
+    `*OPPORTUNITIES* — Latest verified grants from the web\n` +
     `*NEAREST* — Find nearest office for your top benefit\n` +
     `*FEEDBACK* — Rate your experience\n` +
     `*REMINDERS ON* — Get deadline alerts\n` +
@@ -95,8 +97,30 @@ const MESSAGES_EN = {
     `3. We show you everything you qualify for — with exact steps to apply\n\n` +
     `*Is my information safe?*\n` +
     `Yes. Faida is free and confidential. We don't sell your data.\n\n` +
-    `*Commands:* MENU · RESULTS · NEAREST · FEEDBACK · REMINDERS ON/OFF · START\n\n` +
+    `*Commands:* MENU · START · RESULTS · CHAT · OPPORTUNITIES · NEAREST · FEEDBACK · REMINDERS ON/OFF\n\n` +
     `Built by Munene · munene.dev`,
+
+  aiWelcome: () =>
+    `🤖 *Faida AI Assistant*\n\n` +
+    `Ask me anything about government grants, NGO programmes, or how to apply.\n\n` +
+    `I only use verified official sources — I won't invent programmes or links.\n\n` +
+    `Type *MENU* anytime to exit chat.`,
+
+  aiUnavailable: () =>
+    `🤖 The AI assistant isn't available right now.\n\n` +
+    `You can still:\n` +
+    `• *START* — Find benefits that match your profile\n` +
+    `• *OPPORTUNITIES* — See latest verified grants\n` +
+    `• *MENU* — All options`,
+
+  aiError: () =>
+    `Sorry, something went wrong with the AI assistant. Please try again in a moment.\n\n` +
+    `Type *MENU* for other options.`,
+
+  opportunitiesRefreshed: (count) =>
+    `✅ *Verified opportunities updated!*\n\n` +
+    `Found *${count}* listing${count === 1 ? "" : "s"} from official sources.\n\n` +
+    `Type *OPPORTUNITIES* to see them · *CHAT* to ask questions · *MENU* for more.`,
 
   rateLimited: () =>
     `⏳ You're sending messages very quickly!\n\n` +
@@ -352,6 +376,8 @@ const MESSAGES_SW = {
     `*Menyu Kuu ya Faida* 🌿\n\n` +
     `*START* — Angalia fursa zako tena\n` +
     `*RESULTS* — Angalia matokeo yako ya mwisho\n` +
+    `*CHAT* — Uliza msaidizi wa AI kuhusu fursa\n` +
+    `*OPPORTUNITIES* — Fursa mpya kutoka vyanzo vilivyothibitishwa\n` +
     `*NEAREST* — Tafuta ofisi iliyo karibu\n` +
     `*FEEDBACK* — Kadiria uzoefu wako\n` +
     `*REMINDERS ON* — Pata kumbusho la muda wa mwisho\n` +
@@ -366,8 +392,30 @@ const MESSAGES_SW = {
     `3. Tunakuonyesha kila unachostahili — pamoja na hatua za kuomba\n\n` +
     `*Taarifa zangu ziko salama?*\n` +
     `Ndiyo. Faida ni bure na siri. Hatuuzi data yako.\n\n` +
-    `*Amri:* MENU · RESULTS · NEAREST · FEEDBACK · REMINDERS ON/OFF · START\n\n` +
+    `*Amri:* MENU · START · RESULTS · CHAT · OPPORTUNITIES · NEAREST · FEEDBACK · REMINDERS ON/OFF\n\n` +
     `Imetengenezwa na Munene · munene.dev`,
+
+  aiWelcome: () =>
+    `🤖 *Msaidizi wa AI wa Faida*\n\n` +
+    `Niulize chochote kuhusu ruzuku za serikali, programu za NGO, au jinsi ya kuomba.\n\n` +
+    `Ninatumi tu vyanzo rasmi vilivyothibitishwa — sitabuni fursa au viungo.\n\n` +
+    `Andika *MENU* wakati wowote kutoka.`,
+
+  aiUnavailable: () =>
+    `🤖 Msaidizi wa AI haupatikani kwa sasa.\n\n` +
+    `Bado unaweza:\n` +
+    `• *START* — Tafuta fursa zinazokufaa\n` +
+    `• *OPPORTUNITIES* — Angalia ruzuku mpya zilizothibitishwa\n` +
+    `• *MENU* — Chaguo zote`,
+
+  aiError: () =>
+    `Samahani, kuna tatizo na msaidizi wa AI. Jaribu tena baadaye.\n\n` +
+    `Andika *MENU* kwa chaguo zingine.`,
+
+  opportunitiesRefreshed: (count) =>
+    `✅ *Fursa zilizothibitishwa zimesasishwa!*\n\n` +
+    `Tumepata *${count}* tangazo${count === 1 ? "" : " la"} kutoka vyanzo rasmi.\n\n` +
+    `Andika *OPPORTUNITIES* kuona · *CHAT* kuuliza · *MENU* kwa zaidi.`,
 
   rateLimited: () =>
     `⏳ Unatumia ujumbe kwa haraka sana!\n\n` +

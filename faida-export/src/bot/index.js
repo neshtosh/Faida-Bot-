@@ -23,6 +23,7 @@ const { startReminderScheduler } = require("../lib/reminders");
 const { logIncoming, logReply, logError, logger } = require("../lib/logger");
 const { validateEnv } = require("../lib/env");
 const { startHealthServer, setBotStatus } = require("../lib/health");
+const { startOpportunityScheduler } = require("../lib/opportunities");
 
 const AUTH_FOLDER = path.join(__dirname, "../../.auth");
 if (!fs.existsSync(AUTH_FOLDER)) fs.mkdirSync(AUTH_FOLDER, { recursive: true });
@@ -32,6 +33,7 @@ const PORT = process.env.PORT || 3000;
 
 validateEnv();
 startHealthServer(PORT);
+startOpportunityScheduler();
 
 async function startBot() {
   const { state, saveCreds } = await useMultiFileAuthState(AUTH_FOLDER);

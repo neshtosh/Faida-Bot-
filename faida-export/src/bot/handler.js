@@ -9,7 +9,7 @@ const { matchBenefits } = require("../lib/eligibility");
 const { updateSession, persistCompletedApplication, recordAnalyticsEvent } = require("../lib/session");
 const { getMessages } = require("../lib/messages");
 const { findNearestOffice, formatOfficeMessage } = require("../lib/offices");
-const { logEligibilityMatches, logEvent } = require("../lib/logger");
+const { logEligibilityMatches, logEvent, logError } = require("../lib/logger");
 const {
   getFormForBenefit,
   getFieldLabel,
@@ -20,6 +20,12 @@ const {
   formatApplicationDocument,
 } = require("../lib/documents");
 const benefits = require("../db/benefits");
+const { isAiAvailable, chatWithFaida } = require("../lib/ai");
+const {
+  getLiveOpportunities,
+  formatOpportunitiesList,
+  refreshOpportunities,
+} = require("../lib/opportunities");
 
 const RATE_LIMIT_MAX = 20;
 const RATE_LIMIT_WINDOW_MS = 5 * 60 * 1000;
@@ -67,6 +73,9 @@ const FEEDBACK_TRIGGERS = ["feedback", "maoni", "kadiria"];
 const NEAREST_TRIGGERS = ["nearest", "office", "ofisi"];
 const REMINDERS_ON_TRIGGERS = ["reminders on", "reminder on", "kumbusho on"];
 const REMINDERS_OFF_TRIGGERS = ["reminders off", "reminder off", "kumbusho off"];
+const CHAT_TRIGGERS = ["chat", "ask", "ai", "uliza", "msaidizi"];
+const OPPORTUNITIES_TRIGGERS = ["opportunities", "fursa", "latest", "new grants"];
+const REFRESH_TRIGGERS = ["refresh", "update", "sasisha"];
 const IDK_TRIGGERS = ["0", "i don't know", "i dont know", "idk", "don't know", "dont know", "sijui", "unknown"];
 
 const APPLY_CANCEL_TRIGGERS = ["cancel", "stop", "sitisha", "cha", "acha"];
@@ -78,6 +87,54 @@ const APPLY_BACK_TRIGGERS = ["back", "rudi", "prev", "previous", "karibu"];
  * persistence) when session transitions are detected.
  */
 async function handleMessage(userId, text, session, meta = {}) {
+  const input = (text || "").trim().toLowerCase();
+  const msgs = () => getMessages(session.language);
+
+  // ── AI chat mode (async — handled before sync processMessage) ──
+  if (session.step === "ai_chat") {
+    if (MENU_TRIGGERS.includes(input) || ["exit", "quit", "stop", "toka"].includes(input)) {
+      updateSession(userId, { step: "menu" });
+      return msgs().menu();
+    }
+    if (!isAiAvailable()) {
+      return msgs().aiUnavailable();
+    }
+    try {
+      const { reply, history } = await chatWithFaida(session, text.trim());
+      updateSession(userId, { step: "ai_chat", aiHistory: history });
+      return reply;
+    } catch (err) {
+      logError(err, { userId, event: "ai_chat" });
+      return msgs().aiError();
+    }
+  }
+
+  if (CHAT_TRIGGERS.includes(input)) {
+    if (!isAiAvailable()) return msgs().aiUnavailable();
+    updateSession(userId, { step: "ai_chat", aiHistory: [] });
+    return msgs().aiWelcome();
+  }
+
+  if (OPPORTUNITIES_TRIGGERS.includes(input)) {
+    try {
+      const opps = await getLiveOpportunities(false);
+      return formatOpportunitiesList(opps, session.language);
+    } catch (err) {
+      logError(err, { userId, event: "opportunities_list" });
+      return msgs().aiError();
+    }
+  }
+
+  if (REFRESH_TRIGGERS.includes(input)) {
+    try {
+      const result = await refreshOpportunities();
+      return msgs().opportunitiesRefreshed(result.count);
+    } catch (err) {
+      logError(err, { userId, event: "opportunities_refresh" });
+      return msgs().aiError();
+    }
+  }
+
   const { reply, updates } = processMessage(text, session, meta);
   if (updates) {
     updateSession(userId, updates);

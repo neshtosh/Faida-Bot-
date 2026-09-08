@@ -17,7 +17,15 @@
  * }
  */
 
-const benefits = require("../db/benefits");
+const staticBenefits = require("../db/benefits");
+const { getCachedOpportunitiesAsBenefits } = require("./opportunities");
+
+/**
+ * Returns static benefits plus verified live opportunities.
+ */
+function getAllBenefits() {
+  return [...staticBenefits, ...getCachedOpportunitiesAsBenefits()];
+}
 
 /**
  * Score a single benefit against a user profile.
@@ -110,7 +118,7 @@ function scoreBenefit(benefit, user) {
 function matchBenefits(userProfile) {
   const results = [];
 
-  for (const benefit of benefits) {
+  for (const benefit of getAllBenefits()) {
     const { matches, score, reasons } = scoreBenefit(benefit, userProfile);
     if (matches) {
       results.push({ benefit, score, reasons });
@@ -157,4 +165,4 @@ function formatApplicationDetails(benefit) {
   );
 }
 
-module.exports = { matchBenefits, formatBenefitCard, formatApplicationDetails };
+module.exports = { matchBenefits, formatBenefitCard, formatApplicationDetails, getAllBenefits };

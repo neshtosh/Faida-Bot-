@@ -63,6 +63,7 @@ function buildDefaultSession() {
     isNew: true,
     remindersOptIn: false,
     remindersSent: {},
+    aiHistory: [],
     application: {
       benefitId: null,
       currentFieldIndex: 0,
@@ -203,6 +204,7 @@ async function persistSession(userId, session) {
   if (!supabase) return false;
 
   try {
+    await ensureUserRecord(userId, session.profile || {});
     const row = sessionToRow(userId, session);
     const { error } = await supabase.from("sessions").upsert(row, {
       onConflict: "user_id_hash",
@@ -517,14 +519,17 @@ async function ensureUserRecord(userId, profileSnapshot) {
 
   const hash = hashUserId(userId);
   try {
-    await supabase.rpc("faida_upsert_user", {
+    const { error: rpcError } = await supabase.rpc("faida_upsert_user", {
       p_user_id_hash: hash,
       p_language: null,
       p_profile_snapshot: profileSnapshot || {},
     });
-    return true;
+    if (!rpcError) return true;
   } catch (_) {
-    try {
+    // fall through to manual upsert
+  }
+
+  try {
       const { data: existing } = await supabase
         .from("users")
         .select("user_id_hash")
@@ -547,9 +552,8 @@ async function ensureUserRecord(userId, profileSnapshot) {
         });
       }
       return true;
-    } catch (_e) {
-      return false;
-    }
+  } catch (_e) {
+    return false;
   }
 }
 
