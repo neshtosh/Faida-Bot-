@@ -9,6 +9,7 @@ const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 const { isVerifiedUrl, getVerifiedFeeds } = require("./sources");
+const { fetchMtajiOpportunities, isMtajiConfigured } = require("./mtaji");
 const { logger } = require("./logger");
 
 const CACHE_FILE = path.join(__dirname, "../../data/live-opportunities.json");
@@ -170,11 +171,29 @@ function saveCacheToDisk() {
 }
 
 /**
+ * Merges opportunity lists, partner (M-Taji) first, deduped by link.
+ */
+function mergeOpportunities(lists) {
+  const merged = [];
+  const seenLinks = new Set();
+
+  for (const list of lists) {
+    for (const opp of list) {
+      if (!opp?.link || seenLinks.has(opp.link)) continue;
+      seenLinks.add(opp.link);
+      merged.push(opp);
+    }
+  }
+
+  return merged;
+}
+
+/**
  * Fetches and validates opportunities from all verified feeds.
  */
 async function refreshOpportunities() {
   const feeds = getVerifiedFeeds();
-  const found = [];
+  const fromFeeds = [];
   const seenLinks = new Set();
   let feedsOk = 0;
 
@@ -191,7 +210,7 @@ async function refreshOpportunities() {
         if (!opp || seenLinks.has(opp.link)) continue;
 
         seenLinks.add(opp.link);
-        found.push(opp);
+        fromFeeds.push(opp);
       }
 
       feedsOk++;
@@ -200,15 +219,41 @@ async function refreshOpportunities() {
     }
   }
 
+  let fromMtaji = [];
+  let mtajiOk = false;
+  if (isMtajiConfigured()) {
+    try {
+      const result = await fetchMtajiOpportunities();
+      fromMtaji = result.opportunities;
+      mtajiOk = result.ok;
+    } catch (err) {
+      logger.warn({ event: "mtaji_fetch_failed", err: err.message }, "M-Taji fetch failed");
+    }
+  }
+
+  const found = mergeOpportunities([fromMtaji, fromFeeds]);
+
   memoryCache = { opportunities: found, fetchedAt: Date.now() };
   saveCacheToDisk();
 
   logger.info(
-    { event: "opportunities_refreshed", count: found.length, feedsOk },
+    {
+      event: "opportunities_refreshed",
+      count: found.length,
+      mtajiCount: fromMtaji.length,
+      feedsOk,
+      mtajiOk,
+    },
     "Live opportunities refreshed"
   );
 
-  return { count: found.length, feedsOk, feedsTotal: feeds.length };
+  return {
+    count: found.length,
+    mtajiCount: fromMtaji.length,
+    feedsOk,
+    feedsTotal: feeds.length,
+    mtajiConfigured: isMtajiConfigured(),
+  };
 }
 
 /**
@@ -247,8 +292,10 @@ function formatOpportunitiesList(opportunities, lang, limit = 5) {
   }
 
   const header = isSw
-    ? `🆕 *Fursa mpya kutoka vyanzo rasmi vilivyothibitishwa:*\n━━━━━━━━━━━━━━━━━━━━\n\n`
-    : `🆕 *Latest opportunities from verified official sources:*\n━━━━━━━━━━━━━━━━━━━━\n\n`;
+    ? `🆕 *Fursa mpya kutoka vyanzo vilivyothibitishwa:*\n` +
+      `_(Pamoja na M-Taji, mshirika wa Faida)_\n━━━━━━━━━━━━━━━━━━━━\n\n`
+    : `🆕 *Latest opportunities from verified sources:*\n` +
+      `_(Including M-Taji, Faida's partner platform)_\n━━━━━━━━━━━━━━━━━━━━\n\n`;
 
   const cards = list
     .map((o, i) => {
@@ -262,10 +309,10 @@ function formatOpportunitiesList(opportunities, lang, limit = 5) {
 
   const footer = isSw
     ? `\n\n━━━━━━━━━━━━━━━━━━━━\n` +
-      `✅ Fursa hizi zimetoka vyanzo rasmi pekee (.go.ke, usaid.gov, nk.)\n` +
+      `✅ Vyanzo: M-Taji (mshirika), .go.ke, usaid.gov, nk.\n` +
       `Jibu *CHAT* kuuliza zaidi · *REFRESH* kusasisha · *MENU*`
     : `\n\n━━━━━━━━━━━━━━━━━━━━\n` +
-      `✅ These come from verified official sources only (.go.ke, usaid.gov, etc.)\n` +
+      `✅ Sources: M-Taji (partner), .go.ke, usaid.gov, etc.\n` +
       `Reply *CHAT* to ask more · *REFRESH* to update · *MENU*`;
 
   return header + cards + footer;

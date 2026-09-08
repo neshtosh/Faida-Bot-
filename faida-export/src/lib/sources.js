@@ -25,6 +25,7 @@ const VERIFIED_DOMAINS = [
   "un.org",
   "widu.africa",
   "startup.google.com",
+  "m-taji.co.ke",
 ];
 
 /** Official RSS/Atom feeds to poll for new announcements. */

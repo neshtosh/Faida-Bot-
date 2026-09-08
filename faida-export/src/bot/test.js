@@ -11,6 +11,7 @@ const { createSession, getOrCreate } = require("../lib/session");
 const { isAiAvailable } = require("../lib/ai");
 const { formatOpportunitiesList } = require("../lib/opportunities");
 const { isVerifiedUrl } = require("../lib/sources");
+const { mapMtajiRow } = require("../lib/mtaji");
 
 let passed = 0;
 let failed = 0;
@@ -286,8 +287,34 @@ async function runFlowTests() {
       },
     ];
     const formatted = formatOpportunitiesList(sample, "en");
-    expect(formatted).toContain("verified official sources");
+    expect(formatted).toContain("M-Taji");
     expect(formatted).toContain("World Bank");
+  });
+
+  await test("M-Taji opportunity maps to verified partner link", () => {
+    const opp = mapMtajiRow({
+      id: "994b773b-3676-4461-8dde-d789bc698dac",
+      title: "Youth Volunteers Needed",
+      organization: "MY-KDM",
+      amount: "Stipend",
+      kind: "grant",
+      listing_status: "published",
+    });
+    expect(opp).toBeTruthy();
+    expect(opp.link).toBe(
+      "https://www.m-taji.co.ke/opportunities/994b773b-3676-4461-8dde-d789bc698dac"
+    );
+    expect(opp.sourceName).toContain("M-Taji");
+    expect(isVerifiedUrl(opp.link)).toBe(true);
+  });
+
+  await test("M-Taji draft listings are excluded", () => {
+    const opp = mapMtajiRow({
+      id: "draft-1",
+      title: "Hidden Grant",
+      listing_status: "draft",
+    });
+    expect(opp).toBe(null);
   });
 }
 
