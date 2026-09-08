@@ -22,7 +22,7 @@ const { getOrCreate } = require("../lib/session");
 const { startReminderScheduler } = require("../lib/reminders");
 const { logIncoming, logReply, logError, logger } = require("../lib/logger");
 const { validateEnv } = require("../lib/env");
-const { startHealthServer, setBotStatus, setCurrentQr, clearCurrentQr, getQrPageUrl } = require("../lib/health");
+const { startHealthServer, setBotStatus, setCurrentQr, clearCurrentQr, getQrPageUrl, getPublicUrlSetupHint } = require("../lib/health");
 const { startOpportunityScheduler } = require("../lib/opportunities");
 
 const AUTH_FOLDER = path.join(__dirname, "../../.auth");
@@ -60,15 +60,23 @@ async function startBot() {
     if (qr) {
       setBotStatus("awaiting_qr_scan");
       setCurrentQr(qr);
-      const qrLink = getQrPageUrl();
 
       console.clear();
       console.log("╔══════════════════════════════════════════════╗");
       console.log("║     🌿  FAIDA BOT — Scan to Connect          ║");
       console.log("╚══════════════════════════════════════════════╝\n");
       qrcode.generate(qr, { small: true });
-      console.log("\n🔗 Scan from your phone (shareable link):");
-      console.log(`   ${qrLink}\n`);
+      const qrLink = getQrPageUrl();
+      const setupHint = getPublicUrlSetupHint();
+
+      console.log("\n🔗 Scan from your phone:");
+      if (qrLink) {
+        console.log(`   ${qrLink}\n`);
+      } else if (setupHint) {
+        console.log(`   ⚠️  ${setupHint}\n`);
+      } else {
+        console.log("   (Public link unavailable — check server logs)\n");
+      }
       console.log("📱 Or scan the QR above in this terminal.");
       console.log("   WhatsApp → Settings → Linked Devices → Link a Device\n");
       console.log("⏳ QR expires in ~60 seconds — page auto-refreshes with a new one.\n");

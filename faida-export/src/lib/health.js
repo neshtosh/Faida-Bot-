@@ -14,24 +14,60 @@ let currentQr = null;
 let qrGeneratedAt = null;
 
 /**
- * Returns the public base URL for shareable links.
+ * Returns true when running inside a Railway deployment.
+ */
+function isRailwayRuntime() {
+  return !!(process.env.RAILWAY_ENVIRONMENT_ID || process.env.RAILWAY_SERVICE_ID);
+}
+
+/**
+ * Returns the public base URL for shareable links, or null if unknown.
  */
 function getPublicBaseUrl() {
   if (process.env.PUBLIC_URL) {
     return process.env.PUBLIC_URL.replace(/\/$/, "");
   }
-  if (process.env.RAILWAY_PUBLIC_DOMAIN) {
-    return `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`;
+
+  const railwayDomain =
+    process.env.RAILWAY_PUBLIC_DOMAIN ||
+    process.env.RAILWAY_STATIC_URL?.replace(/^https?:\/\//, "");
+
+  if (railwayDomain) {
+    return `https://${railwayDomain.replace(/^https?:\/\//, "")}`;
   }
+
+  // localhost only makes sense for local development — never on Railway
+  if (isRailwayRuntime()) {
+    return null;
+  }
+
   const port = process.env.PORT || 3000;
   return `http://localhost:${port}`;
 }
 
 /**
- * Returns the shareable QR scan page URL.
+ * Returns the shareable QR scan page URL, or null if no public URL is configured.
  */
 function getQrPageUrl() {
-  return `${getPublicBaseUrl()}/qr`;
+  const base = getPublicBaseUrl();
+  return base ? `${base}/qr` : null;
+}
+
+/**
+ * Returns setup instructions when Railway has no public domain yet.
+ */
+function getPublicUrlSetupHint() {
+  if (process.env.PUBLIC_URL || process.env.RAILWAY_PUBLIC_DOMAIN) return null;
+
+  if (isRailwayRuntime()) {
+    return (
+      "Railway public domain not detected. Go to your service → Settings → Networking → " +
+      "Generate Domain, then redeploy. Or set PUBLIC_URL=https://YOUR-SERVICE.up.railway.app " +
+      "in Railway Variables."
+    );
+  }
+
+  return null;
 }
 
 /**
@@ -144,12 +180,21 @@ function buildQrHtml(dataUrl) {
  * Builds the HTML page shown when no QR is available.
  */
 function buildQrUnavailableHtml() {
+  const setupHint = getPublicUrlSetupHint();
   const message =
     botStatus === "connected"
       ? "WhatsApp is already connected. The bot is live."
       : botStatus === "connecting"
         ? "Connecting… refresh this page in a few seconds."
-        : "No QR code is available right now. Restart the bot to generate one.";
+        : setupHint
+          ? setupHint
+          : "No QR code is available right now. Restart the bot to generate one.";
+
+  const publicUrl = getPublicBaseUrl();
+  const extra =
+    setupHint && publicUrl
+      ? `<p><strong>Once configured, open:</strong><br><a href="${publicUrl}/qr">${publicUrl}/qr</a></p>`
+      : "";
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -183,6 +228,7 @@ function buildQrUnavailableHtml() {
   <div class="card">
     <h1>🌿 Faida WhatsApp</h1>
     <p>${message}</p>
+    ${extra}
     <p><small>Status: ${botStatus}</small></p>
   </div>
 </body>
@@ -197,11 +243,14 @@ function startHealthServer(port) {
     const path = (req.url || "/").split("?")[0];
 
     if (path === "/health" || path === "/") {
+      const qrUrl = getQrPageUrl();
       const body = JSON.stringify({
         status: "ok",
         service: "faida-bot",
         bot: botStatus,
-        qrUrl: currentQr ? getQrPageUrl() : null,
+        publicUrl: getPublicBaseUrl(),
+        qrUrl,
+        setupHint: getPublicUrlSetupHint(),
         timestamp: new Date().toISOString(),
       });
 
@@ -263,8 +312,21 @@ function startHealthServer(port) {
   });
 
   server.listen(port, "0.0.0.0", () => {
+    const publicUrl = getPublicBaseUrl();
+    const setupHint = getPublicUrlSetupHint();
+
+    if (setupHint) {
+      logger.warn({ event: "public_url_missing", setupHint }, "Public URL not configured");
+      console.warn(`\n⚠️  ${setupHint}\n`);
+    }
+
     logger.info(
-      { event: "health_server", port, qrUrl: getQrPageUrl() },
+      {
+        event: "health_server",
+        port,
+        publicUrl,
+        qrUrl: getQrPageUrl(),
+      },
       "Health check server listening"
     );
   });
@@ -279,4 +341,6 @@ module.exports = {
   clearCurrentQr,
   getQrPageUrl,
   getPublicBaseUrl,
+  getPublicUrlSetupHint,
+  isRailwayRuntime,
 };

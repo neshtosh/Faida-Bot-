@@ -208,7 +208,26 @@ git push -u origin main
 
 1. Go to [railway.app](https://railway.app) and click **New Project**
 2. Choose **Deploy from GitHub repo** and select your `faida` repository
-3. Railway will detect `Procfile` and `railway.json` automatically
+3. Set **Root Directory** to `faida-export`
+4. Railway will detect `Procfile` and `railway.json` automatically
+
+### Step 2b — Generate a public domain (required for QR link)
+
+Before the shareable QR link works, you must expose the service:
+
+1. Open your Railway service → **Settings** → **Networking**
+2. Under **Public Networking**, click **Generate Domain**
+3. Copy the domain (e.g. `faida-bot-production.up.railway.app`)
+4. Optional but recommended: add variable `PUBLIC_URL=https://faida-bot-production.up.railway.app`
+5. **Redeploy** the service
+
+Your QR scan page will then be at:
+
+```
+https://YOUR-DOMAIN.up.railway.app/qr
+```
+
+> `localhost` links never work on Railway — they only work on your own computer during local dev.
 
 ### Step 3 — Set environment variables
 
