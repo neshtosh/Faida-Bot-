@@ -16,8 +16,15 @@ export function ScrapeNowButton() {
       const res = await fetch("/api/opportunities", { method: "POST" });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Scrape failed");
+      const dbg = data.debug
+        ? ` (M-Taji: ${data.debug.mtaji}, World Bank: ${data.debug.worldBank}, RSS: ${data.debug.rss})`
+        : "";
+      const errHint =
+        data.scraped === 0 && data.debug?.errors?.length
+          ? ` Errors: ${data.debug.errors.join("; ")}`
+          : "";
       setMessage(
-        `Found ${data.scraped} — ${data.inserted} new, ${data.updated} updated, ${data.skipped} skipped`
+        `Found ${data.scraped} — ${data.inserted} new, ${data.updated} updated, ${data.skipped} skipped${dbg}${errHint}`
       );
       router.refresh();
     } catch (err) {

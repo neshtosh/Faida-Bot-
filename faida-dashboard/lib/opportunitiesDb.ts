@@ -1,5 +1,8 @@
 import { getSupabaseAdmin, isSupabaseConfigured } from "./supabase";
-import { scrapeVerifiedOpportunities, type ScrapedOpportunity } from "./scraper";
+import {
+  scrapeVerifiedOpportunitiesWithDebug,
+  type ScrapedOpportunity,
+} from "./scraper";
 
 export type OpportunityStatus = "pending" | "approved" | "rejected";
 
@@ -61,13 +64,20 @@ export async function queueScrapedOpportunities(): Promise<{
   inserted: number;
   updated: number;
   skipped: number;
+  debug?: {
+    mtaji: number;
+    worldBank: number;
+    rss: number;
+    errors: string[];
+  };
 }> {
   const supabase = getSupabaseAdmin();
   if (!supabase) {
     throw new Error("Supabase is not configured. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.");
   }
 
-  const scraped = await scrapeVerifiedOpportunities();
+  const { opportunities: scraped, debug } = await scrapeVerifiedOpportunitiesWithDebug();
+  console.log("[opportunitiesDb] scrape result:", debug);
   let inserted = 0;
   let updated = 0;
   let skipped = 0;
@@ -113,7 +123,18 @@ export async function queueScrapedOpportunities(): Promise<{
     }
   }
 
-  return { scraped: scraped.length, inserted, updated, skipped };
+  return {
+    scraped: scraped.length,
+    inserted,
+    updated,
+    skipped,
+    debug: {
+      mtaji: debug.mtaji,
+      worldBank: debug.worldBank,
+      rss: debug.rss,
+      errors: debug.errors,
+    },
+  };
 }
 
 export async function setOpportunityStatus(

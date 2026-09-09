@@ -210,10 +210,27 @@ function mapMtajiRow(row: Record<string, unknown>): ScrapedOpportunity | null {
   };
 }
 
+function cdata(value: unknown): string {
+  if (!value) return "";
+  if (typeof value === "string") return value;
+  if (typeof value === "object" && value !== null && "cdata!" in value) {
+    return String((value as { "cdata!": string })["cdata!"] || "");
+  }
+  return String(value);
+}
+
+function normalizeUrl(url: string): string {
+  if (!url) return "";
+  return url.startsWith("http://") ? url.replace("http://", "https://") : url;
+}
+
 async function fetchMtajiOpportunities(): Promise<ScrapedOpportunity[]> {
   const base = process.env.MTAJI_SUPABASE_URL?.replace(/\/$/, "");
   const key = process.env.MTAJI_SUPABASE_ANON_KEY;
-  if (!base || !key) return [];
+  if (!base || !key) {
+    console.log("[scraper] M-Taji skipped — MTAJI_SUPABASE_URL or MTAJI_SUPABASE_ANON_KEY not set");
+    return [];
+  }
 
   const url =
     `${base}/rest/v1/opportunities` +
@@ -225,30 +242,113 @@ async function fetchMtajiOpportunities(): Promise<ScrapedOpportunity[]> {
   const res = await fetch(url, {
     headers: { apikey: key, Authorization: `Bearer ${key}` },
   });
-  if (!res.ok) return [];
+  if (!res.ok) {
+    console.warn("[scraper] M-Taji fetch failed:", res.status, await res.text());
+    return [];
+  }
 
   const rows = (await res.json()) as Record<string, unknown>[];
+  console.log("[scraper] M-Taji rows:", rows.length);
   return rows.map(mapMtajiRow).filter(Boolean) as ScrapedOpportunity[];
 }
 
 /**
- * Scrapes verified RSS feeds and M-Taji, deduped by link.
+ * World Bank JSON news API (RSS endpoints often return 404/403).
+ */
+async function fetchWorldBankNews(): Promise<ScrapedOpportunity[]> {
+  const apiUrl =
+    "https://search.worldbank.org/api/v2/news?format=json&rows=25&qterm=kenya";
+  const res = await fetch(apiUrl, {
+    headers: { "User-Agent": "FaidaDashboard/1.0 (Kenya benefits scraper)" },
+  });
+  if (!res.ok) {
+    console.warn("[scraper] World Bank API failed:", res.status);
+    return [];
+  }
+
+  const data = (await res.json()) as {
+    documents?: Record<string, Record<string, unknown>>;
+  };
+  const docs = Object.values(data.documents || {});
+  const keywords = ["kenya", "grant", "fund", "youth", "sme", "africa"];
+  const out: ScrapedOpportunity[] = [];
+
+  for (const doc of docs) {
+    const title = cdata(doc.title);
+    const description = cdata(doc.descr);
+    const link = normalizeUrl(String(doc.url || ""));
+    const text = `${title} ${description} ${doc.keywd || ""}`;
+
+    if (!title || !link || !isVerifiedUrl(link)) continue;
+    if (!matchesKeywords(text, keywords)) continue;
+
+    const opp = itemToOpportunity(
+      { title, link, description, pubDate: String(doc.display_date || "") },
+      "World Bank — News"
+    );
+    if (opp) out.push(opp);
+  }
+
+  console.log("[scraper] World Bank API items:", out.length);
+  return out;
+}
+
+export type ScrapeDebug = {
+  mtaji: number;
+  worldBank: number;
+  rss: number;
+  total: number;
+  errors: string[];
+};
+
+/**
+ * Scrapes verified sources and M-Taji, deduped by link.
  */
 export async function scrapeVerifiedOpportunities(): Promise<ScrapedOpportunity[]> {
+  const { opportunities } = await scrapeVerifiedOpportunitiesWithDebug();
+  return opportunities;
+}
+
+export async function scrapeVerifiedOpportunitiesWithDebug(): Promise<{
+  opportunities: ScrapedOpportunity[];
+  debug: ScrapeDebug;
+}> {
   const merged: ScrapedOpportunity[] = [];
   const seenLinks = new Set<string>();
+  const errors: string[] = [];
+  let mtajiCount = 0;
+  let worldBankCount = 0;
+  let rssCount = 0;
 
-  const fromMtaji = await fetchMtajiOpportunities();
-  for (const opp of fromMtaji) {
-    if (seenLinks.has(opp.link)) continue;
-    seenLinks.add(opp.link);
-    merged.push(opp);
+  try {
+    const fromMtaji = await fetchMtajiOpportunities();
+    mtajiCount = fromMtaji.length;
+    for (const opp of fromMtaji) {
+      if (seenLinks.has(opp.link)) continue;
+      seenLinks.add(opp.link);
+      merged.push(opp);
+    }
+  } catch (err) {
+    errors.push(`M-Taji: ${err instanceof Error ? err.message : "failed"}`);
+  }
+
+  try {
+    const fromWorldBank = await fetchWorldBankNews();
+    worldBankCount = fromWorldBank.length;
+    for (const opp of fromWorldBank) {
+      if (seenLinks.has(opp.link)) continue;
+      seenLinks.add(opp.link);
+      merged.push(opp);
+    }
+  } catch (err) {
+    errors.push(`World Bank: ${err instanceof Error ? err.message : "failed"}`);
   }
 
   for (const feed of VERIFIED_FEEDS) {
     try {
       const xml = await fetchWithTimeout(feed.url);
       const items = parseRssItems(xml);
+      let feedCount = 0;
       for (const item of items) {
         const text = `${item.title} ${item.description}`;
         if (!matchesKeywords(text, feed.keywords)) continue;
@@ -256,11 +356,27 @@ export async function scrapeVerifiedOpportunities(): Promise<ScrapedOpportunity[
         if (!opp || seenLinks.has(opp.link)) continue;
         seenLinks.add(opp.link);
         merged.push(opp);
+        feedCount++;
       }
-    } catch {
-      // skip failed feed
+      rssCount += feedCount;
+      console.log(`[scraper] RSS ${feed.id}:`, feedCount, "items");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "failed";
+      errors.push(`RSS ${feed.id}: ${msg}`);
+      console.warn(`[scraper] RSS ${feed.id} failed:`, msg);
     }
   }
 
-  return merged;
+  console.log("[scraper] total merged:", merged.length, { mtajiCount, worldBankCount, rssCount, errors });
+
+  return {
+    opportunities: merged,
+    debug: {
+      mtaji: mtajiCount,
+      worldBank: worldBankCount,
+      rss: rssCount,
+      total: merged.length,
+      errors,
+    },
+  };
 }
