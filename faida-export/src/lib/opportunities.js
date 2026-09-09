@@ -193,6 +193,103 @@ function mergeOpportunities(lists) {
   return merged;
 }
 
+function cdata(value) {
+  if (!value) return "";
+  if (typeof value === "string") return value;
+  if (typeof value === "object" && value !== null && "cdata!" in value) {
+    return String(value["cdata!"] || "");
+  }
+  return String(value);
+}
+
+function normalizeUrl(url) {
+  if (!url) return "";
+  return url.startsWith("http://") ? url.replace("http://", "https://") : url;
+}
+
+/**
+ * World Bank JSON news API (RSS endpoints often return 404/403).
+ */
+async function fetchWorldBankNews() {
+  const apiUrl =
+    "https://search.worldbank.org/api/v2/news?format=json&rows=25&qterm=kenya";
+  const res = await fetch(apiUrl, {
+    headers: { "User-Agent": "FaidaBot/1.0 (Kenya benefits)" },
+  });
+  if (!res.ok) return [];
+
+  const data = await res.json();
+  const docs = Object.values(data.documents || {});
+  const keywords = ["kenya", "grant", "fund", "youth", "sme", "africa"];
+  const out = [];
+
+  for (const doc of docs) {
+    const title = cdata(doc.title);
+    const description = cdata(doc.descr);
+    const link = normalizeUrl(String(doc.url || ""));
+    const text = `${title} ${description} ${doc.keywd || ""}`;
+
+    if (!title || !link || !isVerifiedUrl(link)) continue;
+    if (!matchesKeywords(text, keywords)) continue;
+
+    const opp = itemToOpportunity(
+      { title, link, description, pubDate: String(doc.display_date || "") },
+      "World Bank — News"
+    );
+    if (opp) out.push(opp);
+  }
+
+  return out;
+}
+
+/**
+ * Scrapes all verified live sources (for admin review queue).
+ */
+async function scrapeRawSources() {
+  const feeds = getVerifiedFeeds();
+  const fromFeeds = [];
+  const seenLinks = new Set();
+
+  for (const feed of feeds) {
+    try {
+      const xml = await fetchWithTimeout(feed.url);
+      const items = parseRssItems(xml);
+
+      for (const item of items) {
+        const text = `${item.title} ${item.description}`;
+        if (!matchesKeywords(text, feed.keywords)) continue;
+
+        const opp = itemToOpportunity(item, feed.name);
+        if (!opp || seenLinks.has(opp.link)) continue;
+
+        seenLinks.add(opp.link);
+        fromFeeds.push(opp);
+      }
+    } catch (err) {
+      logger.warn({ event: "feed_fetch_failed", feed: feed.id, err: err.message }, "Feed fetch failed");
+    }
+  }
+
+  let fromMtaji = [];
+  if (isMtajiConfigured()) {
+    try {
+      const result = await fetchMtajiOpportunities();
+      fromMtaji = result.opportunities;
+    } catch (err) {
+      logger.warn({ event: "mtaji_fetch_failed", err: err.message }, "M-Taji fetch failed");
+    }
+  }
+
+  let fromWorldBank = [];
+  try {
+    fromWorldBank = await fetchWorldBankNews();
+  } catch (err) {
+    logger.warn({ event: "worldbank_fetch_failed", err: err.message }, "World Bank fetch failed");
+  }
+
+  return mergeOpportunities([fromMtaji, fromWorldBank, fromFeeds]);
+}
+
 /**
  * Fetches admin-approved opportunities from Supabase (dashboard sync).
  */
@@ -373,14 +470,29 @@ function startOpportunityScheduler() {
 
   refreshOpportunities().catch(() => {});
 
-  const intervalMs = isOpportunityStoreConfigured() ? 15 * 60 * 1000 : CACHE_TTL_MS;
-  setInterval(() => {
-    refreshOpportunities().catch(() => {});
-  }, intervalMs);
+  if (isOpportunityStoreConfigured()) {
+    const { queueScrapedForReview } = require("./opportunity-queue");
+
+    // Railway bot scrapes → Supabase pending every 12h (no Vercel Cron needed)
+    queueScrapedForReview().catch(() => {});
+    setInterval(() => {
+      queueScrapedForReview().catch(() => {});
+    }, CACHE_TTL_MS);
+
+    // Poll approved items for the WhatsApp bot every 15 minutes
+    setInterval(() => {
+      refreshOpportunities().catch(() => {});
+    }, 15 * 60 * 1000);
+  } else {
+    setInterval(() => {
+      refreshOpportunities().catch(() => {});
+    }, CACHE_TTL_MS);
+  }
 }
 
 module.exports = {
   refreshOpportunities,
+  scrapeRawSources,
   getLiveOpportunities,
   getCachedOpportunitiesAsBenefits,
   formatOpportunitiesList,

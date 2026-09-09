@@ -130,9 +130,10 @@ export default async function OpportunitiesPage({
           </div>
 
           <div className="text-xs text-slate-500">
-            Architecture: Vercel cron → scrape → Supabase (pending) → you approve →
-            Railway bot reads approved rows every ~15 minutes. Users type{" "}
-            <code className="bg-slate-100 px-1 rounded">OPPORTUNITIES</code> in WhatsApp.
+            Architecture: Railway bot scrapes every 12h → Supabase (pending) → you approve
+            here → bot shows approved items in WhatsApp. Use <strong>Scrape now</strong> for
+            an immediate fetch. Users type{" "}
+            <code className="bg-slate-100 px-1 rounded">OPPORTUNITIES</code>.
           </div>
         </>
       )}

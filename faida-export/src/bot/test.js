@@ -292,7 +292,9 @@ async function runFlowTests() {
     expect(
       reply.includes("verified") ||
         reply.includes("vilivyothibitishwa") ||
-        reply.includes("No new opportunities")
+        reply.includes("No new opportunities") ||
+        reply.includes("admin-approved") ||
+        reply.includes("zilizoidhinishwa")
     ).toBe(true);
   });
 
