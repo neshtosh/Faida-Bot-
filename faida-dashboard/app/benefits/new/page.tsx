@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { BenefitForm } from "@/components/BenefitForm";
 
 export default function NewBenefitPage() {
@@ -20,7 +21,9 @@ export default function NewBenefitPage() {
         </p>
       </div>
 
-      <BenefitForm mode="create" />
+      <Suspense fallback={<div className="text-slate-500">Loading form…</div>}>
+        <BenefitForm mode="create" />
+      </Suspense>
     </div>
   );
 }

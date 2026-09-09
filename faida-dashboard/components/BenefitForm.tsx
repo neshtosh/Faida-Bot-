@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState, type FormEvent } from "react";
 import type { Benefit, BenefitEligibility } from "@/types/benefit";
 import { CATEGORIES, CATEGORY_LABELS } from "@/types/benefit";
 
@@ -55,9 +55,16 @@ const splitList = (s: string): string[] =>
 
 export function BenefitForm({ mode, initial }: Props) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [benefit, setBenefit] = useState<Benefit>(initial ?? DEFAULT_BENEFIT);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [importUrl, setImportUrl] = useState("");
+  const [importing, setImporting] = useState(false);
+  const [importMessage, setImportMessage] = useState<string | null>(null);
+  const [docFile, setDocFile] = useState<File | null>(null);
+  const [docImporting, setDocImporting] = useState(false);
+  const [docMessage, setDocMessage] = useState<string | null>(null);
   const [countiesText, setCountiesText] = useState(
     (initial?.eligibility.counties ?? []).join(", ")
   );
@@ -74,6 +81,116 @@ export function BenefitForm({ mode, initial }: Props) {
       eligibility: { ...b.eligibility, [key]: value },
     }));
   };
+
+  function applyImportedBenefit(imported: Partial<Benefit>) {
+    setBenefit((prev) => ({
+      ...prev,
+      ...imported,
+      eligibility: { ...prev.eligibility, ...(imported.eligibility || {}) },
+    }));
+    if (imported.eligibility?.counties) {
+      setCountiesText(imported.eligibility.counties.join(", "));
+    }
+    if (imported.eligibility?.sectors) {
+      setSectorsText(imported.eligibility.sectors.join(", "));
+    }
+  }
+
+  async function handleImportFromUrl(forcedUrl?: string) {
+    const url = (forcedUrl ?? importUrl).trim();
+    if (!url) return;
+    if (!forcedUrl) setImportUrl(url);
+
+    setImporting(true);
+    setImportMessage(null);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/benefits/import-url", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
+      let data: {
+        error?: string;
+        benefit?: Partial<Benefit>;
+        partial?: boolean;
+        warning?: string;
+      } = {};
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error(`Import failed (${res.status})`);
+      }
+      if (!res.ok || !data.benefit) {
+        throw new Error(data.error || "Could not read that page");
+      }
+
+      applyImportedBenefit(data.benefit);
+      setImportMessage(
+        data.warning ||
+          `Imported “${data.benefit.name}”. Review the fields below, then save.`
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Import failed");
+    } finally {
+      setImporting(false);
+    }
+  }
+
+  async function handleImportFromDoc() {
+    if (!docFile) return;
+
+    setDocImporting(true);
+    setDocMessage(null);
+    setError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", docFile);
+
+      const res = await fetch("/api/benefits/import-doc", {
+        method: "POST",
+        body: formData,
+      });
+
+      let data: {
+        error?: string;
+        benefit?: Partial<Benefit>;
+        partial?: boolean;
+        warning?: string;
+        extractedChars?: number;
+      } = {};
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error(`Import failed (${res.status})`);
+      }
+
+      if (!res.ok || !data.benefit) {
+        throw new Error(data.error || "Could not read that document");
+      }
+
+      applyImportedBenefit(data.benefit);
+      setDocMessage(
+        data.warning ||
+          `Read ${data.extractedChars ?? 0} characters from “${docFile.name}”. Review the fields below, then save.`
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Document import failed");
+    } finally {
+      setDocImporting(false);
+    }
+  }
+
+  useEffect(() => {
+    const urlParam = searchParams.get("url");
+    if (mode === "create" && urlParam && !importUrl) {
+      setImportUrl(urlParam);
+      handleImportFromUrl(urlParam);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, mode]);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -133,6 +250,77 @@ export function BenefitForm({ mode, initial }: Props) {
           ⚠️ {error}
         </div>
       )}
+
+      {mode === "create" ? (
+        <section className="card p-6 space-y-4 border-brand-100 bg-brand-50/40">
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">Import from URL</h2>
+            <p className="text-sm text-slate-600 mt-1">
+              Paste any official benefit or grant page link — Faida reads the page and
+              pre-fills the form. You review and vet the source before saving.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <input
+              type="url"
+              value={importUrl}
+              onChange={(e) => setImportUrl(e.target.value)}
+              placeholder="https://example.com/your-grant-page"
+              className="input flex-1"
+            />
+            <button
+              type="button"
+              onClick={() => handleImportFromUrl()}
+              disabled={importing || !importUrl.trim()}
+              className="btn-primary shrink-0"
+            >
+              {importing ? "Reading page…" : "Auto-fill from URL"}
+            </button>
+          </div>
+          {importMessage ? (
+            <p className="text-sm text-emerald-700">{importMessage}</p>
+          ) : null}
+        </section>
+      ) : null}
+
+      {mode === "create" ? (
+        <section className="card p-6 space-y-4 border-violet-100 bg-violet-50/40">
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">Import from document</h2>
+            <p className="text-sm text-slate-600 mt-1">
+              Upload a PDF, Word (.docx), or text file — Faida extracts the text and
+              pre-fills the benefit form. Scanned PDFs may need manual review.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+            <input
+              type="file"
+              accept=".pdf,.docx,.txt,.md,.rtf,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"
+              onChange={(e) => {
+                setDocFile(e.target.files?.[0] ?? null);
+                setDocMessage(null);
+              }}
+              className="block w-full text-sm text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-white file:text-brand-700 file:font-medium hover:file:bg-brand-50"
+            />
+            <button
+              type="button"
+              onClick={handleImportFromDoc}
+              disabled={docImporting || !docFile}
+              className="btn-primary shrink-0"
+            >
+              {docImporting ? "Reading document…" : "Auto-fill from document"}
+            </button>
+          </div>
+          {docFile ? (
+            <p className="text-xs text-slate-500">
+              Selected: {docFile.name} ({Math.round(docFile.size / 1024)} KB)
+            </p>
+          ) : null}
+          {docMessage ? (
+            <p className="text-sm text-violet-800">{docMessage}</p>
+          ) : null}
+        </section>
+      ) : null}
 
       <section className="card p-6 space-y-5">
         <div>

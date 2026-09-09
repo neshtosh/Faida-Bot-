@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
-    serverComponentsExternalPackages: ["fs", "path"],
+    serverComponentsExternalPackages: ["fs", "path", "pdf-parse", "mammoth"],
   },
 };
 

@@ -119,7 +119,7 @@ export default async function OpportunitiesPage({
                           {new Date(opp.scraped_at).toLocaleString()}
                         </td>
                         <td className="px-4 py-4 align-top">
-                          <OpportunityActions id={opp.id} status={opp.status} />
+                          <OpportunityActions id={opp.id} status={opp.status} link={opp.link} />
                         </td>
                       </tr>
                     ))}

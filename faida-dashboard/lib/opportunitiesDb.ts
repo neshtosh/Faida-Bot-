@@ -154,12 +154,16 @@ export async function setOpportunityStatus(
     approved_at: status === "approved" ? now : null,
   };
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("scraped_opportunities")
     .update(patch)
-    .eq("id", id);
+    .eq("id", id)
+    .select("id");
 
   if (error) throw new Error(error.message);
+  if (!data || data.length === 0) {
+    throw new Error(`Opportunity '${id}' not found or update blocked. Check Supabase service role key.`);
+  }
 }
 
 export function isOpportunitiesSyncReady(): boolean {

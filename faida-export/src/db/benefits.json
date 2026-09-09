@@ -861,5 +861,33 @@
       ],
       "groupRequired": false
     }
+  },
+  {
+    "id": "82426012406postgraduate-call-for-proposa-afa830",
+    "name": "82426012406Postgraduate Call For Proposals",
+    "provider": "NRF shall be submitted",
+    "category": "financial",
+    "emoji": "💰",
+    "description": "1 CALL FOR PROPOSALS: POSTGRADUATE RESEARCH GRANTS -NRF001/2026 1. Background and Rationale The National Research Fund (NRF), established under the Science, Technology and Innovation Act, 2013, is mandated to mobilize resources for research and innovation to strengthen Kenya’s national research ecosystem. In line with this mandate, NRF recognizes postgraduate research as a critical pillar for developing sustainable research capacity, advancing knowledge, and nurturing future researchers, innovators, and policy leaders. Despite their central role in generating original knowledge, postgraduate r",
+    "amount": "(NRF), established under the Science, Te",
+    "howToApply": ": The research proposals for this call must be submitted by 6th March 2026 at 23:59hrs. Only successful applicants will be contacted. Applications should be submitted in electronic format through the Online Grants Management System: grantsportal.nrf.go.ke. 5.2 Review process/ Evaluation Criteria: In the review of the research proposals, the following evaluation criteria will be used: i. Quality and originality of the proposed research (20%) ii. Relevance of the proposed research to the call objectives (20%) iii. Feasibility of the proposed research (10%) iv. Budget justification and value for money (15%) v. Potential impact of the proposed research; (10%) vi. Suitability of the proposed research design and methodology;15% vii. Technical capacity of the researcher and supervision support; (",
+    "documents": "National ID and documents listed in the source material",
+    "deadline": "Rolling",
+    "link": "",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 99,
+      "gender": "any",
+      "employed": "any",
+      "businessOwner": "any",
+      "disability": "any",
+      "counties": [
+        "Nairobi"
+      ],
+      "sectors": [
+        "any"
+      ],
+      "groupRequired": false
+    }
   }
 ]

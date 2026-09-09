@@ -6,9 +6,10 @@ import { useState } from "react";
 type Props = {
   id: string;
   status: string;
+  link?: string;
 };
 
-export function OpportunityActions({ id, status }: Props) {
+export function OpportunityActions({ id, status, link }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState<"approve" | "reject" | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -18,13 +19,18 @@ export function OpportunityActions({ id, status }: Props) {
     setError(null);
 
     try {
-      const res = await fetch(`/api/opportunities/${id}`, {
+      const res = await fetch(`/api/opportunities/${encodeURIComponent(id)}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: next }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Request failed");
+      let data: { error?: string; ok?: boolean } = {};
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error(`Server error (${res.status}). Check Vercel env: SUPABASE_SERVICE_ROLE_KEY`);
+      }
+      if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed");
@@ -51,6 +57,14 @@ export function OpportunityActions({ id, status }: Props) {
 
   return (
     <div className="flex flex-col items-end gap-1">
+      {link ? (
+        <a
+          href={`/benefits/new?url=${encodeURIComponent(link)}`}
+          className="text-xs text-brand-600 hover:underline mb-1"
+        >
+          Add to catalog →
+        </a>
+      ) : null}
       <div className="flex gap-2">
         <button
           type="button"
