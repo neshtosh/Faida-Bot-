@@ -1,24 +1,21 @@
 /**
  * Faida Eligibility Engine
  * ──────────────────────────────────────────────────────────
- * Takes a user profile and returns matched + scored benefits.
- *
- * User profile shape:
- * {
- *   age: number,
- *   gender: "male" | "female",
- *   county: string,
- *   employed: boolean,
- *   businessOwner: boolean,
- *   disability: boolean,
- *   sector: string,         // "tech" | "agriculture" | "retail" | "services" | "other"
- *   hasSafaricom: boolean,
- *   categoriesWanted: string[]  // ["financial","health","employment","legal","housing"]
- * }
+ * Matches user profiles to benefits and live opportunities using
+ * structured rules plus keyword relevance scoring.
  */
 
 const staticBenefits = require("../db/benefits");
 const { getCachedOpportunitiesAsBenefits } = require("./opportunities");
+
+/** Common stop-words to ignore when keyword matching. */
+const STOP_WORDS = new Set([
+  "the", "and", "for", "with", "from", "that", "this", "what", "which", "about",
+  "have", "need", "want", "can", "you", "are", "any", "how", "where", "when",
+  "grant", "grants", "fund", "funds", "help", "find", "looking", "apply",
+  "kenya", "kenyan", "please", "me", "my", "i", "a", "an", "to", "in", "on",
+  "na", "ya", "kwa", "ni", "nini", "nataka", "tafuta", "fursa", "ruzuku",
+]);
 
 /**
  * Returns static benefits plus verified live opportunities.
@@ -28,11 +25,68 @@ function getAllBenefits() {
 }
 
 /**
- * Score a single benefit against a user profile.
- * Returns { matches: boolean, score: number, reasons: string[] }
+ * Builds searchable text from a benefit or opportunity record.
  */
-function scoreBenefit(benefit, user) {
-  const e = benefit.eligibility;
+function buildBenefitSearchText(benefit) {
+  return [
+    benefit.name,
+    benefit.provider,
+    benefit.description,
+    benefit.amount,
+    benefit.category,
+    benefit.sourceName,
+    benefit.howToApply,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+}
+
+/**
+ * Extracts meaningful query terms from user text.
+ */
+function extractQueryTerms(query) {
+  if (!query) return [];
+  return query
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, " ")
+    .split(/\s+/)
+    .filter((t) => t.length > 2 && !STOP_WORDS.has(t));
+}
+
+/**
+ * Scores keyword overlap between a benefit and a search query.
+ */
+function scoreQueryKeywords(benefit, query) {
+  const terms = extractQueryTerms(query);
+  if (terms.length === 0) return { bonus: 0, reasons: [] };
+
+  const text = buildBenefitSearchText(benefit);
+  let bonus = 0;
+  const reasons = [];
+
+  for (const term of terms) {
+    if (text.includes(term)) {
+      bonus += 4;
+      if (reasons.length < 3) reasons.push(`matches "${term}"`);
+    }
+  }
+
+  // Phrase bonus for multi-word queries
+  const phrase = query.toLowerCase().trim();
+  if (phrase.length > 5 && text.includes(phrase)) {
+    bonus += 8;
+    reasons.push("strong text match");
+  }
+
+  return { bonus, reasons };
+}
+
+/**
+ * Score a single benefit against a user profile.
+ */
+function scoreBenefit(benefit, user, query = null) {
+  const e = benefit.eligibility || {};
   const reasons = [];
   let score = 0;
   let disqualified = false;
@@ -54,9 +108,25 @@ function scoreBenefit(benefit, user) {
     }
   }
 
+  // ── County ───────────────────────────────────────────────
+  if (
+    e.counties &&
+    !e.counties.includes("any") &&
+    user.county &&
+    user.county !== "Unknown"
+  ) {
+    const countyLower = user.county.toLowerCase();
+    const matchesCounty = e.counties.some((c) => c.toLowerCase() === countyLower);
+    if (!matchesCounty) {
+      score -= 5;
+    } else {
+      score += 8;
+      reasons.push(`available in ${user.county}`);
+    }
+  }
+
   // ── Employment status ────────────────────────────────────
   if (e.employed !== "any" && e.employed !== user.employed) {
-    // Not a hard disqualifier for most funds — just lower score
     score -= 3;
   } else if (e.employed !== "any") {
     score += 5;
@@ -91,7 +161,7 @@ function scoreBenefit(benefit, user) {
     reasons.push("requires a registered group");
   }
 
-  // ── Category filter (user only wants certain categories) ──
+  // ── Category filter ──────────────────────────────────────
   if (
     user.categoriesWanted &&
     user.categoriesWanted.length > 0 &&
@@ -100,32 +170,46 @@ function scoreBenefit(benefit, user) {
     disqualified = true;
   }
 
-  // ── Bonus: accessible (no group required, rolling deadline) ─
-  if (!e.groupRequired && benefit.deadline.toLowerCase().includes("rolling")) {
+  // ── Keyword relevance (profile interests + live query) ───
+  const profileKeywords = (user.categoriesWanted || []).join(" ");
+  const profileKw = scoreQueryKeywords(benefit, profileKeywords);
+  score += Math.min(profileKw.bonus, 12);
+
+  if (query) {
+    const queryKw = scoreQueryKeywords(benefit, query);
+    score += queryKw.bonus;
+    reasons.push(...queryKw.reasons);
+  }
+
+  // ── Live / partner opportunity boost ─────────────────────
+  if (benefit.partner === "m-taji" || benefit.verified) {
+    score += 3;
+  }
+
+  // ── Bonus: accessible programmes ─────────────────────────
+  if (!e.groupRequired && (benefit.deadline || "").toLowerCase().includes("rolling")) {
     score += 5;
     reasons.push("available right now, no deadline pressure");
   }
 
   if (disqualified) return { matches: false, score: 0, reasons: [] };
 
-  return { matches: true, score, reasons };
+  return { matches: true, score, reasons: [...new Set(reasons)] };
 }
 
 /**
- * Match a user profile against all benefits.
- * Returns array of { benefit, score, reasons } sorted by score desc.
+ * Match a user profile against all benefits, optionally ranked by query.
  */
-function matchBenefits(userProfile) {
+function matchBenefits(userProfile, query = null) {
   const results = [];
 
   for (const benefit of getAllBenefits()) {
-    const { matches, score, reasons } = scoreBenefit(benefit, userProfile);
+    const { matches, score, reasons } = scoreBenefit(benefit, userProfile, query);
     if (matches) {
       results.push({ benefit, score, reasons });
     }
   }
 
-  // Sort by score descending
   results.sort((a, b) => b.score - a.score);
   return results;
 }
@@ -165,4 +249,12 @@ function formatApplicationDetails(benefit) {
   );
 }
 
-module.exports = { matchBenefits, formatBenefitCard, formatApplicationDetails, getAllBenefits };
+module.exports = {
+  matchBenefits,
+  formatBenefitCard,
+  formatApplicationDetails,
+  getAllBenefits,
+  buildBenefitSearchText,
+  extractQueryTerms,
+  scoreQueryKeywords,
+};

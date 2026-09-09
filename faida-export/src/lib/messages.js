@@ -207,7 +207,13 @@ const MESSAGES_EN = {
   resultsFooter: () =>
     `\n\n━━━━━━━━━━━━━━━━━━━━\n` +
     `💡 Reply *D1*, *D2*, etc. for full application steps.\n` +
+    `Or just type your question — I'll help you find grants & fill forms.\n` +
     `Reply *NEAREST* for the nearest office · *MENU* for more options.`,
+
+  profileRequiredForAi: () =>
+    `👋 I'd love to help you find the right grants!\n\n` +
+    `First I need to learn a bit about you (6 quick questions).\n\n` +
+    `Type *START* or *Hi* to begin — then you can chat naturally, no need to type CHAT.`,
 
   detailFooter: () =>
     `━━━━━━━━━━━━━━━━━━━━\n` +
@@ -528,7 +534,13 @@ const MESSAGES_SW = {
   resultsFooter: () =>
     `\n\n━━━━━━━━━━━━━━━━━━━━\n` +
     `💡 Jibu *D1*, *D2*, nk. kwa hatua kamili za kuomba.\n` +
+    `Au andika swali lako — nitakusaidia kutafuta ruzuku na kujaza fomu.\n` +
     `Jibu *NEAREST* kwa ofisi iliyo karibu · *MENU* kwa chaguo zaidi.`,
+
+  profileRequiredForAi: () =>
+    `👋 Ningependa kukusaidia kupata ruzuku zinazokufaa!\n\n` +
+    `Kwanza nahitaji kujua kidogo kukuhusu (maswali 6 mafupi).\n\n` +
+    `Andika *START* au *Hi* kuanza — kisha unaweza kuongea kawaida, huna haja ya kuandika CHAT.`,
 
   detailFooter: () =>
     `━━━━━━━━━━━━━━━━━━━━\n` +

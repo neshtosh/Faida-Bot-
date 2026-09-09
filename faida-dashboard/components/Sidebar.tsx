@@ -19,6 +19,12 @@ const NAV_ITEMS = [
       path === "/benefits" || path.startsWith("/benefits/"),
   },
   {
+    href: "/opportunities",
+    label: "Live opportunities",
+    icon: "🆕",
+    match: (path: string) => path === "/opportunities",
+  },
+  {
     href: "/applications",
     label: "Applications",
     icon: "📝",

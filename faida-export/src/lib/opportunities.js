@@ -10,6 +10,11 @@ const path = require("path");
 const crypto = require("crypto");
 const { isVerifiedUrl, getVerifiedFeeds } = require("./sources");
 const { fetchMtajiOpportunities, isMtajiConfigured } = require("./mtaji");
+const {
+  isOpportunityStoreConfigured,
+  fetchApprovedOpportunities,
+  getCachedApprovedOpportunities,
+} = require("./opportunity-store");
 const { logger } = require("./logger");
 
 const CACHE_FILE = path.join(__dirname, "../../data/live-opportunities.json");
@@ -189,9 +194,32 @@ function mergeOpportunities(lists) {
 }
 
 /**
+ * Fetches admin-approved opportunities from Supabase (dashboard sync).
+ */
+async function refreshFromSupabase() {
+  const approved = await fetchApprovedOpportunities(true);
+  memoryCache = { opportunities: approved, fetchedAt: Date.now() };
+  saveCacheToDisk();
+  logger.info(
+    { event: "opportunities_refreshed_supabase", count: approved.length },
+    "Refreshed approved opportunities from Supabase"
+  );
+  return {
+    count: approved.length,
+    source: "supabase",
+    adminApproved: true,
+  };
+}
+
+/**
  * Fetches and validates opportunities from all verified feeds.
+ * Skipped when admin-approved Supabase sync is enabled.
  */
 async function refreshOpportunities() {
+  if (isOpportunityStoreConfigured()) {
+    return refreshFromSupabase();
+  }
+
   const feeds = getVerifiedFeeds();
   const fromFeeds = [];
   const seenLinks = new Set();
@@ -260,6 +288,12 @@ async function refreshOpportunities() {
  * Returns cached live opportunities, refreshing if stale.
  */
 async function getLiveOpportunities(forceRefresh = false) {
+  if (isOpportunityStoreConfigured()) {
+    if (forceRefresh) await fetchApprovedOpportunities(true);
+    else await fetchApprovedOpportunities(false);
+    return getCachedApprovedOpportunities();
+  }
+
   if (!memoryCache.fetchedAt) loadCacheFromDisk();
 
   const stale = Date.now() - memoryCache.fetchedAt > CACHE_TTL_MS;
@@ -274,6 +308,9 @@ async function getLiveOpportunities(forceRefresh = false) {
  * Returns live opportunities as benefit objects for the matcher.
  */
 function getCachedOpportunitiesAsBenefits() {
+  if (isOpportunityStoreConfigured()) {
+    return getCachedApprovedOpportunities();
+  }
   if (!memoryCache.fetchedAt) loadCacheFromDisk();
   return memoryCache.opportunities || [];
 }
@@ -285,17 +322,27 @@ function formatOpportunitiesList(opportunities, lang, limit = 5) {
   const isSw = lang === "sw";
   const list = opportunities.slice(0, limit);
 
+  const adminApproved = isOpportunityStoreConfigured();
+
   if (list.length === 0) {
     return isSw
-      ? `🔍 *Hakuna fursa mpya kutoka vyanzo vilivyothibitishwa kwa sasa.*\n\nJaribu tena baadaye au andika *REFRESH*.\n\nJibu *CHAT* kuuliza msaidizi wa AI.`
-      : `🔍 *No new opportunities from verified sources right now.*\n\nTry again later or type *REFRESH*.\n\nReply *CHAT* to ask the AI assistant.`;
+      ? adminApproved
+        ? `🔍 *Hakuna fursa zilizoidhinishwa kwa sasa.*\n\nMsimamizi wa Faida anaangalia fursa mpya kila siku. Jaribu tena baadaye au andika *REFRESH*.\n\nJibu *CHAT* kuuliza msaidizi wa AI.`
+        : `🔍 *Hakuna fursa mpya kutoka vyanzo vilivyothibitishwa kwa sasa.*\n\nJaribu tena baadaye au andika *REFRESH*.\n\nJibu *CHAT* kuuliza msaidizi wa AI.`
+      : adminApproved
+        ? `🔍 *No admin-approved opportunities right now.*\n\nThe Faida team reviews new listings regularly. Try again later or type *REFRESH*.\n\nReply *CHAT* to ask the AI assistant.`
+        : `🔍 *No new opportunities from verified sources right now.*\n\nTry again later or type *REFRESH*.\n\nReply *CHAT* to ask the AI assistant.`;
   }
 
   const header = isSw
-    ? `🆕 *Fursa mpya kutoka vyanzo vilivyothibitishwa:*\n` +
-      `_(Pamoja na M-Taji, mshirika wa Faida)_\n━━━━━━━━━━━━━━━━━━━━\n\n`
-    : `🆕 *Latest opportunities from verified sources:*\n` +
-      `_(Including M-Taji, Faida's partner platform)_\n━━━━━━━━━━━━━━━━━━━━\n\n`;
+    ? adminApproved
+      ? `🆕 *Fursa zilizoidhinishwa na msimamizi wa Faida:*\n━━━━━━━━━━━━━━━━━━━━\n\n`
+      : `🆕 *Fursa mpya kutoka vyanzo vilivyothibitishwa:*\n` +
+        `_(Pamoja na M-Taji, mshirika wa Faida)_\n━━━━━━━━━━━━━━━━━━━━\n\n`
+    : adminApproved
+      ? `🆕 *Admin-approved live opportunities:*\n━━━━━━━━━━━━━━━━━━━━\n\n`
+      : `🆕 *Latest opportunities from verified sources:*\n` +
+        `_(Including M-Taji, Faida's partner platform)_\n━━━━━━━━━━━━━━━━━━━━\n\n`;
 
   const cards = list
     .map((o, i) => {
@@ -326,9 +373,10 @@ function startOpportunityScheduler() {
 
   refreshOpportunities().catch(() => {});
 
+  const intervalMs = isOpportunityStoreConfigured() ? 15 * 60 * 1000 : CACHE_TTL_MS;
   setInterval(() => {
     refreshOpportunities().catch(() => {});
-  }, CACHE_TTL_MS);
+  }, intervalMs);
 }
 
 module.exports = {

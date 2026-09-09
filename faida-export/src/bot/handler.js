@@ -36,6 +36,7 @@ const {
 } = require("../lib/formassist");
 const { generateFormPdf } = require("../lib/pdfexport");
 const { submitFilledForm } = require("../lib/submit");
+const { isProfileComplete, buildMatchProfile, isInQuestionnaire } = require("../lib/profile");
 
 const RATE_LIMIT_MAX = 20;
 const RATE_LIMIT_WINDOW_MS = 5 * 60 * 1000;
@@ -156,6 +157,22 @@ async function handleMessage(userId, text, session, meta = {}) {
     }
   }
 
+  // ── Natural AI chat (no CHAT keyword — profile must be complete) ──
+  if (shouldRouteToNaturalAi(session, input, rawText)) {
+    return handleNaturalAiChat(userId, session, rawText);
+  }
+
+  // ── Profile incomplete: guide user to questionnaire first ──
+  if (
+    !isProfileComplete(session) &&
+    !isInQuestionnaire(session.step) &&
+    !isStructuredCommand(input) &&
+    rawText.length > 2 &&
+    !START_TRIGGERS.includes(input)
+  ) {
+    return { reply: msgs().profileRequiredForAi() };
+  }
+
   // ── AI chat mode (async — handled before sync processMessage) ──
   if (session.step === "ai_chat") {
     if (MENU_TRIGGERS.includes(input) || ["exit", "quit", "stop", "toka"].includes(input)) {
@@ -191,6 +208,7 @@ async function handleMessage(userId, text, session, meta = {}) {
   }
 
   if (CHAT_TRIGGERS.includes(input)) {
+    if (!isProfileComplete(session)) return { reply: msgs().profileRequiredForAi() };
     if (!isAiAvailable()) return { reply: msgs().aiUnavailable() };
     updateSession(userId, { step: "ai_chat", aiHistory: [] });
     return { reply: msgs().aiWelcome() };
@@ -216,7 +234,12 @@ async function handleMessage(userId, text, session, meta = {}) {
     }
   }
 
-  const { reply, updates } = processMessage(text, session, meta);
+  const { reply, updates, routeToAi } = processMessage(text, session, meta);
+
+  if (routeToAi && isProfileComplete(session) && isAiAvailable()) {
+    return handleNaturalAiChat(userId, { ...session, ...updates }, rawText);
+  }
+
   if (updates) {
     updateSession(userId, updates);
     if (updates.lastMatches && updates.lastMatches.length > 0) {
@@ -270,6 +293,83 @@ async function handleMessage(userId, text, session, meta = {}) {
     }
   }
   return { reply };
+}
+
+/**
+ * Returns true for commands that should not be treated as natural chat.
+ */
+function isStructuredCommand(input) {
+  if (!input) return true;
+  if (MENU_TRIGGERS.includes(input) || HELP_TRIGGERS.includes(input)) return true;
+  if (SHARE_TRIGGERS.includes(input) || RESULTS_TRIGGERS.includes(input)) return true;
+  if (FEEDBACK_TRIGGERS.includes(input) || NEAREST_TRIGGERS.includes(input)) return true;
+  if (REMINDERS_ON_TRIGGERS.includes(input) || REMINDERS_OFF_TRIGGERS.includes(input)) return true;
+  if (CHAT_TRIGGERS.includes(input) || OPPORTUNITIES_TRIGGERS.includes(input)) return true;
+  if (REFRESH_TRIGGERS.includes(input) || PDF_TRIGGERS.includes(input)) return true;
+  if (SUBMIT_TRIGGERS.includes(input) || START_TRIGGERS.includes(input)) return true;
+  if (FORM_TRIGGERS.includes(input) || input.startsWith("form ")) return true;
+  if (/^d\d+$/.test(input) || input.startsWith("apply")) return true;
+  if (["a", "b", "c", "1", "2", "3"].includes(input)) return true;
+  return false;
+}
+
+/**
+ * Returns true when a free-text message should go to the AI assistant.
+ */
+function shouldRouteToNaturalAi(session, input, rawText) {
+  if (!isAiAvailable()) return false;
+  if (!isProfileComplete(session)) return false;
+  if (isStructuredCommand(input)) return false;
+  if (isInQuestionnaire(session.step)) return false;
+  if (["application", "web_form", "feedback_rating", "feedback_comment", "nearest_location", "application_resume_prompt"].includes(session.step)) {
+    return false;
+  }
+  if (!rawText || rawText.length < 2) return false;
+  return ["menu", "results", "ai_chat"].includes(session.step);
+}
+
+/**
+ * Handles natural-language AI conversation with query-aware matching.
+ */
+async function handleNaturalAiChat(userId, session, rawText) {
+  const msgs = getMessages(session.language);
+
+  if (!isAiAvailable()) {
+    return { reply: msgs.aiUnavailable() };
+  }
+
+  try {
+    const matchProfile = buildMatchProfile(session);
+    const queryMatches = matchBenefits(matchProfile, rawText).slice(0, 8);
+    const enrichedSession = {
+      ...session,
+      lastMatches: queryMatches.length > 0 ? queryMatches : session.lastMatches || [],
+    };
+
+    const { reply, history, startWebFormUrl } = await chatWithFaida(enrichedSession, rawText);
+
+    updateSession(userId, {
+      step: "ai_chat",
+      aiHistory: history,
+      lastMatches: enrichedSession.lastMatches,
+      profileComplete: true,
+    });
+
+    if (startWebFormUrl) {
+      try {
+        const started = await beginWebForm(enrichedSession, startWebFormUrl);
+        updateSession(userId, { step: "web_form", webForm: started.webForm, aiHistory: history });
+        return { reply: `${reply}\n\n━━━━━━━━━━━━━━━━━━━━\n${started.reply}` };
+      } catch (err) {
+        logError(err, { userId, event: "ai_form_start" });
+      }
+    }
+
+    return { reply };
+  } catch (err) {
+    logError(err, { userId, event: "natural_ai_chat" });
+    return { reply: msgs.aiError() };
+  }
 }
 
 /**
@@ -492,6 +592,7 @@ function processMessage(text, session, meta = {}) {
       ...baseUpdates,
       step: workingSession.language ? "ask_age" : "ask_language",
       profile: {},
+      profileComplete: false,
       lastMatches: [],
     };
     const reply = workingSession.language ? msgs().welcome() : getMessages("en").askLanguage();
@@ -759,7 +860,8 @@ function processMessage(text, session, meta = {}) {
         reply: msgs().noMatches(),
         updates: {
           ...baseUpdates,
-          step: "results",
+          step: "menu",
+          profileComplete: true,
           profile,
           lastMatches: matches,
         },
@@ -770,7 +872,8 @@ function processMessage(text, session, meta = {}) {
       reply: buildResultsMessage(matches.slice(0, 6), workingSession.language),
       updates: {
         ...baseUpdates,
-        step: "results",
+        step: "menu",
+        profileComplete: true,
         profile,
         lastMatches: matches,
       },
@@ -782,8 +885,11 @@ function processMessage(text, session, meta = {}) {
     return handleApplicationInput(workingSession, text, baseUpdates);
   }
 
-  // ── Post-results / menu fallback ────────────────────────────
+  // ── Post-results / menu: free conversation goes to AI (via handleMessage) ──
   if (step === "results" || step === "menu") {
+    if (isProfileComplete(workingSession) && isAiAvailable()) {
+      return { reply: null, routeToAi: true, updates: baseUpdates };
+    }
     return { reply: msgs().unknownInput(), updates: baseUpdates };
   }
 

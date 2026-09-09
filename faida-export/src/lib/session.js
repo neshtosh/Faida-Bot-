@@ -63,6 +63,7 @@ function buildDefaultSession() {
     isNew: true,
     remindersOptIn: false,
     remindersSent: {},
+    profileComplete: false,
     aiHistory: [],
     webForm: null,
     application: {

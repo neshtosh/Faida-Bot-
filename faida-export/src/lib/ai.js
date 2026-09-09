@@ -74,7 +74,8 @@ function buildSystemPrompt(session) {
     `- search_verified_catalog: find grants/benefits/opportunities\n` +
     `- fetch_verified_page: read a verified application page\n` +
     `- start_form_assistance: begin guided form filling for a verified URL\n` +
-    `- User commands: FORM <url>, PDF (export), SUBMIT (partner sites only)\n\n` +
+    `- User commands: FORM <url>, PDF (export), SUBMIT (partner sites only)\n` +
+    `- Users can type naturally after completing their profile — no CHAT keyword needed.\n\n` +
     `USER PROFILE:\n${JSON.stringify(profile, null, 2)}\n\n` +
     `USER'S LAST MATCHES:\n${matchSummary}\n\n` +
     `VERIFIED LIVE OPPORTUNITIES (from official RSS feeds):\n${liveSummary}\n\n` +

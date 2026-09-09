@@ -5,7 +5,9 @@
 
 process.env.NODE_ENV = "test";
 
-const { matchBenefits } = require("../lib/eligibility");
+const { matchBenefits, scoreQueryKeywords } = require("../lib/eligibility");
+const { isProfileComplete } = require("../lib/profile");
+const staticBenefits = require("../db/benefits");
 const { handleMessage } = require("./handler");
 const { createSession, getOrCreate } = require("../lib/session");
 const { isAiAvailable } = require("../lib/ai");
@@ -258,7 +260,22 @@ async function runFlowTests() {
   await test("CHAT without API key shows unavailable message", async () => {
     const chatUser = "test-chat-001";
     createSession(chatUser);
-    const sess = await getOrCreate(chatUser);
+    let sess = await getOrCreate(chatUser);
+    sess = {
+      ...sess,
+      profileComplete: true,
+      profile: {
+        age: 25,
+        gender: "female",
+        county: "Nairobi",
+        employed: false,
+        businessOwner: true,
+        disability: false,
+        hasSafaricom: true,
+        categoriesWanted: ["financial"],
+      },
+      step: "menu",
+    };
     const reply = replyText(await handleMessage(chatUser, "CHAT", sess));
     if (isAiAvailable()) {
       expect(reply).toContain("AI Assistant");
@@ -351,6 +368,37 @@ async function runFlowTests() {
     expect(support.partner).toBe("m-taji");
   });
 }
+
+test("Keyword scoring boosts youth-related grants", () => {
+  const yedf = staticBenefits.find((b) => b.id === "yedf-loan");
+  const kw = scoreQueryKeywords(yedf, "youth business loan");
+  expect(kw.bonus).toBeGreaterThan(0);
+});
+
+test("Query-aware matching ranks youth funds for youth queries", () => {
+  const profile = {
+    age: 25,
+    gender: "male",
+    county: "Nairobi",
+    employed: false,
+    businessOwner: true,
+    disability: false,
+    hasSafaricom: true,
+    categoriesWanted: ["financial"],
+  };
+  const matches = matchBenefits(profile, "youth enterprise loan");
+  const ids = matches.map((m) => m.benefit.id);
+  expect(ids.includes("yedf-loan")).toBe(true);
+});
+
+test("Profile completeness requires core fields", () => {
+  expect(
+    isProfileComplete({
+      profile: { age: 25, gender: "male", county: "Nairobi", categoriesWanted: ["financial"] },
+    })
+  ).toBe(true);
+  expect(isProfileComplete({ profile: { age: 25 } })).toBe(false);
+});
 
 runFlowTests().then(() => {
   console.log("\n" + "─".repeat(50));

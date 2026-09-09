@@ -29,19 +29,18 @@ function scoreMatch(query, item) {
  * Searches verified benefits and live opportunities.
  */
 function searchVerifiedCatalog(query, limit = 8) {
-  const items = [...staticBenefits, ...getCachedOpportunitiesAsBenefits()];
-  return items
-    .map((item) => ({ item, score: scoreMatch(query, item) }))
-    .filter((r) => r.score > 0)
-    .sort((a, b) => b.score - a.score)
+  const profile = { age: 30, gender: "unknown", county: "Unknown", employed: false, businessOwner: false, disability: false, hasSafaricom: true, categoriesWanted: ["financial", "health", "employment", "legal", "housing"] };
+  const { matchBenefits } = require("./eligibility");
+  return matchBenefits(profile, query)
     .slice(0, limit)
     .map((r) => ({
-      id: r.item.id,
-      name: r.item.name,
-      provider: r.item.provider,
-      link: r.item.link,
-      category: r.item.category,
-      sourceName: r.item.sourceName || "Faida database",
+      id: r.benefit.id,
+      name: r.benefit.name,
+      provider: r.benefit.provider,
+      link: r.benefit.link,
+      category: r.benefit.category,
+      sourceName: r.benefit.sourceName || "Faida database",
+      score: r.score,
     }));
 }
 
