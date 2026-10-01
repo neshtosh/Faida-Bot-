@@ -19,7 +19,7 @@ const {
   generateReferenceCode,
   formatApplicationDocument,
 } = require("../lib/documents");
-const benefits = require("../db/benefits");
+const { getBenefits } = require("../lib/benefits-store");
 const { isAiAvailable, chatWithFaida } = require("../lib/ai");
 const {
   getLiveOpportunities,
@@ -75,7 +75,9 @@ const CATEGORY_KEYWORDS = {
   nyumba: "housing",
 };
 
-const START_TRIGGERS = ["start", "restart", "hi", "hello", "habari", "hii", "hey", "sasa", "mambo"];
+const GREETING_TRIGGERS = ["start", "hi", "hello", "habari", "hii", "hey", "sasa", "mambo"];
+const RESTART_TRIGGERS = ["restart", "start over", "startover", "update profile"];
+const START_TRIGGERS = [...GREETING_TRIGGERS, ...RESTART_TRIGGERS];
 const MENU_TRIGGERS = ["menu", "main menu", "back", "menyu"];
 const HELP_TRIGGERS = ["help", "how does this work", "what is faida", "msaada"];
 const SHARE_TRIGGERS = ["share", "shiriki"];
@@ -510,6 +512,31 @@ async function submitWebForm(session) {
 }
 
 /**
+ * Re-shows the current onboarding question after a greeting mid-flow.
+ */
+function questionnairePromptForStep(session) {
+  const msgs = getMessages(session.language);
+  switch (session.step) {
+    case "ask_language":
+      return getMessages("en").askLanguage();
+    case "ask_age":
+      return msgs.welcome();
+    case "ask_gender":
+      return msgs.askGender();
+    case "ask_county":
+      return msgs.askCounty();
+    case "ask_employment":
+      return msgs.askEmployment();
+    case "ask_disability":
+      return msgs.askDisability();
+    case "ask_categories":
+      return msgs.askCategories();
+    default:
+      return msgs.menu();
+  }
+}
+
+/**
  * Pure message processor — returns reply and session updates without side effects.
  */
 function processMessage(text, session, meta = {}) {
@@ -587,7 +614,33 @@ function processMessage(text, session, meta = {}) {
     return handleApplyCommand(workingSession, input, baseUpdates);
   }
 
-  if (START_TRIGGERS.includes(input)) {
+  if (RESTART_TRIGGERS.includes(input)) {
+    const updates = {
+      ...baseUpdates,
+      step: workingSession.language ? "ask_age" : "ask_language",
+      profile: {},
+      profileComplete: false,
+      lastMatches: [],
+      aiHistory: [],
+      webForm: null,
+    };
+    const reply = workingSession.language ? msgs().welcome() : getMessages("en").askLanguage();
+    return { reply, updates };
+  }
+
+  if (GREETING_TRIGGERS.includes(input)) {
+    if (isProfileComplete(workingSession)) {
+      return {
+        reply: msgs().welcomeBack(),
+        updates: { ...baseUpdates, step: "menu" },
+      };
+    }
+    if (isInQuestionnaire(workingSession.step) && workingSession.step !== "welcome") {
+      return {
+        reply: msgs().questionnaireResume() + "\n\n" + questionnairePromptForStep(workingSession),
+        updates: baseUpdates,
+      };
+    }
     const updates = {
       ...baseUpdates,
       step: workingSession.language ? "ask_age" : "ask_language",
@@ -1074,7 +1127,7 @@ function formatApplicationDetails(benefit, lang) {
 function getActiveBenefit(session) {
   const app = session.application;
   if (!app || !app.benefitId) return null;
-  return benefits.find((b) => b.id === app.benefitId) || null;
+  return getBenefits().find((b) => b.id === app.benefitId) || null;
 }
 
 function toResults(session, baseUpdates) {

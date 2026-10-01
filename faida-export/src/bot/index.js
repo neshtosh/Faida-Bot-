@@ -24,6 +24,7 @@ const { logIncoming, logReply, logError, logger } = require("../lib/logger");
 const { validateEnv } = require("../lib/env");
 const { startHealthServer, setBotStatus, setCurrentQr, clearCurrentQr, getQrPageUrl, getPublicUrlSetupHint } = require("../lib/health");
 const { startOpportunityScheduler } = require("../lib/opportunities");
+const { startBenefitsScheduler } = require("../lib/benefits-store");
 
 const AUTH_FOLDER = path.join(__dirname, "../../.auth");
 if (!fs.existsSync(AUTH_FOLDER)) fs.mkdirSync(AUTH_FOLDER, { recursive: true });
@@ -33,6 +34,7 @@ const PORT = process.env.PORT || 3000;
 
 validateEnv();
 startHealthServer(PORT);
+startBenefitsScheduler();
 startOpportunityScheduler();
 
 async function startBot() {

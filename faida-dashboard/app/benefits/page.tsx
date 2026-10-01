@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { readBenefits } from "@/lib/benefitsIo";
+import { readBenefits, usesSupabaseBenefits } from "@/lib/benefitsIo";
 import { CATEGORIES, CATEGORY_LABELS } from "@/types/benefit";
 
 interface SearchParams {
@@ -12,7 +12,7 @@ export default async function BenefitsPage({
 }: {
   searchParams: SearchParams;
 }) {
-  const allBenefits = readBenefits();
+  const allBenefits = await readBenefits();
   const activeCategory =
     searchParams.category && CATEGORIES.includes(searchParams.category as never)
       ? (searchParams.category as (typeof CATEGORIES)[number])
@@ -43,6 +43,7 @@ export default async function BenefitsPage({
           <p className="text-slate-600 mt-1">
             Manage the {allBenefits.length} benefits shown to citizens in the
             WhatsApp bot.
+            {usesSupabaseBenefits() ? " Synced via Supabase." : " (local JSON file)"}
           </p>
         </div>
         <Link href="/benefits/new" className="btn-primary w-full md:w-auto">

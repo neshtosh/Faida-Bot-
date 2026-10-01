@@ -21,6 +21,15 @@ const MESSAGES_EN = {
     `*How old are you?*\n` +
     `_(Type your age, e.g. 27 — or *0* if you don't know)_`,
 
+  welcomeBack: () =>
+    `🌿 *Welcome back to Faida!*\n\n` +
+    `We still have your profile saved — no need to answer the same questions again.\n\n` +
+    `Reply *MENU* for options, *RESULTS* for your matches, or *CHAT* to ask the assistant.\n\n` +
+    `Reply *RESTART* only if you want to update your answers from scratch.`,
+
+  questionnaireResume: () =>
+    `👋 Good to see you again! Let's pick up where you left off.`,
+
   askGender: () =>
     `Got it! 👍\n\n` +
     `*What is your gender?*\n\n` +
@@ -97,7 +106,7 @@ const MESSAGES_EN = {
     `3. We show you everything you qualify for — with exact steps to apply\n\n` +
     `*Is my information safe?*\n` +
     `Yes. Faida is free and confidential. We don't sell your data.\n\n` +
-    `*Commands:* MENU · START · RESULTS · CHAT · OPPORTUNITIES · NEAREST · FEEDBACK · REMINDERS ON/OFF\n\n` +
+    `*Commands:* MENU · RESULTS · CHAT · OPPORTUNITIES · NEAREST · FEEDBACK · REMINDERS ON/OFF · RESTART (new profile)\n\n` +
     `Built by Munene · munene.dev`,
 
   aiWelcome: () =>
@@ -347,6 +356,15 @@ const MESSAGES_SW = {
     `Tuanze! 👇\n\n` +
     `*Una umri gani?*\n` +
     `_(Andika umri wako, mfano 27 — au *0* ikiwa hujui)_`,
+
+  welcomeBack: () =>
+    `🌿 *Karibu tena Faida!*\n\n` +
+    `Tuna hifadhi wasifu wako — hauhitaji kujibu maswali yale yale tena.\n\n` +
+    `Jibu *MENU* kwa chaguo, *RESULTS* kwa matokeo yako, au *CHAT* kuuliza msaidizi.\n\n` +
+    `Jibu *RESTART* tu ukataka kusasisha majibu yako kutoka mwanzo.`,
+
+  questionnaireResume: () =>
+    `👋 Nimefurahi kukuona tena! Tuendelee ulipoachia.`,
 
   askGender: () =>
     `Sawa! 👍\n\n` +

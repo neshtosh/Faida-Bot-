@@ -5,7 +5,7 @@
  * and sends WhatsApp reminders to opted-in users who matched those benefits.
  */
 
-const benefits = require("../db/benefits");
+const { getBenefits } = require("./benefits-store");
 const { getReminderRecipients, markReminderSent } = require("./session");
 const { logger } = require("./logger");
 
@@ -144,7 +144,7 @@ function getUpcomingBenefits(withinDays = REMINDER_WINDOW_DAYS) {
   const today = new Date(Date.UTC(nairobi.year, nairobi.month - 1, nairobi.day));
   const upcoming = [];
 
-  for (const benefit of benefits) {
+  for (const benefit of getBenefits()) {
     const deadline = getNextDeadline(benefit);
     if (!deadline) continue;
 

@@ -6,7 +6,6 @@
  */
 
 const { BENEFIT_FORM_MAP } = require("./applications");
-const benefits = require("../db/benefits");
 
 const FIELD_LABELS_EN = {
   fullName: "Full Name",

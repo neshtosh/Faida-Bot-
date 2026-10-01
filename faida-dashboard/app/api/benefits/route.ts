@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import type { Benefit } from "@/types/benefit";
-import { readBenefits, slugifyId, writeBenefits } from "@/lib/benefitsIo";
+import { readBenefits, slugifyId, upsertBenefit, getBenefitById } from "@/lib/benefitsIo";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const benefits = readBenefits();
+    const benefits = await readBenefits();
     return NextResponse.json({ count: benefits.length, results: benefits });
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Unknown error";
@@ -25,13 +25,13 @@ export async function POST(req: Request) {
       );
     }
 
-    const all = readBenefits();
     const id =
       payload.id && payload.id.trim().length > 0
         ? payload.id.trim()
         : slugifyId(payload.name);
 
-    if (all.some((b) => b.id === id)) {
+    const existing = await getBenefitById(id);
+    if (existing) {
       return NextResponse.json(
         {
           error: `A benefit with id '${id}' already exists. Use PUT /api/benefits/${id} to update it.`,
@@ -78,8 +78,7 @@ export async function POST(req: Request) {
       },
     };
 
-    all.push(newBenefit);
-    writeBenefits(all);
+    await upsertBenefit(newBenefit);
 
     return NextResponse.json({ ok: true, benefit: newBenefit }, { status: 201 });
   } catch (err) {

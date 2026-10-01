@@ -9,8 +9,8 @@ interface Params {
   params: { id: string };
 }
 
-export default function EditBenefitPage({ params }: Params) {
-  const benefit = getBenefitById(params.id);
+export default async function EditBenefitPage({ params }: Params) {
+  const benefit = await getBenefitById(params.id);
   if (!benefit) notFound();
 
   return (

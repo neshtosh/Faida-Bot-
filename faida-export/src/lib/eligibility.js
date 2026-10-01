@@ -5,7 +5,7 @@
  * structured rules plus keyword relevance scoring.
  */
 
-const staticBenefits = require("../db/benefits");
+const { getBenefits } = require("./benefits-store");
 const { getCachedOpportunitiesAsBenefits } = require("./opportunities");
 
 /** Common stop-words to ignore when keyword matching. */
@@ -21,7 +21,7 @@ const STOP_WORDS = new Set([
  * Returns static benefits plus verified live opportunities.
  */
 function getAllBenefits() {
-  return [...staticBenefits, ...getCachedOpportunitiesAsBenefits()];
+  return [...getBenefits(), ...getCachedOpportunitiesAsBenefits()];
 }
 
 /**

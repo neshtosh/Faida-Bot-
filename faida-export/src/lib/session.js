@@ -30,10 +30,13 @@
 
 require("dotenv").config();
 
-const benefits = require("../db/benefits");
+const { getBenefits } = require("./benefits-store");
+const { isProfileComplete } = require("./profile");
 const { hashUserId } = require("./privacy");
 const { getSupabaseClient } = require("./supabase");
 const { logSessionCreated, logSessionExpired } = require("./logger");
+
+const RESERVED_PROFILE_KEYS = ["__app", "__meta"];
 
 const sessions = new Map();
 const pendingLoads = new Map();
@@ -97,7 +100,7 @@ function deserializeMatches(stored) {
 
   return stored
     .map((item) => {
-      const benefit = benefits.find((b) => b.id === item.benefitId);
+      const benefit = getBenefits().find((b) => b.id === item.benefitId);
       if (!benefit) return null;
       return {
         benefit,
@@ -109,14 +112,26 @@ function deserializeMatches(stored) {
 }
 
 /**
+ * Strips internal session keys from a stored profile object.
+ */
+function cleanProfileFields(profile) {
+  if (!profile || typeof profile !== "object" || Array.isArray(profile)) return {};
+  const out = { ...profile };
+  for (const key of RESERVED_PROFILE_KEYS) delete out[key];
+  return out;
+}
+
+/**
  * Converts a database row into an in-memory session object.
  */
 function rowToSession(row) {
-  const p = row.profile || {};
-  return {
+  const p = row.profile && typeof row.profile === "object" ? row.profile : {};
+  const profile = cleanProfileFields(p);
+  const meta = p.__meta && typeof p.__meta === "object" ? p.__meta : {};
+  const sessionShape = {
     step: row.step || "welcome",
     language: row.language || null,
-    profile: typeof p === "object" && !Array.isArray(p) && !p.__app ? p : {},
+    profile,
     lastMatches: deserializeMatches(row.last_matches),
     feedback: row.feedback || null,
     messageTimestamps: row.message_timestamps || [],
@@ -125,8 +140,11 @@ function rowToSession(row) {
     isNew: false,
     remindersOptIn: row.reminders_opt_in || false,
     remindersSent: row.reminders_sent || {},
+    profileComplete: !!meta.profileComplete,
+    aiHistory: Array.isArray(meta.aiHistory) ? meta.aiHistory : [],
+    webForm: meta.webForm || null,
     application:
-      typeof p === "object" && p && p.__app
+      p.__app && typeof p.__app === "object"
         ? {
             benefitId: p.__app.benefitId || null,
             currentFieldIndex: p.__app.currentFieldIndex || 0,
@@ -144,20 +162,32 @@ function rowToSession(row) {
             completedApps: [],
           },
   };
+  if (!sessionShape.profileComplete && isProfileComplete(sessionShape)) {
+    sessionShape.profileComplete = true;
+  }
+  return sessionShape;
 }
 
 /**
  * Converts a session object into a database row payload.
  */
 function sessionToRow(userId, session) {
-  const rawProfile = session.profile || {};
+  const rawProfile = cleanProfileFields(session.profile || {});
+  const __meta = {
+    profileComplete: !!session.profileComplete || isProfileComplete(session),
+  };
+  if (session.aiHistory && session.aiHistory.length > 0) {
+    __meta.aiHistory = session.aiHistory.slice(-20);
+  }
+  if (session.webForm) __meta.webForm = session.webForm;
+
   const hasApp =
     session.application &&
     (session.application.benefitId ||
       (session.application.completedApps && session.application.completedApps.length > 0));
   const profilePayload = hasApp
-    ? { ...rawProfile, __app: session.application }
-    : rawProfile;
+    ? { ...rawProfile, __meta, __app: session.application }
+    : { ...rawProfile, __meta };
   return {
     user_id_hash: hashUserId(userId),
     step: session.step,
@@ -189,10 +219,7 @@ async function loadSessionFromSupabase(userId) {
 
     if (error || !data) return null;
 
-    const session = rowToSession(data);
-    if (Date.now() - session.lastActivity > SESSION_TTL_MS) return null;
-
-    return session;
+    return rowToSession(data);
   } catch (_) {
     return null;
   }
@@ -206,7 +233,7 @@ async function persistSession(userId, session) {
   if (!supabase) return false;
 
   try {
-    await ensureUserRecord(userId, session.profile || {});
+    await ensureUserRecord(userId, session);
     const row = sessionToRow(userId, session);
     const { error } = await supabase.from("sessions").upsert(row, {
       onConflict: "user_id_hash",
@@ -358,6 +385,15 @@ async function getOrCreate(userId) {
   const existing = getSession(userId);
   if (existing) return existing;
 
+  if (process.env.NODE_ENV === "test") {
+    if (sessions.has(userId)) {
+      const s = sessions.get(userId);
+      s.lastActivity = Date.now();
+      return s;
+    }
+    return createSession(userId);
+  }
+
   if (pendingLoads.has(userId)) {
     return pendingLoads.get(userId);
   }
@@ -365,8 +401,27 @@ async function getOrCreate(userId) {
   const loadPromise = (async () => {
     const remote = await loadSessionFromSupabase(userId);
     if (remote) {
+      const expired = Date.now() - remote.lastActivity > SESSION_TTL_MS;
+      if (expired) {
+        logSessionExpired(userId);
+        await mergeLongTermUserMemory(userId, remote);
+        remote.lastActivity = Date.now();
+        if (isProfileComplete(remote)) {
+          remote.step = "menu";
+        }
+      }
       sessions.set(userId, remote);
       return remote;
+    }
+
+    const fromUserRow = await loadUserMemoryFromSupabase(userId);
+    if (fromUserRow) {
+      const session = buildDefaultSession();
+      applyUserMemoryToSession(session, fromUserRow);
+      session.isNew = false;
+      sessions.set(userId, session);
+      persistSession(userId, session).catch(() => {});
+      return session;
     }
 
     if (sessions.has(userId)) return sessions.get(userId);
@@ -398,7 +453,7 @@ function getMostPopularBenefit(counts) {
 
   if (!topId) return null;
 
-  const benefit = benefits.find((b) => b.id === topId);
+  const benefit = getBenefits().find((b) => b.id === topId);
   return {
     id: topId,
     name: benefit ? benefit.name : topId,
@@ -512,19 +567,100 @@ function getNairobiDateKeyFallback() {
 }
 
 /**
+ * Loads long-term profile memory from the users table (survives session TTL).
+ */
+async function loadUserMemoryFromSupabase(userId) {
+  const supabase = getSupabaseClient();
+  if (!supabase) return null;
+
+  try {
+    const { data, error } = await supabase
+      .from("users")
+      .select("language, reminder_opt_in, profile_snapshot")
+      .eq("user_id_hash", hashUserId(userId))
+      .maybeSingle();
+
+    if (error || !data) return null;
+
+    const snap =
+      data.profile_snapshot && typeof data.profile_snapshot === "object"
+        ? data.profile_snapshot
+        : {};
+    const profile = cleanProfileFields(snap);
+    const meta = snap.__meta && typeof snap.__meta === "object" ? snap.__meta : {};
+    const profileComplete =
+      !!meta.profileComplete ||
+      isProfileComplete({ profile, profileComplete: meta.profileComplete });
+
+    if (!profileComplete && Object.keys(profile).length === 0) return null;
+
+    return {
+      language: data.language || null,
+      remindersOptIn: !!data.reminder_opt_in,
+      profile,
+      profileComplete,
+    };
+  } catch (_) {
+    return null;
+  }
+}
+
+/**
+ * Applies users-table memory onto an existing session (e.g. after TTL expiry).
+ */
+function applyUserMemoryToSession(session, memory) {
+  if (!memory) return session;
+  if (memory.language) session.language = memory.language;
+  if (memory.remindersOptIn) session.remindersOptIn = memory.remindersOptIn;
+  if (memory.profile && Object.keys(memory.profile).length > 0) {
+    session.profile = { ...session.profile, ...memory.profile };
+  }
+  if (memory.profileComplete || isProfileComplete(session)) {
+    session.profileComplete = true;
+    session.step = "menu";
+  }
+  return session;
+}
+
+async function mergeLongTermUserMemory(userId, session) {
+  const memory = await loadUserMemoryFromSupabase(userId);
+  if (memory) applyUserMemoryToSession(session, memory);
+  return session;
+}
+
+/**
+ * Profile fields stored on users.profile_snapshot (no active app state).
+ */
+function profileSnapshotForUsersTable(session) {
+  const profile = cleanProfileFields(session?.profile || {});
+  if (Object.keys(profile).length === 0) return {};
+  const complete = !!session?.profileComplete || isProfileComplete(session || {});
+  if (complete) return { ...profile, __meta: { profileComplete: true } };
+  return profile;
+}
+
+/**
  * Ensures the users table has a row for this hashed user ID.
  * Upserts with first_seen / last_seen bookkeeping and optional profile snapshot.
  */
-async function ensureUserRecord(userId, profileSnapshot) {
+async function ensureUserRecord(userId, sessionOrProfile) {
   const supabase = getSupabaseClient();
   if (!supabase) return false;
 
+  const session =
+    sessionOrProfile &&
+    typeof sessionOrProfile === "object" &&
+    ("profile" in sessionOrProfile || "profileComplete" in sessionOrProfile)
+      ? sessionOrProfile
+      : { profile: sessionOrProfile || {} };
+
+  const profileSnapshot = profileSnapshotForUsersTable(session);
   const hash = hashUserId(userId);
   try {
     const { error: rpcError } = await supabase.rpc("faida_upsert_user", {
       p_user_id_hash: hash,
-      p_language: null,
-      p_profile_snapshot: profileSnapshot || {},
+      p_language: session.language || null,
+      p_profile_snapshot: profileSnapshot,
     });
     if (!rpcError) return true;
   } catch (_) {
@@ -537,20 +673,22 @@ async function ensureUserRecord(userId, profileSnapshot) {
         .select("user_id_hash")
         .eq("user_id_hash", hash)
         .maybeSingle();
+      const rowPatch = {
+        last_seen_at: new Date().toISOString(),
+        ...(session.language ? { language: session.language } : {}),
+        reminder_opt_in: !!session.remindersOptIn,
+        ...(Object.keys(profileSnapshot).length > 0
+          ? { profile_snapshot: profileSnapshot }
+          : {}),
+      };
       if (existing) {
-        await supabase
-          .from("users")
-          .update({
-            last_seen_at: new Date().toISOString(),
-            ...(profileSnapshot && Object.keys(profileSnapshot).length > 0
-              ? { profile_snapshot: profileSnapshot }
-              : {}),
-          })
-          .eq("user_id_hash", hash);
+        await supabase.from("users").update(rowPatch).eq("user_id_hash", hash);
       } else {
         await supabase.from("users").insert({
           user_id_hash: hash,
-          profile_snapshot: profileSnapshot || {},
+          profile_snapshot: profileSnapshot,
+          language: session.language || null,
+          reminder_opt_in: !!session.remindersOptIn,
         });
       }
       return true;
@@ -606,7 +744,7 @@ async function persistCompletedApplication(params) {
   const supabase = getSupabaseClient();
   if (!supabase) return false;
 
-  await ensureUserRecord(userId, profileSnapshot || {});
+  await ensureUserRecord(userId, { profile: profileSnapshot || {}, profileComplete: true });
 
   try {
     const userHash = hashUserId(userId);
@@ -691,6 +829,9 @@ module.exports = {
   serializeMatches,
   deserializeMatches,
   ensureUserRecord,
+  loadUserMemoryFromSupabase,
+  applyUserMemoryToSession,
   persistCompletedApplication,
   recordAnalyticsEvent,
+  cleanProfileFields,
 };

@@ -7,9 +7,9 @@ process.env.NODE_ENV = "test";
 
 const { matchBenefits, scoreQueryKeywords } = require("../lib/eligibility");
 const { isProfileComplete } = require("../lib/profile");
-const staticBenefits = require("../db/benefits");
-const { handleMessage } = require("./handler");
-const { createSession, getOrCreate } = require("../lib/session");
+const { getBenefits } = require("../lib/benefits-store");
+const { handleMessage, processMessage } = require("./handler");
+const { createSession, getOrCreate, clearSession } = require("../lib/session");
 const { isAiAvailable } = require("../lib/ai");
 const { formatOpportunitiesList } = require("../lib/opportunities");
 const { isVerifiedUrl } = require("../lib/sources");
@@ -173,6 +173,41 @@ async function runFlowTests() {
     expect(reply).toContain("Welcome to Faida");
   });
 
+  await test("Returning user with saved profile gets welcome back on 'hi'", async () => {
+    const sess = {
+      step: "menu",
+      language: "en",
+      profileComplete: true,
+      profile: {
+        age: 28,
+        gender: "female",
+        county: "Nairobi",
+        employed: false,
+        businessOwner: true,
+        disability: false,
+        hasSafaricom: true,
+        categoriesWanted: ["financial"],
+      },
+      lastMatches: [],
+      messageTimestamps: [],
+      remindersOptIn: false,
+      remindersSent: {},
+      application: {
+        benefitId: null,
+        currentFieldIndex: 0,
+        templateId: null,
+        answers: {},
+        startedAt: null,
+        completedApps: [],
+      },
+    };
+    const { reply } = processMessage("hi", sess);
+    expect(reply).toContain("Welcome back");
+    if (reply.includes("How old are you")) {
+      throw new Error('Should not restart the age question for returning users');
+    }
+  });
+
   await test("Age validation rejects non-numbers", async () => {
     createSession(userId);
     await handleMessage(userId, "hi", await getOrCreate(userId));
@@ -206,6 +241,7 @@ async function runFlowTests() {
 
   await test("Full conversation flow produces results", async () => {
     const flowId = "test-flow-001";
+    await clearSession(flowId);
     let sess;
 
     sess = await getOrCreate(flowId);
@@ -372,7 +408,7 @@ async function runFlowTests() {
 }
 
 test("Keyword scoring boosts youth-related grants", () => {
-  const yedf = staticBenefits.find((b) => b.id === "yedf-loan");
+  const yedf = getBenefits().find((b) => b.id === "yedf-loan");
   const kw = scoreQueryKeywords(yedf, "youth business loan");
   expect(kw.bonus).toBeGreaterThan(0);
 });

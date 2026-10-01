@@ -7,7 +7,8 @@
     "start": "node src/bot/index.js",
     "dev": "nodemon src/bot/index.js",
     "simulate": "node src/bot/simulate.js",
-    "test": "node src/bot/test.js"
+    "test": "node src/bot/test.js",
+    "sync-benefits": "node scripts/sync-benefits-to-supabase.js"
   },
   "keywords": [
     "kenya",

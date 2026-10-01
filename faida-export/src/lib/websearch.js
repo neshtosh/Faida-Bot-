@@ -5,7 +5,6 @@
  * before optionally fetching a verified page.
  */
 
-const staticBenefits = require("../db/benefits");
 const { getCachedOpportunitiesAsBenefits } = require("./opportunities");
 const { fetchVerifiedPage } = require("./webfetch");
 

@@ -9,7 +9,7 @@
 require("dotenv").config();
 
 const Anthropic = require("@anthropic-ai/sdk");
-const staticBenefits = require("../db/benefits");
+const { getBenefits } = require("./benefits-store");
 const { getCachedOpportunitiesAsBenefits } = require("./opportunities");
 const { isVerifiedUrl } = require("./sources");
 const { logger } = require("./logger");
@@ -79,7 +79,7 @@ function buildSystemPrompt(session) {
     `USER PROFILE:\n${JSON.stringify(profile, null, 2)}\n\n` +
     `USER'S LAST MATCHES:\n${matchSummary}\n\n` +
     `VERIFIED LIVE OPPORTUNITIES (from official RSS feeds):\n${liveSummary}\n\n` +
-    `STATIC BENEFITS COUNT: ${staticBenefits.length} programmes in database.\n` +
+    `STATIC BENEFITS COUNT: ${getBenefits().length} programmes in database.\n` +
     `User can type MENU to exit chat, OPPORTUNITIES for latest verified listings, RESULTS for their matches.`
   );
 }

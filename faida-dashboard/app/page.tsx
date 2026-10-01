@@ -1,3 +1,6 @@
+import { getDashboardStats, isSupabaseConfigured } from "@/lib/adminDb";
+
+export const dynamic = "force-dynamic";
 import { readBenefits } from "@/lib/benefitsIo";
 import { CATEGORY_LABELS } from "@/types/benefit";
 import Link from "next/link";
@@ -38,8 +41,10 @@ const StatCard: FC<StatCardProps> = ({ label, value, icon, tone = "brand" }) => 
   </div>
 );
 
-export default function OverviewPage() {
-  const benefits = readBenefits();
+export default async function OverviewPage() {
+  const benefits = await readBenefits();
+  const supabaseOk = isSupabaseConfigured();
+  const stats = supabaseOk ? await getDashboardStats() : null;
 
   const byCategory = new Map<string, number>();
   for (const b of benefits) {
@@ -63,10 +68,30 @@ export default function OverviewPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <StatCard label="Total Benefits" value={benefits.length} icon="📋" tone="brand" />
-        <StatCard label="Rolling Intakes" value={rolling} icon="🔁" tone="blue" />
-        <StatCard label="Upcoming Deadlines" value={withDeadline} icon="📅" tone="amber" />
-        <StatCard label="Group-Required" value={groupOnly} icon="👥" tone="violet" />
+        {stats ? (
+          <>
+            <StatCard label="WhatsApp Users" value={stats.totalUsers} icon="👥" tone="blue" />
+            <StatCard label="Applications" value={stats.totalApplications} icon="📝" tone="amber" />
+            <StatCard label="Active (7 days)" value={stats.activeUsersLast7Days} icon="📈" tone="violet" />
+          </>
+        ) : (
+          <>
+            <StatCard label="Rolling Intakes" value={rolling} icon="🔁" tone="blue" />
+            <StatCard label="Upcoming Deadlines" value={withDeadline} icon="📅" tone="amber" />
+            <StatCard label="Group-Required" value={groupOnly} icon="👥" tone="violet" />
+          </>
+        )}
       </div>
+
+      {!supabaseOk ? (
+        <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          Supabase is not configured — connect it in{" "}
+          <Link href="/settings" className="text-brand-700 hover:underline font-medium">
+            Settings
+          </Link>{" "}
+          to see live users and applications.
+        </div>
+      ) : null}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <div className="card p-5 lg:col-span-2">

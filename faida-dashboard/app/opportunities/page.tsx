@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { OpportunityActions } from "@/components/OpportunityActions";
+
+export const dynamic = "force-dynamic";
 import { ScrapeNowButton } from "@/components/ScrapeNowButton";
 import {
   isOpportunitiesSyncReady,
