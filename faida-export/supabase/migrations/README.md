@@ -27,6 +27,10 @@ success, move on. If it errors, STOP — do not proceed to the next file.
 | 3    | [02_rls.sql](./02_rls.sql)                         | Secures tables with Row Level Security             |
 | 4    | [03_seed_benefits.sql](./03_seed_benefits.sql)     | Populates `benefits` with the 30 Kenyan benefits   |
 | 5    | [04_views.sql](./04_views.sql)                     | Creates dashboard analytics views                 |
+| 6    | [05_scraped_opportunities.sql](./05_scraped_opportunities.sql) | Adds the admin review queue for scraped opportunities |
+| 7    | [06_scraped_opportunities_rls_fix.sql](./06_scraped_opportunities_rls_fix.sql) | Service-role policy for the review queue |
+| 8    | [07_view_fixes.sql](./07_view_fixes.sql)           | Fixes two views, closes views to the public key    |
+| 9    | [08_reminder_contact.sql](./08_reminder_contact.sql) | Encrypted contact column for deadline reminders  |
 
 **Tip:** If SQL Editor shows "1 query run" with no errors, you're good. For
 `03_seed_benefits.sql` the output of the last block is a NOTICE with the
@@ -36,8 +40,8 @@ final count — it should be `30`.
 
 ## ✅ Verify the schema
 
-After running all 5 migrations, paste this check query into the SQL Editor
-and run it. Confirm you see `7 tables`, `6 views`, `30 benefits`:
+After running all the migrations, paste this check query into the SQL Editor
+and run it. Confirm you see `8 tables`, `6 views`, `30 benefits`:
 
 ```sql
 SELECT 'tables'   AS kind, COUNT(*) AS n
@@ -58,7 +62,7 @@ Expected output (approximately — your `tables` count may be 8-10 if Supabase
 has extensions installed, the important ones are `> 5`):
 
 ```
-tables   |  7
+tables   |  8
 views    |  6
 benefits | 30
 ```
@@ -100,6 +104,12 @@ SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOi...<service_role key>
 # Must be a RANDOM string, at least 32 chars. Same as before,
 # or generate a new one with:  node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 FAIDA_HASH_SALT=change-this-to-a-random-string
+
+# Required in production — protects the /qr WhatsApp pairing page
+QR_ACCESS_TOKEN=<random string, 16+ chars>
+
+# Optional — lets deadline reminders survive restarts (needs migration 08)
+REMINDER_ENCRYPTION_KEY=<random string>
 ```
 
 ### 2) Dashboard — `faida-dashboard/.env.local`
@@ -109,7 +119,7 @@ Create the file and fill:
 ```
 SUPABASE_URL=https://YOUR-PROJECT-REF.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOi...<service_role key>
-FAIDA_HASH_SALT=SAME_VALUE_AS_IN_BOT_DOT_ENV
+ADMIN_PASSWORD=<8+ chars — required to sign in to the dashboard>
 ```
 
 ---
@@ -134,7 +144,7 @@ node -e "
     .then(r => {
       if (r.error) {
         console.error('Supabase error — code:', r.error.code, '| msg:', r.error.message);
-        if (r.error.code === 'PGRST125') console.error('HINT: benefits table does not exist yet. Run the 5 SQL migration scripts in SQL Editor.');
+        if (r.error.code === 'PGRST125') console.error('HINT: benefits table does not exist yet. Run the SQL migration scripts in SQL Editor.');
         process.exit(2);
       }
       console.log('Supabase OK. Benefit count:', r.count);
@@ -173,4 +183,5 @@ All migrations are **idempotent** — safe to re-run (they use
 | `applications`       | Row per submitted application, with reference code and status.             |
 | `application_fields` | Individual form answers for inspection / debugging.                        |
 | `analytics_events`   | Append-only event log for dashboard charts.                                |
-| `audit_log`          | Records every dashboard mutation (benefit create/edit/delete).             |
+| `scraped_opportunities` | Opportunities scraped by the bot, pending admin approval on the dashboard. |
+| `audit_log`          | Reserved for dashboard change history (not written to yet).                |

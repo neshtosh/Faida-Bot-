@@ -37,6 +37,10 @@ startHealthServer(PORT);
 startBenefitsScheduler();
 startOpportunityScheduler();
 
+// Latest live socket — reconnects replace it, and the reminder scheduler
+// (started once) must always send through the current one.
+let activeSock = null;
+
 async function startBot() {
   const { state, saveCreds } = await useMultiFileAuthState(AUTH_FOLDER);
   const { version } = await fetchLatestBaileysVersion();
@@ -85,6 +89,7 @@ async function startBot() {
     }
 
     if (connection === "close") {
+      if (activeSock === sock) activeSock = null;
       setBotStatus("disconnected");
       const reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
       const shouldReconnect = reason !== DisconnectReason.loggedOut;
@@ -100,6 +105,7 @@ async function startBot() {
     }
 
     if (connection === "open") {
+      activeSock = sock;
       clearCurrentQr();
       console.clear();
       console.log("╔══════════════════════════════════════════════╗");
@@ -108,7 +114,8 @@ async function startBot() {
       console.log("╚══════════════════════════════════════════════╝\n");
 
       startReminderScheduler(async (userId, text) => {
-        await sock.sendMessage(userId, { text });
+        if (!activeSock) throw new Error("WhatsApp not connected");
+        await activeSock.sendMessage(userId, { text });
         logReply(userId, text);
       });
 
@@ -156,6 +163,8 @@ async function startBot() {
             fileName: payload.document.fileName || "faida-form.pdf",
           });
           console.log(`📎 Sent PDF: ${payload.document.fileName}\n`);
+          // PDFs contain ID numbers etc. — don't keep them on disk after delivery
+          fs.promises.unlink(payload.document.path).catch(() => {});
         }
         console.log(`✅ Replied\n`);
       } catch (err) {

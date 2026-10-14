@@ -203,7 +203,7 @@ async function runDailyReminders(sendMessageFn) {
   const upcoming = getUpcomingBenefits();
   if (upcoming.length === 0) return { sent: 0, skipped: 0 };
 
-  const recipients = getReminderRecipients();
+  const recipients = await getReminderRecipients();
   const todayKey = getNairobiDateKey();
   let sent = 0;
   let skipped = 0;
@@ -223,7 +223,7 @@ async function runDailyReminders(sendMessageFn) {
       try {
         const message = formatReminderMessage(benefit, daysLeft, recipient.language);
         await sendMessageFn(recipient.userId, message);
-        markReminderSent(recipient.userId, benefit.id, todayKey);
+        await markReminderSent(recipient.userId, benefit.id, todayKey);
         sent++;
       } catch (_) {
         skipped++;
@@ -245,7 +245,9 @@ function startReminderScheduler(sendMessageFn) {
     const p = getNairobiDateParts();
     const todayKey = getNairobiDateKey();
 
-    if (p.hour !== 8 || p.minute !== 0) return;
+    // Run once per day at or after 8am (a 60s tick can skip exactly 8:00).
+    // After a restart past 8am it runs again, but remindersSent dedupes per day.
+    if (p.hour < 8) return;
     if (lastRunDateKey === todayKey) return;
 
     lastRunDateKey = todayKey;

@@ -6,7 +6,12 @@
  */
 
 const { matchBenefits } = require("../lib/eligibility");
-const { updateSession, persistCompletedApplication, recordAnalyticsEvent } = require("../lib/session");
+const {
+  updateSession,
+  persistCompletedApplication,
+  recordAnalyticsEvent,
+  syncReminderContact,
+} = require("../lib/session");
 const { getMessages } = require("../lib/messages");
 const { findNearestOffice, formatOfficeMessage } = require("../lib/offices");
 const { logEligibilityMatches, logEvent, logError } = require("../lib/logger");
@@ -106,6 +111,14 @@ async function handleMessage(userId, text, session, meta = {}) {
   const input = (text || "").trim().toLowerCase();
   const rawText = (text || "").trim();
   const msgs = () => getMessages(session.language);
+
+  // ── Rate limit every message, including async AI / form / refresh paths ──
+  const rateCheck = checkRateLimit(session);
+  updateSession(userId, rateCheck.updates);
+  if (rateCheck.limited) {
+    return { reply: msgs().rateLimited() };
+  }
+  meta = { ...meta, rateChecked: true };
 
   // ── Web form filling (async) ──
   if (session.step === "web_form") {
@@ -243,17 +256,23 @@ async function handleMessage(userId, text, session, meta = {}) {
   }
 
   if (updates) {
+    // updateSession mutates `session` in place — snapshot it first so the
+    // before/after comparisons below see the previous state
+    const prev = { ...session };
     updateSession(userId, updates);
+    if (typeof updates.remindersOptIn === "boolean" && updates.remindersOptIn !== !!prev.remindersOptIn) {
+      syncReminderContact(userId, updates.remindersOptIn).catch(() => {});
+    }
     if (updates.lastMatches && updates.lastMatches.length > 0) {
-      const prevIds = (session.lastMatches || []).map((m) => m.benefit.id).join(",");
+      const prevIds = (prev.lastMatches || []).map((m) => m.benefit.id).join(",");
       const nextIds = updates.lastMatches.map((m) => m.benefit.id).join(",");
       if (prevIds !== nextIds) {
         logEligibilityMatches(userId, updates.lastMatches);
       }
     }
 
-    const prevActive = session?.application?.benefitId;
-    const prevStep = session?.step;
+    const prevActive = prev.application?.benefitId;
+    const prevStep = prev.step;
     const nextStep = updates?.step;
     const nextActive = updates?.application?.benefitId;
     const nextStartedAt = updates?.application?.startedAt;
@@ -273,7 +292,7 @@ async function handleMessage(userId, text, session, meta = {}) {
       ).catch(() => {});
     }
 
-    const prevCompleted = session?.application?.completedApps?.length || 0;
+    const prevCompleted = prev.application?.completedApps?.length || 0;
     const nextCompleted = updates?.application?.completedApps?.length || 0;
     if (prevActive && !nextActive && nextCompleted > prevCompleted) {
       const newest = (updates.application.completedApps || []).slice(prevCompleted)[0];
@@ -285,11 +304,11 @@ async function handleMessage(userId, text, session, meta = {}) {
           benefitId: newest.benefitId,
           templateId: newest.templateId || form.templateId,
           refCode: newest.refCode,
-          startedAt: session?.application?.startedAt || newest.completedAt,
+          startedAt: prev.application?.startedAt || newest.completedAt,
           answers: newest.answers || {},
           templateFields: form.fields,
           submissionMode: isMobileOnly ? "mobile" : "office",
-          profileSnapshot: session?.profile || {},
+          profileSnapshot: prev.profile || {},
         }).catch(() => {});
       }
     }
@@ -415,11 +434,11 @@ async function beginWebForm(session, url) {
     return {
       webForm,
       reply:
-        msgs().formFetched(webForm.title, webForm.fields.length) +
+        msgs.formFetched(webForm.title, webForm.fields.length) +
         "\n\n" +
         formatWebFormDocument(webForm, session.language) +
         "\n\n" +
-        msgs().formCompleteHelp(),
+        msgs.formCompleteHelp(),
     };
   }
 
@@ -427,7 +446,7 @@ async function beginWebForm(session, url) {
   return {
     webForm: { ...webForm, currentFieldIndex: idx },
     reply:
-      msgs().formFetched(webForm.title, webForm.fields.length) +
+      msgs.formFetched(webForm.title, webForm.fields.length) +
       "\n\n" +
       buildWebFormQuestion(field, idx + 1, webForm.fields.length, session.language),
   };
@@ -449,14 +468,14 @@ async function handleWebFormAnswer(session, text) {
   const result = answerCurrentField(session.webForm, text);
 
   if (!result.ok) {
-    return { reply: msgs().formFieldError(result.error), webForm: session.webForm };
+    return { reply: msgs.formFieldError(result.error), webForm: session.webForm };
   }
 
   const webForm = result.webForm;
   if (result.complete || isWebFormComplete(webForm)) {
     return {
       webForm,
-      reply: formatWebFormDocument(webForm, session.language) + "\n\n" + msgs().formCompleteHelp(),
+      reply: formatWebFormDocument(webForm, session.language) + "\n\n" + msgs.formCompleteHelp(),
     };
   }
 
@@ -476,7 +495,7 @@ async function exportWebFormPdf(session) {
   const webForm = session.webForm;
 
   if (!webForm) {
-    return { reply: msgs().formNoActive() };
+    return { reply: msgs.formNoActive() };
   }
 
   const filePath = await generateFormPdf({
@@ -489,7 +508,7 @@ async function exportWebFormPdf(session) {
   });
 
   return {
-    reply: msgs().formPdfReady(webForm.refCode),
+    reply: msgs.formPdfReady(webForm.refCode),
     document: {
       path: filePath,
       mimetype: "application/pdf",
@@ -504,7 +523,7 @@ async function exportWebFormPdf(session) {
 async function submitWebForm(session) {
   const msgs = getMessages(session.language);
   if (!session.webForm) {
-    return { reply: msgs().formNoActive() };
+    return { reply: msgs.formNoActive() };
   }
 
   const result = await submitFilledForm(session.webForm, session.profile || {});
@@ -540,13 +559,16 @@ function questionnairePromptForStep(session) {
  * Pure message processor — returns reply and session updates without side effects.
  */
 function processMessage(text, session, meta = {}) {
+  // handleMessage already counted this message; only standalone callers check here
+  const rateCheck = meta.rateChecked
+    ? { limited: false, updates: {} }
+    : checkRateLimit(session);
+
   if (meta.isVoice) {
     const msgs = getMessages(session.language);
-    const rateCheck = checkRateLimit(session);
     return { reply: msgs.voiceMessage(), updates: rateCheck.updates };
   }
 
-  const rateCheck = checkRateLimit(session);
   if (rateCheck.limited) {
     const msgs = getMessages(session.language);
     return { reply: msgs.rateLimited(), updates: rateCheck.updates };
@@ -1019,6 +1041,12 @@ function handleNearestCommand(session, locationText, baseUpdates) {
  */
 function handleNearestWithLocation(session, locationText, baseUpdates) {
   const matches = session.lastMatches || [];
+  if (matches.length === 0) {
+    return {
+      reply: getMessages(session.language).nearestNoMatches(),
+      updates: { ...baseUpdates, step: "menu" },
+    };
+  }
   const topBenefit = matches[0].benefit;
   const county = session.profile?.county;
 

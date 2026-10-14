@@ -90,9 +90,10 @@ export default async function SettingsPage() {
       <section className="card p-6 space-y-3">
         <h2 className="text-lg font-semibold text-slate-900">Privacy</h2>
         <p className="text-sm text-slate-600">
-          <code className="text-xs bg-slate-100 px-1 rounded">FAIDA_HASH_SALT</code> must match
-          the bot&apos;s <code className="text-xs bg-slate-100 px-1 rounded">.env</code> so user
-          hashes align. Phone numbers are never stored — only SHA-256 hashes.
+          Users are stored as salted SHA-256 hashes of their phone number (the salt,{" "}
+          <code className="text-xs bg-slate-100 px-1 rounded">FAIDA_HASH_SALT</code>, lives only in
+          the bot). The one exception: users who send <em>REMINDERS ON</em> have their WhatsApp
+          number stored encrypted so reminders can reach them; it is deleted when they opt out.
         </p>
       </section>
     </div>

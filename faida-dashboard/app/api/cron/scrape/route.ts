@@ -5,13 +5,9 @@ function isAuthorized(req: NextRequest): boolean {
   const secret = process.env.CRON_SECRET;
   if (!secret) return false;
 
-  const auth = req.headers.get("authorization");
-  if (auth === `Bearer ${secret}`) return true;
-
-  // Vercel Cron sends this header on scheduled invocations
-  if (req.headers.get("x-vercel-cron") === "1") return true;
-
-  return false;
+  // Vercel Cron also sends "Authorization: Bearer $CRON_SECRET" when CRON_SECRET is set.
+  // Don't trust x-vercel-cron — any client can send that header.
+  return req.headers.get("authorization") === `Bearer ${secret}`;
 }
 
 export async function GET(req: NextRequest) {

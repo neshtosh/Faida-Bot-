@@ -21,4 +21,15 @@ npm start          # connect to WhatsApp
 
 See [`faida-export/README.md`](faida-export/README.md) for full documentation.
 
+## Quick start (dashboard)
+
+```bash
+cd faida-dashboard
+cp .env.local.example .env.local   # set SUPABASE_* and ADMIN_PASSWORD
+npm install
+npm run dev                        # http://localhost:3001 — sign in with ADMIN_PASSWORD
+```
+
+Database setup: [`faida-export/supabase/migrations/README.md`](faida-export/supabase/migrations/README.md).
+
 Built by [Munene](https://munene.dev) · Kenya 🇰🇪

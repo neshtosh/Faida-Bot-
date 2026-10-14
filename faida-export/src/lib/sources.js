@@ -11,7 +11,6 @@ const VERIFIED_DOMAINS = [
   "go.ke",
   "or.ke",
   "ac.ke",
-  "co.ke",
   "worldbank.org",
   "usaid.gov",
   "mastercardfdn.org",
@@ -19,13 +18,14 @@ const VERIFIED_DOMAINS = [
   "safaricom.co.ke",
   "equitybank.co.ke",
   "kcbgroup.com",
-  "google.com",
   "developpp.vc",
   "undp.org",
   "un.org",
   "widu.africa",
   "startup.google.com",
   "m-taji.co.ke",
+  "spark.co.ke",
+  "grow.google",
 ];
 
 /** Official RSS/Atom feeds to poll for new announcements. */

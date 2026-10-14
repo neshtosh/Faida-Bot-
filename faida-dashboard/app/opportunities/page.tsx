@@ -37,7 +37,7 @@ export default async function OpportunitiesPage({
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Live opportunities</h1>
           <p className="text-slate-600 mt-1 max-w-2xl">
-            The dashboard scrapes verified sources every 12 hours. You approve items
+            The WhatsApp bot scrapes verified sources every 12 hours. You approve items
             here — approved grants appear in the WhatsApp bot on Railway via Supabase.
           </p>
         </div>

@@ -32,7 +32,12 @@ require("dotenv").config();
 
 const { getBenefits } = require("./benefits-store");
 const { isProfileComplete } = require("./profile");
-const { hashUserId } = require("./privacy");
+const {
+  hashUserId,
+  encryptUserId,
+  decryptUserId,
+  isReminderEncryptionConfigured,
+} = require("./privacy");
 const { getSupabaseClient } = require("./supabase");
 const { logSessionCreated, logSessionExpired } = require("./logger");
 
@@ -517,12 +522,38 @@ async function getAnalytics() {
 }
 
 /**
- * Returns opted-in users eligible for deadline reminders.
+ * Stores (opt-in) or deletes (opt-out) the encrypted WhatsApp ID used to
+ * send reminders after a restart. No-op without Supabase or an encryption key.
  */
-function getReminderRecipients() {
+async function syncReminderContact(userId, optIn) {
+  const supabase = getSupabaseClient();
+  if (!supabase) return false;
+
+  const encrypted = optIn ? encryptUserId(userId) : null;
+  if (optIn && !encrypted) return false;
+
+  try {
+    await ensureUserRecord(userId, sessions.get(userId) || {});
+    const { error } = await supabase
+      .from("users")
+      .update({ reminder_opt_in: !!optIn, reminder_jid_enc: encrypted })
+      .eq("user_id_hash", hashUserId(userId));
+    return !error;
+  } catch (_) {
+    return false;
+  }
+}
+
+/**
+ * Returns opted-in users eligible for deadline reminders: everyone in memory,
+ * plus users stored in Supabase with an encrypted contact (survives restarts).
+ */
+async function getReminderRecipients() {
   const recipients = [];
+  const seenHashes = new Set();
 
   for (const [userId, session] of sessions.entries()) {
+    seenHashes.add(hashUserId(userId));
     if (!session.remindersOptIn) continue;
     if (!session.lastMatches || session.lastMatches.length === 0) continue;
 
@@ -534,21 +565,75 @@ function getReminderRecipients() {
     });
   }
 
+  const supabase = getSupabaseClient();
+  if (!supabase || !isReminderEncryptionConfigured()) return recipients;
+
+  try {
+    const { data: users, error } = await supabase
+      .from("users")
+      .select("user_id_hash, reminder_jid_enc")
+      .eq("reminder_opt_in", true)
+      .not("reminder_jid_enc", "is", null);
+    if (error || !users?.length) return recipients;
+
+    const stored = users.filter((u) => !seenHashes.has(u.user_id_hash));
+    if (stored.length === 0) return recipients;
+
+    const { data: rows } = await supabase
+      .from("sessions")
+      .select("user_id_hash, language, last_matches, reminders_sent")
+      .in("user_id_hash", stored.map((u) => u.user_id_hash));
+    const sessionByHash = new Map((rows || []).map((r) => [r.user_id_hash, r]));
+
+    for (const u of stored) {
+      const row = sessionByHash.get(u.user_id_hash);
+      const userId = decryptUserId(u.reminder_jid_enc);
+      const matchedBenefitIds = (row?.last_matches || []).map((m) => m.benefitId).filter(Boolean);
+      if (!userId || matchedBenefitIds.length === 0) continue;
+
+      recipients.push({
+        userId,
+        language: row.language || "en",
+        matchedBenefitIds,
+        remindersSent: row.reminders_sent || {},
+      });
+    }
+  } catch (_) {
+    // Fall back to in-memory recipients only
+  }
+
   return recipients;
 }
 
 /**
  * Records that a reminder was sent for a benefit today.
  */
-function markReminderSent(userId, benefitId, dateKey) {
+async function markReminderSent(userId, benefitId, dateKey) {
+  const key = dateKey || getNairobiDateKeyFallback();
   const session = sessions.get(userId);
-  if (!session) return;
 
-  if (!session.remindersSent) session.remindersSent = {};
-  session.remindersSent[benefitId] = dateKey || getNairobiDateKeyFallback();
-  session.lastActivity = Date.now();
-  sessions.set(userId, session);
-  persistSession(userId, session).catch(() => {});
+  if (session) {
+    if (!session.remindersSent) session.remindersSent = {};
+    session.remindersSent[benefitId] = key;
+    persistSession(userId, session).catch(() => {});
+    return;
+  }
+
+  // Not in memory (recipient loaded from Supabase) — update the stored row
+  const supabase = getSupabaseClient();
+  if (!supabase) return;
+  try {
+    const hash = hashUserId(userId);
+    const { data } = await supabase
+      .from("sessions")
+      .select("reminders_sent")
+      .eq("user_id_hash", hash)
+      .maybeSingle();
+    await supabase
+      .from("sessions")
+      .update({ reminders_sent: { ...(data?.reminders_sent || {}), [benefitId]: key } })
+      .eq("user_id_hash", hash);
+  } catch (_) {}
 }
 
 /**
@@ -656,17 +741,6 @@ async function ensureUserRecord(userId, sessionOrProfile) {
 
   const profileSnapshot = profileSnapshotForUsersTable(session);
   const hash = hashUserId(userId);
-  try {
-    const { error: rpcError } = await supabase.rpc("faida_upsert_user", {
-      p_user_id_hash: hash,
-      p_language: session.language || null,
-      p_profile_snapshot: profileSnapshot,
-    });
-    if (!rpcError) return true;
-  } catch (_) {
-    // fall through to manual upsert
-  }
-
   try {
       const { data: existing } = await supabase
         .from("users")
@@ -796,18 +870,14 @@ async function persistCompletedApplication(params) {
     }
 
     try {
-      await supabase.from("users").update({ app_count: supabase.rpc("inc") }).eq("user_id_hash", userHash);
-    } catch (_) {
-      try {
-        const { data: u } = await supabase.from("users").select("app_count").eq("user_id_hash", userHash).maybeSingle();
-        if (u) {
-          await supabase
-            .from("users")
-            .update({ app_count: (u.app_count || 0) + 1 })
-            .eq("user_id_hash", userHash);
-        }
-      } catch (_e) {}
-    }
+      const { data: u } = await supabase.from("users").select("app_count").eq("user_id_hash", userHash).maybeSingle();
+      if (u) {
+        await supabase
+          .from("users")
+          .update({ app_count: (u.app_count || 0) + 1 })
+          .eq("user_id_hash", userHash);
+      }
+    } catch (_e) {}
 
     recordAnalyticsEvent("application_complete", userId, benefitId, { refCode, templateId });
 
@@ -826,6 +896,7 @@ module.exports = {
   getAnalytics,
   getReminderRecipients,
   markReminderSent,
+  syncReminderContact,
   serializeMatches,
   deserializeMatches,
   ensureUserRecord,

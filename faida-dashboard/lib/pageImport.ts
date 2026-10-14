@@ -1,4 +1,6 @@
 import crypto from "crypto";
+import dns from "dns/promises";
+import net from "net";
 import type { Benefit } from "@/types/benefit";
 
 const FETCH_TIMEOUT_MS = 30000;
@@ -186,6 +188,68 @@ export type ImportResult = {
   warning?: string;
 };
 
+const MAX_REDIRECTS = 5;
+
+/** True for loopback, private, link-local (incl. cloud metadata) and other non-public IPs. */
+function isPrivateAddress(ip: string): boolean {
+  const v4 = ip.startsWith("::ffff:") ? ip.slice(7) : ip;
+  if (net.isIPv4(v4)) {
+    const [a, b] = v4.split(".").map(Number);
+    return (
+      a === 0 || a === 10 || a === 127 ||
+      (a === 100 && b >= 64 && b <= 127) ||
+      (a === 169 && b === 254) ||
+      (a === 172 && b >= 16 && b <= 31) ||
+      (a === 192 && b === 168) ||
+      a >= 224
+    );
+  }
+  const lower = ip.toLowerCase();
+  return (
+    lower === "::" || lower === "::1" ||
+    lower.startsWith("fc") || lower.startsWith("fd") || lower.startsWith("fe80")
+  );
+}
+
+/** Throws unless the URL's host resolves only to public addresses. */
+async function assertPublicHost(url: URL): Promise<void> {
+  const host = url.hostname.replace(/^\[|\]$/g, "");
+  const addresses = net.isIP(host)
+    ? [host]
+    : (await dns.lookup(host, { all: true })).map((a) => a.address);
+  if (addresses.length === 0 || addresses.some(isPrivateAddress)) {
+    throw new Error("URL points to a private or internal address");
+  }
+}
+
+/** fetch() that re-checks every redirect hop against private addresses. */
+async function fetchPublicUrl(start: string, signal: AbortSignal): Promise<Response> {
+  let current = new URL(start);
+  for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
+    if (current.protocol !== "http:" && current.protocol !== "https:") {
+      throw new Error("Only http(s) URLs can be imported");
+    }
+    await assertPublicHost(current);
+    const res = await fetch(current, {
+      signal,
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+      },
+      redirect: "manual",
+    });
+    const location = res.headers.get("location");
+    if (res.status >= 300 && res.status < 400 && location) {
+      current = new URL(location, current);
+      continue;
+    }
+    return res;
+  }
+  throw new Error("Too many redirects");
+}
+
 export async function importBenefitFromUrl(url: string): Promise<ImportResult> {
   const normalized = parseHttpUrl(url);
 
@@ -194,16 +258,7 @@ export async function importBenefitFromUrl(url: string): Promise<ImportResult> {
 
   let html: string;
   try {
-    const res = await fetch(normalized, {
-      signal: controller.signal,
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.9",
-      },
-      redirect: "follow",
-    });
+    const res = await fetchPublicUrl(normalized, controller.signal);
     if (!res.ok) {
       const reason = `HTTP ${res.status}`;
       return {

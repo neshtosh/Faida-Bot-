@@ -6,6 +6,7 @@
  */
 
 const http = require("http");
+const crypto = require("crypto");
 const QRCode = require("qrcode");
 const { logger } = require("./logger");
 
@@ -50,7 +51,24 @@ function getPublicBaseUrl() {
  */
 function getQrPageUrl() {
   const base = getPublicBaseUrl();
-  return base ? `${base}/qr` : null;
+  if (!base) return null;
+  const token = process.env.QR_ACCESS_TOKEN;
+  return token ? `${base}/qr?token=${encodeURIComponent(token)}` : `${base}/qr`;
+}
+
+/**
+ * Returns true if the request may view the pairing QR.
+ * Anyone who scans the QR links their WhatsApp as the bot, so when
+ * QR_ACCESS_TOKEN is set the request must carry ?token=<value>.
+ */
+function isQrRequestAuthorized(req) {
+  const expected = process.env.QR_ACCESS_TOKEN;
+  if (!expected) return process.env.NODE_ENV !== "production";
+
+  const given = new URL(req.url || "/", "http://localhost").searchParams.get("token") || "";
+  const a = crypto.createHash("sha256").update(given).digest();
+  const b = crypto.createHash("sha256").update(expected).digest();
+  return crypto.timingSafeEqual(a, b);
 }
 
 /**
@@ -242,14 +260,18 @@ function startHealthServer(port) {
   const server = http.createServer(async (req, res) => {
     const path = (req.url || "/").split("?")[0];
 
+    if ((path === "/qr" || path === "/qr.png") && !isQrRequestAuthorized(req)) {
+      res.writeHead(403, { "Content-Type": "text/plain" });
+      res.end("Forbidden.");
+      return;
+    }
+
     if (path === "/health" || path === "/") {
-      const qrUrl = getQrPageUrl();
       const body = JSON.stringify({
         status: "ok",
         service: "faida-bot",
         bot: botStatus,
         publicUrl: getPublicBaseUrl(),
-        qrUrl,
         setupHint: getPublicUrlSetupHint(),
         timestamp: new Date().toISOString(),
       });
@@ -325,7 +347,6 @@ function startHealthServer(port) {
         event: "health_server",
         port,
         publicUrl,
-        qrUrl: getQrPageUrl(),
       },
       "Health check server listening"
     );

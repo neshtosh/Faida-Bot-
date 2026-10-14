@@ -198,7 +198,14 @@ export function benefitFromText(
   text: string,
   options: { fileName?: string; sourceUrl?: string } = {}
 ): Partial<Benefit> {
-  const cleaned = text.replace(/\0/g, " ").replace(/\s+/g, " ").trim();
+  // Keep line breaks — the name/description/steps extractors split on them
+  const cleaned = text
+    .replace(/\0/g, " ")
+    .replace(/\r\n?/g, "\n")
+    .replace(/[^\S\n]+/g, " ")
+    .replace(/ *\n */g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
   const name = extractName(cleaned, options.fileName);
   const description = extractDescription(cleaned, name);
   const category = guessCategory(cleaned);

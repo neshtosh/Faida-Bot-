@@ -69,8 +69,8 @@ export function benefitToRow(benefit: Benefit): Omit<BenefitRow, "is_published" 
     deadline_annual: benefit.deadlineAnnual ?? false,
     link: benefit.link || "",
     eligibility: benefit.eligibility,
-    is_published: true,
-    priority_weight: 0,
+    // is_published / priority_weight are omitted on purpose: new rows get the
+    // DB defaults (published, weight 0) and edits keep whatever is stored.
     updated_at: new Date().toISOString(),
   };
 }

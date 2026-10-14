@@ -33,17 +33,23 @@ faida/
 │   │   ├── simulate.js    ← Test bot in terminal (no WhatsApp needed)
 │   │   └── test.js        ← Automated tests
 │   ├── db/
-│   │   └── benefits.js    ← All Kenya benefits database
+│   │   └── benefits.json  ← Offline fallback catalog (Supabase is the source of truth)
 │   └── lib/
 │       ├── eligibility.js ← Matching engine
-│       ├── session.js     ← User session manager
+│       ├── session.js     ← Sessions + long-term memory (Supabase, salted hashes)
+│       ├── applications.js / documents.js ← Guided application forms + reference codes
+│       ├── ai.js / ai-tools.js ← AI assistant (OpenAI or Claude) with verified-source tools
+│       ├── formassist.js / webfetch.js / pdfexport.js ← FORM <url>, PDF export
+│       ├── opportunities.js / mtaji.js / opportunity-*.js ← Scraping + admin-approved feed
+│       ├── sources.js     ← Verified-domain allowlist
 │       ├── reminders.js   ← Deadline reminder scheduler
+│       ├── privacy.js     ← Hashing + reminder-contact encryption
 │       ├── logger.js      ← Structured logging (pino)
 │       ├── env.js         ← Startup env validation
-│       └── health.js      ← HTTP health check for Railway
+│       └── health.js      ← /health + token-protected /qr pairing page
 ├── Procfile               ← Railway/Heroku process file
 ├── railway.json           ← Railway deploy config
-├── supabase/schema.sql    ← Database schema (when ready)
+├── supabase/              ← Migrations (00–08) + consolidated schema.sql
 ├── .env.example           ← Environment variables template
 ├── .auth/                 ← WhatsApp session (auto-created, gitignore this)
 └── package.json
@@ -83,7 +89,7 @@ Test the full 6-question flow and see your matched benefits.
 ```bash
 npm test
 ```
-All 17 tests should pass.
+All 30 tests should pass.
 
 ### 6. Connect to WhatsApp
 ```bash
@@ -92,7 +98,7 @@ npm start
 A QR code will appear in the terminal **and** as a shareable link:
 
 ```
-http://localhost:3000/qr
+http://localhost:3000/qr          (add ?token=<QR_ACCESS_TOKEN> if you set one)
 ```
 
 Open that link on your phone to scan easily.
@@ -151,7 +157,10 @@ User: "SHARE"
 
 ## Adding New Benefits
 
-Open `src/db/benefits.js` and add a new object to the array:
+With Supabase configured, add and edit benefits in the admin dashboard
+(`faida-dashboard`, **Benefits → New Benefit**); the bot reloads the catalog
+every 5 minutes. Without Supabase, add an object to `src/db/benefits.json`
+in this shape:
 
 ```javascript
 {
@@ -224,7 +233,7 @@ Before the shareable QR link works, you must expose the service:
 Your QR scan page will then be at:
 
 ```
-https://YOUR-DOMAIN.up.railway.app/qr
+https://YOUR-DOMAIN.up.railway.app/qr?token=<QR_ACCESS_TOKEN>
 ```
 
 > `localhost` links never work on Railway — they only work on your own computer during local dev.
@@ -237,16 +246,22 @@ In Railway: **Project → your service → Variables → Raw Editor**, add:
 |----------|----------|---------|
 | `NODE_ENV` | Yes | `production` |
 | `FAIDA_HASH_SALT` | Yes | `a-long-random-string-here` |
+| `QR_ACCESS_TOKEN` | Yes | random string, 16+ chars — the `/qr` page requires `?token=` |
 | `LOG_LEVEL` | No | `info` |
 | `BOT_NAME` | No | `Faida` |
+| `PUBLIC_URL` | No | `https://your-service.up.railway.app` |
 | `SUPABASE_URL` | No* | `https://xxx.supabase.co` |
-| `SUPABASE_ANON_KEY` | No* | your anon key |
+| `SUPABASE_SERVICE_ROLE_KEY` | No* | your service_role key (needed to write sessions/applications) |
+| `REMINDER_ENCRYPTION_KEY` | No | random string — reminders survive restarts (needs migration 08) |
+| `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` | No | enables the AI assistant (`AI_PROVIDER` picks one) |
+| `ANTHROPIC_MODEL` | No | defaults to `claude-opus-5-5` |
+| `MTAJI_SUPABASE_URL` / `MTAJI_SUPABASE_ANON_KEY` | No | M-Taji partner opportunities feed |
 
-\* If you set one Supabase variable, you must set both.
+\* If you set `SUPABASE_URL`, also set a key (service role preferred; `SUPABASE_ANON_KEY` alone can't write through RLS).
 
 `PORT` is set automatically by Railway — do not override it.
 
-The bot **will refuse to start** in production if `FAIDA_HASH_SALT` is missing or still set to the example default.
+The bot **will refuse to start** in production if `FAIDA_HASH_SALT` is missing or still the example default, or if `QR_ACCESS_TOKEN` is missing.
 
 ### Step 4 — Deploy
 
@@ -280,13 +295,13 @@ Railway uses this endpoint (`healthcheckPath: /health` in `railway.json`) to mon
 Baileys uses QR scan to link WhatsApp. On Railway:
 
 1. Open **Deployments → View Logs**
-2. Look for the **shareable link**, e.g. `https://your-service.up.railway.app/qr`
+2. Look for the **shareable link**, e.g. `https://your-service.up.railway.app/qr?token=...` (only share it with whoever is linking the bot — anyone who scans the QR becomes the bot)
 3. Open that link on your phone (or share it with someone who needs to scan)
 4. Scan the QR on the page: **WhatsApp → Settings → Linked Devices → Link a Device**
 
 The terminal still shows an ASCII QR as a backup. The web page auto-refreshes every 15 seconds while waiting for a scan.
 
-Direct image link (optional): `https://your-service.up.railway.app/qr.png`
+Direct image link (optional): `https://your-service.up.railway.app/qr.png?token=<QR_ACCESS_TOKEN>`
 
 > **Important:** Railway containers are ephemeral. If the container restarts, you may need to re-scan unless you persist the `.auth` folder using a [Railway Volume](https://docs.railway.app/reference/volumes) mounted at `/app/.auth`.
 
@@ -338,10 +353,11 @@ For a production-grade setup with Meta's official API:
 - [x] Deadline reminder system
 - [x] Structured logging (pino)
 - [x] Railway deployment setup
-- [ ] Supabase integration (persist sessions + analytics) — database setup last
-- [ ] Web dashboard (Next.js) for admins to manage benefits
+- [x] Supabase integration (sessions, long-term memory, applications, analytics)
+- [x] Admin dashboard (Next.js, password-protected) — benefits, opportunities review, applications
 - [ ] WhatsApp Cloud API migration (verified business number)
-- [ ] Claude API integration (smarter matching)
+- [x] AI assistant (OpenAI or Claude) with verified-source tools and guided form filling
+- [x] Live opportunities (M-Taji partner, World Bank, USAID) with admin approval
 - [ ] SMS fallback (Africa's Talking) for non-WhatsApp users
 - [ ] B2B white-label API for SACCOs
 
@@ -351,8 +367,8 @@ For a production-grade setup with Meta's official API:
 
 - [Baileys](https://github.com/WhiskeySockets/Baileys) — WhatsApp Web API
 - Node.js — Runtime
-- Supabase — Database (coming)
-- Next.js — Web dashboard (coming)
+- Supabase — Database
+- Next.js — Admin dashboard (`../faida-dashboard`)
 
 ---
 

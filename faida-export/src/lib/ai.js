@@ -13,7 +13,7 @@ const { getBenefits } = require("./benefits-store");
 const { getCachedOpportunitiesAsBenefits } = require("./opportunities");
 const { isVerifiedUrl } = require("./sources");
 const { logger } = require("./logger");
-const { OPENAI_TOOLS, executeAiTool } = require("./ai-tools");
+const { OPENAI_TOOLS, ANTHROPIC_TOOLS, executeAiTool } = require("./ai-tools");
 
 const MAX_HISTORY = 8;
 const MAX_REPLY_CHARS = 3800;
@@ -174,32 +174,103 @@ async function chatWithOpenAI(session, userMessage, history) {
   };
 }
 
+const DEFAULT_ANTHROPIC_MODEL = "claude-opus-5-5";
+
+// Models that accept output_config.effort and the server-side refusal fallback.
+// An older ANTHROPIC_MODEL override is sent without them.
+const ANTHROPIC_CURRENT_MODELS = new Set([
+  "claude-opus-5-5",
+  "claude-opus-5",
+  "claude-sonnet-5-5",
+  "claude-fable-5-1",
+]);
+
+const FALLBACK_TEXT = "Sorry, I couldn't generate a response. Type MENU to continue.";
+
 /**
- * Calls Anthropic Messages API.
+ * Calls the Anthropic Messages API with the same verified-source tools as
+ * the OpenAI path (search, fetch, form assist), looping up to MAX_TOOL_ROUNDS.
  */
 async function chatWithAnthropic(session, userMessage, history) {
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-  const model = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-20250514";
+  const model = process.env.ANTHROPIC_MODEL || DEFAULT_ANTHROPIC_MODEL;
+  const isCurrent = ANTHROPIC_CURRENT_MODELS.has(model);
 
+  // Within a turn the assistant content (incl. thinking blocks) is appended
+  // unchanged; across WhatsApp turns only the text history is kept.
   const messages = [
     ...history.map((m) => ({ role: m.role, content: m.content })),
     { role: "user", content: userMessage },
   ];
 
-  const response = await client.messages.create({
-    model,
-    max_tokens: 1024,
-    system: buildSystemPrompt(session),
-    messages,
-  });
+  let startWebFormUrl = null;
 
-  return (
-    response.content
-      .filter((block) => block.type === "text")
-      .map((block) => block.text)
-      .join("\n")
-      .trim() || "Sorry, I couldn't generate a response. Type MENU to continue."
-  );
+  for (let round = 0; round < MAX_TOOL_ROUNDS; round++) {
+    const response = await client.beta.messages.create({
+      model,
+      max_tokens: 16000,
+      system: buildSystemPrompt(session),
+      tools: ANTHROPIC_TOOLS,
+      messages,
+      ...(isCurrent
+        ? {
+            // Short WhatsApp Q&A — low effort keeps replies fast and cheap
+            output_config: { effort: "low" },
+            // On a safety decline, re-run on Anthropic's recommended fallback model
+            betas: ["server-side-fallback-2026-07-01"],
+            fallbacks: "default",
+          }
+        : {}),
+    });
+
+    if (response.stop_reason === "refusal") {
+      return {
+        text: "Sorry, I can't help with that. Type MENU to see your options.",
+        startWebFormUrl,
+      };
+    }
+
+    const toolUses = response.content.filter((b) => b.type === "tool_use");
+    if (response.stop_reason !== "tool_use" || toolUses.length === 0) {
+      const text = response.content
+        .filter((b) => b.type === "text")
+        .map((b) => b.text)
+        .join("\n")
+        .trim();
+      return { text: text || FALLBACK_TEXT, startWebFormUrl };
+    }
+
+    messages.push({ role: "assistant", content: response.content });
+
+    const toolResults = [];
+    for (const call of toolUses) {
+      const args = call.input || {};
+      let content;
+      let isError = false;
+      try {
+        content = await executeAiTool(call.name, args);
+      } catch (err) {
+        content = JSON.stringify({ error: err.message });
+        isError = true;
+      }
+      if (call.name === "start_form_assistance" && isVerifiedUrl(args.url)) {
+        startWebFormUrl = args.url;
+      }
+      toolResults.push({
+        type: "tool_result",
+        tool_use_id: call.id,
+        content,
+        ...(isError ? { is_error: true } : {}),
+      });
+    }
+    // All results for one assistant turn go back in a single user message
+    messages.push({ role: "user", content: toolResults });
+  }
+
+  return {
+    text: "I need a bit more time for that search. Try FORM followed by a verified link, or type OPPORTUNITIES.",
+    startWebFormUrl,
+  };
 }
 
 /**
@@ -215,13 +286,12 @@ async function chatWithFaida(session, userMessage) {
   let reply;
   let startWebFormUrl = null;
 
-  if (provider === "openai") {
-    const result = await chatWithOpenAI(session, userMessage, history);
-    reply = result.text;
-    startWebFormUrl = result.startWebFormUrl;
-  } else {
-    reply = await chatWithAnthropic(session, userMessage, history);
-  }
+  const result =
+    provider === "openai"
+      ? await chatWithOpenAI(session, userMessage, history)
+      : await chatWithAnthropic(session, userMessage, history);
+  reply = result.text;
+  startWebFormUrl = result.startWebFormUrl;
 
   const safeReply = sanitizeReply(reply);
 

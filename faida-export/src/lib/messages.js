@@ -257,11 +257,12 @@ const MESSAGES_EN = {
   remindersOn: () =>
     `✅ *Deadline reminders turned ON*\n\n` +
     `We'll message you at 8am Nairobi time when a benefit you matched has a deadline within 7 days.\n\n` +
+    `🔒 To reach you, we keep your WhatsApp number encrypted. It is deleted when you turn reminders off.\n\n` +
     `Reply *REMINDERS OFF* anytime to stop.`,
 
   remindersOff: () =>
     `🔕 *Deadline reminders turned OFF*\n\n` +
-    `You won't receive deadline alerts anymore.\n\n` +
+    `You won't receive deadline alerts anymore, and your stored number has been deleted.\n\n` +
     `Reply *REMINDERS ON* when you want them again.`,
 
   resultsHeader: (total) =>
@@ -593,11 +594,12 @@ const MESSAGES_SW = {
   remindersOn: () =>
     `✅ *Kumbusho la muda wa mwisho limewashwa*\n\n` +
     `Tutakutumia ujumbe saa 8 asubuhi (Saa za Nairobi) fursa ulizostahili inapokaribia muda wake wa mwisho (siku 7).\n\n` +
+    `🔒 Ili kukufikia, tunahifadhi namba yako ya WhatsApp kwa usimbaji fiche. Inafutwa ukizima kumbusho.\n\n` +
     `Jibu *REMINDERS OFF* kuzima kumbusho.`,
 
   remindersOff: () =>
     `🔕 *Kumbusho la muda wa mwisho limezimwa*\n\n` +
-    `Hutapokea kumbusho tena.\n\n` +
+    `Hutapokea kumbusho tena, na namba yako iliyohifadhiwa imefutwa.\n\n` +
     `Jibu *REMINDERS ON* kuwasha tena.`,
 
   resultActionsMenu: (benefitName) =>

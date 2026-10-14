@@ -139,6 +139,9 @@ async function fetchVerifiedPage(urlString) {
     if (!res.ok) {
       throw new Error(`HTTP ${res.status}`);
     }
+    if (res.url && !isVerifiedUrl(res.url)) {
+      throw new Error("Redirected to an unverified source");
+    }
 
     const buf = await res.arrayBuffer();
     if (buf.byteLength > MAX_HTML_BYTES) {

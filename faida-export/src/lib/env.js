@@ -24,6 +24,9 @@ function getEnvErrors() {
     } else if (process.env.FAIDA_HASH_SALT === DEFAULT_HASH_SALT) {
       errors.push("FAIDA_HASH_SALT (must not use the example default — set a unique random string)");
     }
+    if (!process.env.QR_ACCESS_TOKEN || process.env.QR_ACCESS_TOKEN.length < 16) {
+      errors.push("QR_ACCESS_TOKEN (random string, 16+ chars — protects the /qr pairing page)");
+    }
   }
 
   const hasSupabaseUrl = !!process.env.SUPABASE_URL;
@@ -65,7 +68,8 @@ function validateEnv() {
     console.error("Production requires at minimum:");
     console.error("  NODE_ENV=production");
     console.error("  PORT=3000          (Railway sets this automatically)");
-    console.error("  FAIDA_HASH_SALT=<random-string>\n");
+    console.error("  FAIDA_HASH_SALT=<random-string>");
+    console.error("  QR_ACCESS_TOKEN=<random-string>\n");
   }
 
   process.exit(1);

@@ -80,15 +80,15 @@ export const Sidebar: FC = () => {
         })}
       </nav>
 
-      <div className="p-4 border-t border-slate-200">
-        <div className="text-xs text-slate-500">WhatsApp Bot</div>
-        <div className="flex items-center gap-2 mt-1">
-          <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-sm font-medium text-emerald-700">
-            Connected
-          </span>
-        </div>
-      </div>
+      <form method="POST" action="/api/auth/logout" className="p-3 border-t border-slate-200">
+        <button
+          type="submit"
+          className="w-full flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+        >
+          <span className="text-base">🚪</span>
+          <span>Sign out</span>
+        </button>
+      </form>
     </aside>
   );
 };

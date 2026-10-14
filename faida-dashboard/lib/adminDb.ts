@@ -183,10 +183,20 @@ export function applicationsToCsv(rows: ApplicationRow[]): string {
       r.completed_at,
       r.submission_mode || "",
     ]
-      .map((v) => `"${String(v).replace(/"/g, '""')}"`)
+      .map(csvCell)
       .join(",")
   );
   return [header.join(","), ...lines].join("\n");
+}
+
+/**
+ * Quotes a CSV cell. Cells starting with = + - @ (or tab/CR) are prefixed with
+ * an apostrophe so Excel / Sheets don't run them as formulas.
+ */
+function csvCell(value: unknown): string {
+  let s = value == null ? "" : String(value);
+  if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
+  return `"${s.replace(/"/g, '""')}"`;
 }
 
 export { isSupabaseConfigured };

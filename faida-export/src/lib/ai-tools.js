@@ -57,6 +57,14 @@ const OPENAI_TOOLS = [
   },
 ];
 
+/** Same tools in Anthropic Messages API format (strict = schema-valid inputs). */
+const ANTHROPIC_TOOLS = OPENAI_TOOLS.map(({ function: fn }) => ({
+  name: fn.name,
+  description: fn.description,
+  input_schema: { ...fn.parameters, additionalProperties: false },
+  strict: true,
+}));
+
 /**
  * Executes an AI tool call and returns a string result for the model.
  */
@@ -106,4 +114,4 @@ async function researchVerifiedTopic(query) {
   return searchAndFetch(query, true);
 }
 
-module.exports = { OPENAI_TOOLS, executeAiTool, researchVerifiedTopic };
+module.exports = { OPENAI_TOOLS, ANTHROPIC_TOOLS, executeAiTool, researchVerifiedTopic };
