@@ -17,6 +17,12 @@ you're obliged to do, and handles the paperwork for both — with your consent.*
 
 _Faida_ (Kiswahili): benefit, gain, profit.
 
+**The point of Faida is to make public and partner services simple to use.** The
+user says what they need in plain language; Faida's agents work the portals.
+Applications are submitted by **browser-use agents**, not by people doing it by
+hand. The model to follow is the america.gov bot, applied to Kenyan national and
+county services.
+
 ---
 
 ## 2. The problem
@@ -115,7 +121,8 @@ case tracker.
 
 ### 5.6 Assist
 - Free-text Q&A grounded in verified sources (already partly built).
-- Handoff to a human when the agent is stuck, unsure, or the user asks for one.
+- Escalation to Faida support when something goes wrong (complaints, disputes,
+  account problems). Support fixes problems; it doesn't do submissions.
 - Directions to the nearest Huduma Centre or office when something must be done
   in person.
 
@@ -160,7 +167,7 @@ Rules that apply at every level:
 - **OTPs** are relayed live over WhatsApp ("KRA sent you a code. Reply with it
   here."). Faida never asks for an M-Pesa PIN.
 - **CAPTCHAs and anti-bot checks are never bypassed.** They are passed to the user
-  or to a human operator.
+  to solve, then the agent carries on.
 
 ### 6.3 Legal & regulatory guardrails (needs legal review)
 - **Data Protection Act 2019:** register with the ODPC as data controller (and
@@ -189,10 +196,13 @@ For each service, Faida uses the highest rung available:
    M-Taji, M-Pesa Daraja for payments, SACCO core-banking APIs).
 2. **Browser agent (computer use)**: a sandboxed browser driven by an AI agent
    following a **playbook** for that portal.
-3. **Human operator**: a Faida ops agent completes the step in the same sandbox,
-   with the same audit trail. This is also the fallback when the agent fails.
-4. **Guided self-service**: Faida prepares everything and walks the user through
-   doing it themselves, or sends them to a Huduma Centre.
+3. **Guided self-service**: Faida prepares everything and walks the user through
+   doing it themselves, or sends them to a Huduma Centre. This is the fallback
+   when a playbook is broken or a step has to be done in person.
+
+No rung has people submitting for users. When the agent needs something only the
+user can give (an OTP, a CAPTCHA, a photo, a decision), it asks over WhatsApp and
+waits.
 
 ### 7.2 Browser agent design
 
@@ -200,7 +210,7 @@ For each service, Faida uses the highest rung available:
 WhatsApp ─► Orchestrator (LLM) ─► Case engine ─► Executor
                  ▲                     │            ├─ API adapter
                  │                     │            ├─ Browser agent (sandbox per task)
-                 └── OTP / consent ◄───┘            └─ Human ops queue
+                 └── OTP / consent ◄───┘            └─ Guided self-service (fallback)
                        requests                          │
                                                 Evidence store (screens, receipts)
 ```
@@ -215,16 +225,18 @@ WhatsApp ─► Orchestrator (LLM) ─► Case engine ─► Executor
   users; credentials are injected by the executor, never put in the model's prompt.
 - **Evidence:** screenshots of the final review and confirmation pages, plus
   extracted reference numbers, are saved to the case.
-- **Monitoring:** success rate per playbook; automatic fallback to human ops after N
-  failures; ops console to watch or take over a live session.
+- **Monitoring:** success rate per playbook. After N failures a playbook is paused,
+  users get guided self-service, and the team is alerted to fix it. A console lets
+  the team replay agent runs to debug them.
 - **Model:** a computer-use-capable model drives the browser; a cheaper model
   handles conversation and classification.
 
-### 7.3 Concierge first
+### 7.3 Rolling out a portal
 
-Before automating a portal, **run it manually** (human ops do steps 2–3 for real
-users). That proves demand, uncovers edge cases and produces the playbook. Automate
-only the services that have volume.
+1. Write the playbook and test it end to end on the team's own accounts.
+2. Launch it to a small group of users, with hard checkpoints on every step that
+   submits or pays.
+3. Widen it once its success rate passes a set bar; keep monitoring after that.
 
 ---
 
@@ -280,7 +292,7 @@ What the repo has now (October 2026), compared with the vision:
 | Fulfil obligations | — | Obligations calendar, playbooks for KRA, eCitizen, SHA, county permits |
 | Track | Applications stored; admin can set status manually | Case engine, status checks on portals, user-facing status |
 | Communicate | Deadline reminders, feedback | Unified case thread, OTP relay, document requests |
-| Assist | AI chat (OpenAI/Claude) limited to verified sources; nearest office | Human handoff, ops console |
+| Assist | AI chat (OpenAI/Claude) limited to verified sources; nearest office | Support escalation; console to replay and debug agent runs |
 | Partners | Admin dashboard (one shared password) for benefits and opportunities | Partner portal, roles and permissions, analytics |
 | Trust & compliance | Hashed user IDs, encrypted reminder contacts, rate limiting | Consent records, DPIA, ODPC registration, credential vault, audit trail for users |
 
@@ -293,21 +305,20 @@ What the repo has now (October 2026), compared with the vision:
 - Consent and terms flow; DPIA; ODPC registration started.
 - **Case model** (one record per request, with status history and evidence).
 - Document vault (encrypted ID, KRA PIN, photos, certificates).
-- Real admin auth and roles in the dashboard; ops view of cases.
+- Real admin auth and roles in the dashboard; view of cases and agent runs.
 
-### Phase 1 — Concierge MVP
+### Phase 1 — Agent MVP
 - Pick **3–5 high-volume services** (candidates: SHA registration, KRA PIN + nil
   return, business name registration, county single business permit, certificate
   of good conduct, plus 2–3 benefits such as youth or women's funds).
-- Flow: discover → prepare in chat → user approves → **human ops submit** → tracked
-  case → status updates on WhatsApp.
-- Measure demand, completion time, failure reasons; write playbooks.
+- Flow: discover → prepare in chat → user approves → **browser agent submits** →
+  tracked case → status updates on WhatsApp.
+- Playbooks for each launch portal, hard checkpoints, OTP relay, evidence capture,
+  automatic status checks.
 
-### Phase 2 — Agent execution
-- Browser agent runs the playbooks from Phase 1 with hard checkpoints; human ops
-  as fallback.
-- OTP relay, evidence capture, automatic status checks.
-- Payments via M-Pesa STK push to official paybills.
+### Phase 2 — Payments & more services
+- Payments via M-Pesa STK push to official paybills (permits, licences, fees).
+- More playbooks, chosen by demand; county portals.
 
 ### Phase 3 — Proactive agent
 - Obligations calendar and standing mandates (L3).
@@ -326,7 +337,7 @@ What the repo has now (October 2026), compared with the vision:
 |---|---|
 | North star | **Cases completed successfully per month** (benefit received or obligation fulfilled) |
 | Activation | % of new users who complete their profile; % who start a case |
-| Execution | Case completion rate; median time to complete; agent vs human share; playbook success rate |
+| Execution | Case completion rate; median time to complete; playbook success rate; % of cases needing guided self-service |
 | Value | Ksh in benefits unlocked; penalties avoided; cost per case vs cyber café |
 | Trust | Consent decline rate; revocations; complaints; data incidents (target: 0) |
 | Retention | Users with 2+ cases in 90 days; reminder → action rate |
@@ -338,10 +349,10 @@ What the repo has now (October 2026), compared with the vision:
 
 | Risk | Impact | Mitigation |
 |---|---|---|
-| Agent acts wrongly in a user's name | Legal and financial harm, lost trust | Hard checkpoints, evidence, scoped mandates, insurance, human review for high-stakes actions |
+| Agent acts wrongly in a user's name | Legal and financial harm, lost trust | Hard checkpoints, evidence, scoped mandates, insurance, extra user confirmation for high-stakes actions |
 | Credential / data breach | Severe | Vault, no credentials in prompts, least privilege, pen-testing, DPIA |
-| Portal changes break playbooks | Failed cases | Monitoring, automatic fallback to human ops, quick re-certification |
-| Portals block automation or forbid it in their terms | Execution blocked | Pursue official intermediary status; human-ops fallback; work with institutions |
+| Portal changes break playbooks | Failed cases | Monitoring, pause the playbook and fall back to guided self-service, quick re-certification |
+| Portals block automation or forbid it in their terms | Execution blocked | Pursue official intermediary status; guided self-service fallback; work with institutions |
 | WhatsApp number banned (Baileys) | Channel down | Cloud API migration (Phase 0) |
 | Seen as an unofficial broker / fraud vector | Reputation | Verified business identity, clear branding, no upfront fees for benefits, partnerships with institutions |
 | Stale catalogue | Bad recommendations | Partner self-service listings, scraping with admin approval, expiry dates |
@@ -357,7 +368,7 @@ What the repo has now (October 2026), compared with the vision:
 3. **Legal route:** can Faida register as an agent or intermediary with eCitizen,
    KRA or SHA? What does counsel say about acting on user credentials?
 4. **Money:** charge users for obligations? Fee level? Who pays for benefits work?
-5. **Ops:** who staffs the concierge phase, and what hours?
+5. **Agent stack:** which computer-use model and browser sandbox to use; hosting in Kenya or abroad?
 6. **Channels:** is USSD/SMS needed for launch, or after?
 7. **Partners:** is there a first SACCO or county partner in view?
 8. **Team & ownership:** product owner, data protection officer, legal counsel.
