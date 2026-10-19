@@ -1,10 +1,13 @@
 # Faida — Product Document
 
-> **Status:** Draft v0.1 · October 2026
+> **Status:** Draft v0.2 · October 2026
 > **Owner:** _TBD_
 > **What this is:** The product intent for Faida, written down for the first time.
 > It combines what the code already does with the founding idea: an agent that
 > handles a citizen's dealings with institutions **end to end, on their behalf**.
+> **Sources:** the codebase (October 2026), the build chat logs in
+> [`docs/archive/`](archive/), and the internal *Faida Platform Proposal*
+> (Munene, August 2026).
 > Statements marked **[Assumption]** are inferred and need confirming. Open
 > questions are collected in [§14](#14-open-questions).
 
@@ -27,7 +30,22 @@ county services.
 
 ## 2. The problem
 
+> "The money exists. The programmes exist. The people who need them exist. What's
+> missing is the layer that connects all three." — Faida Platform Proposal
+
+The proposal's headline figures: **58M+** Kenyans qualify for at least one benefit,
+**Ksh 5B+** in government SME grants goes unclaimed, and there are **~0** direct
+competitors doing this in Kenya. [Assumption: these need sources before they're used
+externally. 58M is more than Kenya's population.]
+
+The disconnect runs both ways. People don't know what exists or how to get it, and
+providers can't reach the people their programmes are meant for.
+
 For most Kenyans, dealing with institutions is slow, confusing and expensive:
+
+- **Information is scattered.** The Hustler Fund is on USSD. YEDF is on a government
+  website. KIEP is on a separate portal. Ward grants need a physical office visit.
+  NGO funding depends on knowing the right people.
 
 - **Entitlements go unclaimed.** Government funds (Hustler Fund, YEDF, Uwezo, WEF,
   AGPO), county programmes, NGO grants and SACCO products exist, but people don't
@@ -65,6 +83,31 @@ It starts with government and county services, then opens to **SACCOs, NGOs and
 private providers**, who can reach eligible, opted-in users with their own benefits
 and complete enrolment through the same agent.
 
+### 3.1 Principles
+
+From the proposal, with a fourth added by this doc:
+
+1. **Accessibility:** WhatsApp first; works on any phone. SMS for alerts.
+2. **Intelligence:** AI eligibility matching that improves over time.
+3. **Completeness:** every benefit category, and eventually every service, in one place.
+4. **Agency:** Faida does the task, not just explains it (§6–§7).
+
+### 3.2 Core use cases
+
+Everything Faida builds should serve one of these. A user can start with any of
+them in plain language, in English or Kiswahili.
+
+| # | The user says… | Faida does |
+|---|---|---|
+| U1 | **"Apply for X for me"** / "Renew my business permit" | Checks eligibility, collects what's missing, gets consent, submits through the agent, tracks it to the end |
+| U2 | **"Tell me about X"** / "What do I need for a good conduct certificate?" | Plain-language summary: who it's for, documents, fees, deadlines, where and how, from verified sources |
+| U3 | **"Am I eligible for X?"** | A yes / no / almost, with the reason and what would change the answer |
+| U4 | **"What can I get?"** | Benefits and services that fit the user's profile, ranked by value and ease of application |
+| U5 | *(Faida starts the conversation)* | **Proactive reach:** "The Nairobi youth bursary opens Monday. You qualify. Want me to apply?" Also deadline alerts and obligation reminders |
+
+U5 is the difference from a directory. Programmes are matched to the people who
+qualify for them, not just listed and left for people to find.
+
 ---
 
 ## 4. Users
@@ -72,11 +115,11 @@ and complete enrolment through the same agent.
 | Segment | Description | Primary need | [Assumption] priority |
 |---|---|---|---|
 | **Everyday citizen** | 18–60, has WhatsApp, low to medium digital confidence, often in a peri-urban or rural county | "Tell me what I qualify for and do it for me" | P0 |
-| **Micro and small business owner** | Kiosk, salon, boda boda, mama mboga, small shop | Permits, KRA, AGPO, loans; staying compliant | P0 |
+| **Micro and small business owner** | Kiosk, salon, boda boda, mama mboga, small shop (proposal: 7.4M SMEs) | Permits, KRA, AGPO, loans; staying compliant | P0 |
 | **Youth / job seeker** | 18–35, student or recently graduated | Training, jobs, youth funds, HELB, certificates | P1 |
 | **Vulnerable groups** | PWDs, elderly, women's groups, chamas | Targeted funds, NCPWD registration, cash transfers | P1 |
 | **Diaspora / proxy helpers** | Family members acting for a parent or relative | Act on someone else's behalf, with consent | P2 |
-| **Partners (B2B)** | SACCOs, county governments, NGOs, MFIs, employers | Reach eligible people and complete enrolment | P2 |
+| **Partners (B2B)** | SACCOs and MFIs (proposal: 14,000+ SACCOs), 47 county governments, NGOs, employers | Reach eligible people and complete enrolment | P2, but the proposal sees B2B as the fastest route to revenue |
 
 ---
 
@@ -91,7 +134,7 @@ case tracker.
 - Explains *why* the user qualifies and what they still need.
 - Proactive: "New: Nairobi County youth bursary opens Monday. You qualify. Want me
   to apply?"
-- Ranks by value, likelihood of success and effort, not just by match.
+- Ranks by value, likelihood of success and **ease of application**, not just by match.
 
 ### 5.2 Apply (benefits)
 - Collects only the information that's missing, reusing the vault (ID, KRA PIN,
@@ -116,6 +159,7 @@ case tracker.
 ### 5.5 Communicate
 - One thread for everything: reminders, status updates, OTP requests, document
   requests, official decisions.
+- SMS as a backup channel for alerts and deadlines.
 - Translates official language into plain English or Kiswahili.
 - Follows up: "SHA asked for a photo of your ID's back side. Send it here."
 
@@ -246,6 +290,9 @@ WhatsApp ─► Orchestrator (LLM) ─► Case engine ─► Executor
 providers.
 
 **What they get:**
+- **Featured listings** (NGOs, programmes): shown to users who are eligible, not to everyone.
+- **Citizen outreach** (counties, national programmes): announce a programme and
+  reach the residents who qualify, with enrolment built in.
 - **Reach:** place their benefit or product in the catalogue; Faida matches it to
   eligible, opted-in users.
 - **Enrolment:** Faida completes sign-up through the partner's API or form (same
@@ -267,10 +314,40 @@ providers.
 
 ---
 
-## 9. Business model (options, not decided)
+## 9. Business model & strategy
 
-| Stream | Who pays | Notes |
-|---|---|---|
+### 9.1 Revenue streams
+
+From the proposal. Figures are the proposal's targets, not validated.
+
+| Stream | Who pays | Price (proposal) | Notes |
+|---|---|---|---|
+| Premium tier | Users | Ksh 299 / month | Proposal: guided help + priority alerts. With the agent model this becomes "Faida does it for you"; discovery and eligibility stay free |
+| Application service | Users | Ksh 500–2,000 per application | Proposal calls it concierge; here the agent does the work. Cheaper than a cyber café |
+| B2B white-label | SACCOs, MFIs | Ksh 50K–200K / year per org | **Fastest route to revenue:** one Ksh 100K deal beats the initial $3,000 target |
+| NGO featured listings | NGOs | Ksh 20K–50K / listing / month | Shown only to eligible users, clearly labelled |
+| Government contracts | Counties, national programmes | Ksh 500K–2M per contract | Largest upside: outreach and enrolment for public programmes |
+
+The proposal runs B2B in parallel with the consumer base, since each helps the other.
+
+### 9.2 Why Faida can win
+
+- **Local by default:** M-Pesa, ward offices, boda boda riders, mama mbogas; how
+  Kenyans actually find information.
+- **WhatsApp-first:** spreads through family groups and church chats without a
+  marketing budget.
+- **Data moat:** a verified, maintained database of Kenyan benefits and services,
+  plus the portal playbooks (§7), takes real work to copy.
+- **AI matching and execution:** a personalised guide that also does the task, not a directory.
+- **First mover:** no direct competitor in Kenya today (proposal claim).
+
+### 9.3 Funding routes (from the proposal)
+
+Catalyst Fund (grant), Antler Africa (equity), KIEP 250+ / World Bank (grant),
+Developpp Ventures (grant), Google Hustle Academy (non-dilutive), WIDU Africa (grant).
+Themes: financial inclusion, government service digitisation, AI for social impact.
+
+---|---|---|
 | Partner placement / enrolment fee | SACCOs, MFIs, insurers, training providers | Per qualified application or per enrolment |
 | Government / county contracts | Counties, programmes | Faida as an outreach and enrolment channel for public programmes |
 | Donor / NGO funding | Development partners | Financial inclusion and social protection goals |
@@ -281,17 +358,33 @@ providers.
 
 ## 10. Where we are today
 
+### 10.1 Against the proposal's MVP plan (August 2026)
+
+| Week | Deliverable | Status |
+|---|---|---|
+| 1 | 20–30 verified benefits with eligibility tags | ✅ 30 in `benefits.json`, synced to Supabase, editable in the dashboard |
+| 1 | Landing page with "Try on WhatsApp" + email capture | ❌ Not in the repo |
+| 2 | WhatsApp bot with 5-question eligibility flow + follow-up steps | ✅ 6 questions, EN/SW, on Baileys. The proposal's income question isn't asked |
+| 3 | Soft launch: 10 WhatsApp groups, LinkedIn, 3 SACCO pilot conversations | ❓ Unknown |
+| 4+ | Health and employment categories, web dashboard, funding applications | ✅ All 5 categories; dashboard built. Funding: unknown |
+
+The build has already gone past the proposal: guided application forms, AI chat,
+live opportunities and memory. The proposal's product was a **guide**. This doc
+extends it to an **agent** that does the task.
+
+### 10.2 Against the vision
+
 What the repo has now (October 2026), compared with the vision:
 
 | Capability | Today | Gap to vision |
 |---|---|---|
 | Channel | WhatsApp via Baileys (unofficial), QR-linked | Move to WhatsApp Cloud API; SMS/USSD fallback |
-| Profile | 6-question questionnaire (EN/SW), long-term memory in Supabase | Richer profile, document vault, proxy users |
+| Profile | 6-question questionnaire (EN/SW), long-term memory in Supabase | Income (in the proposal), richer profile, document vault, proxy users |
 | Discover | ~30 curated benefits + rule/keyword matching; approved scraped opportunities (M-Taji, World Bank, USAID) | Bigger, maintained catalogue; county coverage; better ranking; proactive alerts |
 | Apply | Guided in-chat forms (8 field templates), reference code, PDF export; `FORM <url>` reads verified web forms | **No submission.** Needs consent flow, executors, evidence |
 | Fulfil obligations | — | Obligations calendar, playbooks for KRA, eCitizen, SHA, county permits |
 | Track | Applications stored; admin can set status manually | Case engine, status checks on portals, user-facing status |
-| Communicate | Deadline reminders, feedback | Unified case thread, OTP relay, document requests |
+| Communicate | Deadline reminders on WhatsApp, feedback | SMS alerts, unified case thread, OTP relay, document requests |
 | Assist | AI chat (OpenAI/Claude) limited to verified sources; nearest office | Support escalation; console to replay and debug agent runs |
 | Partners | Admin dashboard (one shared password) for benefits and opportunities | Partner portal, roles and permissions, analytics |
 | Trust & compliance | Hashed user IDs, encrypted reminder contacts, rate limiting | Consent records, DPIA, ODPC registration, credential vault, audit trail for users |
@@ -301,6 +394,7 @@ What the repo has now (October 2026), compared with the vision:
 ## 11. Roadmap (proposed)
 
 ### Phase 0 — Foundations (no new user features)
+- Landing page and early-signup capture (outstanding from the proposal).
 - WhatsApp Cloud API (verified business number); retire Baileys.
 - Consent and terms flow; DPIA; ODPC registration started.
 - **Case model** (one record per request, with status history and evidence).
@@ -371,11 +465,20 @@ What the repo has now (October 2026), compared with the vision:
 5. **Agent stack:** which computer-use model and browser sandbox to use; hosting in Kenya or abroad?
 6. **Channels:** is USSD/SMS needed for launch, or after?
 7. **Partners:** is there a first SACCO or county partner in view?
-8. **Team & ownership:** product owner, data protection officer, legal counsel.
+8. **Team & ownership** (proposal §10): who owns benefits research, the bot, the
+   agent, and SACCO outreach? Product owner, data protection officer, legal counsel.
+9. **Infrastructure:** domain (faida.co.ke?), verified WhatsApp Business number.
+10. **Headline numbers:** sources for 58M+ eligible and Ksh 5B+ unclaimed.
+11. **Pricing:** does the Ksh 299/month premium tier still make sense once the agent
+    does the work, or does a per-application fee fit better?
 
 ---
 
 ## Appendix A — Earlier design history
+
+The *Faida Platform Proposal* (internal, August 2026) is the original pitch: a
+WhatsApp-first guide with an eligibility checker, application assistant, deadline
+alerts and a verified benefits database. This doc builds on it.
 
 The original AI-assisted build conversations are in [`docs/archive/`](archive/).
 They record the "apply directly from the bot" idea (the A/B/C menu: apply now /
