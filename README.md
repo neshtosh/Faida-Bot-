@@ -9,6 +9,11 @@ WhatsApp bot + admin dashboard for matching Kenyans to government grants, NGO su
 | [`faida-export/`](faida-export/) | WhatsApp bot (Node.js + Baileys) |
 | [`faida-dashboard/`](faida-dashboard/) | Admin dashboard (Next.js) |
 
+## Docs
+
+- [`docs/PRODUCT.md`](docs/PRODUCT.md) — product vision, delegation model, roadmap
+- [`docs/archive/`](docs/archive/) — early build conversations
+
 ## Quick start (bot)
 
 ```bash
