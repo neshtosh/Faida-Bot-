@@ -3,8 +3,9 @@
 > **Status:** Draft v0.2 · October 2026
 > **Owner:** _TBD_
 > **What this is:** The product intent for Faida, written down for the first time.
-> It combines what the code already does with the founding idea: an agent that
-> handles a citizen's dealings with institutions **end to end, on their behalf**.
+> **Faida is an agent.** It handles a citizen's dealings with institutions **end to
+> end, on their behalf**. The WhatsApp bot in this repo is its first channel, not
+> the product.
 > **Sources:** the codebase (October 2026), the build chat logs in
 > [`docs/archive/`](archive/), and the internal *Faida Platform Proposal*
 > (Munene, August 2026).
@@ -15,8 +16,11 @@
 
 ## 1. One-liner
 
-**Faida is a personal agent on WhatsApp that finds what you're entitled to, does what
-you're obliged to do, and handles the paperwork for both — with your consent.**
+**Faida is a personal agent that finds what you're entitled to, does what you're
+obliged to do, and handles the paperwork for both — with your consent.**
+
+It is not a directory, a guide or a chatbot that tells you where to go. It does the
+task. WhatsApp is how you talk to it.
 
 _Faida_ (Kiswahili): benefit, gain, profit.
 
@@ -66,7 +70,7 @@ enough; most of them need it done for them, safely.
 
 ## 3. Vision
 
-A Kenyan has one trusted contact on WhatsApp (later also SMS/USSD) that:
+Every Kenyan has their own agent, reachable on WhatsApp (later also SMS/USSD), that:
 
 1. **Knows them**: a consented profile, documents and history, kept securely.
 2. **Looks out for them**: brings up benefits they qualify for and obligations
@@ -322,7 +326,7 @@ From the proposal. Figures are the proposal's targets, not validated.
 
 | Stream | Who pays | Price (proposal) | Notes |
 |---|---|---|---|
-| Premium tier | Users | Ksh 299 / month | Proposal: guided help + priority alerts. With the agent model this becomes "Faida does it for you"; discovery and eligibility stay free |
+| Premium tier | Users | Ksh 299 / month | The proposal priced guided help + priority alerts. For Faida this means the agent doing tasks for you; discovery and eligibility stay free |
 | Application service | Users | Ksh 500–2,000 per application | Proposal calls it concierge; here the agent does the work. Cheaper than a cyber café |
 | B2B white-label | SACCOs, MFIs | Ksh 50K–200K / year per org | **Fastest route to revenue:** one Ksh 100K deal beats the initial $3,000 target |
 | NGO featured listings | NGOs | Ksh 20K–50K / listing / month | Shown only to eligible users, clearly labelled |
@@ -338,7 +342,8 @@ The proposal runs B2B in parallel with the consumer base, since each helps the o
   marketing budget.
 - **Data moat:** a verified, maintained database of Kenyan benefits and services,
   plus the portal playbooks (§7), takes real work to copy.
-- **AI matching and execution:** a personalised guide that also does the task, not a directory.
+- **An agent, not a directory:** it matches, then does the task, from enquiry to
+  confirmation.
 - **First mover:** no direct competitor in Kenya today (proposal claim).
 
 ### 9.3 Funding routes (from the proposal)
@@ -369,8 +374,9 @@ Themes: financial inclusion, government service digitisation, AI for social impa
 | 4+ | Health and employment categories, web dashboard, funding applications | ✅ All 5 categories; dashboard built. Funding: unknown |
 
 The build has already gone past the proposal: guided application forms, AI chat,
-live opportunities and memory. The proposal's product was a **guide**. This doc
-extends it to an **agent** that does the task.
+live opportunities and memory. But it is still a guide: it prepares and explains,
+and the user submits. Making Faida the **agent** that does the task is the main gap
+(§10.2).
 
 ### 10.2 Against the vision
 
@@ -465,8 +471,8 @@ What the repo has now (October 2026), compared with the vision:
 5. **Agent stack:** which computer-use model and browser sandbox to use; hosting in Kenya or abroad?
 6. **Channels:** is USSD/SMS needed for launch, or after?
 7. **Partners:** is there a first SACCO or county partner in view?
-8. **Team & ownership** (proposal §10): who owns benefits research, the bot, the
-   agent, and SACCO outreach? Product owner, data protection officer, legal counsel.
+8. **Team & ownership** (proposal §10): who owns benefits research, the agent
+   (conversation and execution), and SACCO outreach? Product owner, data protection officer, legal counsel.
 9. **Infrastructure:** domain (faida.co.ke?), verified WhatsApp Business number.
 10. **Headline numbers:** sources for 58M+ eligible and Ksh 5B+ unclaimed.
 11. **Pricing:** does the Ksh 299/month premium tier still make sense once the agent
@@ -476,10 +482,10 @@ What the repo has now (October 2026), compared with the vision:
 
 ## Appendix A — Earlier design history
 
-The *Faida Platform Proposal* (internal, August 2026) is the original pitch: a
-WhatsApp-first guide with an eligibility checker, application assistant, deadline
-alerts and a verified benefits database. This doc builds on it.
+The *Faida Platform Proposal* (internal, August 2026) is the original pitch. Its
+building blocks (eligibility checker, application assistant, deadline alerts,
+verified benefits database) are capabilities of the agent here.
 
 The original AI-assisted build conversations are in [`docs/archive/`](archive/).
-They record the "apply directly from the bot" idea (the A/B/C menu: apply now /
+They record the "apply directly from the bot" idea, the first step towards the agent (the A/B/C menu: apply now /
 apply yourself / save) that the guided application flow came from.
