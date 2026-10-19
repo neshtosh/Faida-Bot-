@@ -1,12 +1,18 @@
-# Faida — Kenya Benefits Access Platform
+# Faida — Kenya's Services Agent
 
-WhatsApp bot + admin dashboard for matching Kenyans to government grants, NGO support, and private sector benefits.
+Faida is an agent that handles Kenyans' dealings with government, county, NGO and
+SACCO services end to end, with their consent. It finds what they're entitled to,
+checks eligibility, applies and fulfils obligations on their behalf (using
+browser-use agents where there's no API), tracks every case, and reaches out first
+when something new fits them. WhatsApp is its first channel.
+
+See [`docs/PRODUCT.md`](docs/PRODUCT.md) for the full product doc.
 
 ## Projects
 
 | Folder | Description |
 |--------|-------------|
-| [`faida-export/`](faida-export/) | WhatsApp bot (Node.js + Baileys) |
+| [`faida-export/`](faida-export/) | The agent's WhatsApp channel and backend (Node.js + Baileys) |
 | [`faida-dashboard/`](faida-dashboard/) | Admin dashboard (Next.js) |
 
 ## Docs
@@ -14,7 +20,7 @@ WhatsApp bot + admin dashboard for matching Kenyans to government grants, NGO su
 - [`docs/PRODUCT.md`](docs/PRODUCT.md) — product vision, delegation model, roadmap
 - [`docs/archive/`](docs/archive/) — early build conversations
 
-## Quick start (bot)
+## Quick start (agent backend)
 
 ```bash
 cd faida-export

@@ -1,7 +1,7 @@
 {
   "name": "faida",
   "version": "1.0.0",
-  "description": "Faida — Kenya Benefits Access Platform. WhatsApp bot that matches Kenyans to government grants, NGO support, and private sector benefits.",
+  "description": "Faida — Kenya's services agent. Backend and WhatsApp channel for an agent that finds, applies for and tracks government, county, NGO and SACCO services on users' behalf.",
   "main": "src/bot/index.js",
   "scripts": {
     "start": "node src/bot/index.js",
