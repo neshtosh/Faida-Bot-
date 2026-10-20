@@ -33,8 +33,16 @@ The one thing a visitor starts is the first hello (the CTA), and the hero says s
 **Benefits and opportunities, not just funds and permits.** The hero leads with
 "Benefits and opportunities you qualify for but never heard of." The day mixes
 an opportunity (youth fund), a benefit nobody asked for (Inua Jamii for Cucu) and
-obligations, and "What Faida handles" opens with Support, Education, Farming and
-Money that's yours before licences and tax.
+obligations.
+
+**Everything on offer, from every source.** The catalogue section is not a list of
+named programmes (that reads closed). It is the shape of the exchange, from
+`docs/OPPORTUNITY-MATRIX.md`: "If it's on offer, Faida knows about it", then two
+lists, *what's on offer* (16 offer types with plain examples) and *who's offering
+it* (12 kinds of source, "and anyone else offering something to people"). A
+footer carries verification ("is this real?") and a link for organisations to
+list an offer. The organisations chapter speaks to any offer, not just
+programmes, and adds checking applicants against the offer's rules.
 
 ## 2. Audience and consequences
 
@@ -119,7 +127,10 @@ sun and cobalt, four grounds, Unbounded.
   works over SMS and USSD; files and pays on a user's behalf; manages family
   accounts; supports standing mandates with limits; never sees PINs; deletes data
   on request; enrols users into partner systems; "All 47 counties".
-- Every scheme named in "What Faida handles" and the 12:30 chapter (Inua Jamii's
+- "Every offer is checked before it reaches you", "Faida only brings you offers
+  it has checked are genuine" and "Ask 'is this real?'" need a working
+  verification process at launch.
+- Every scheme named in the 12:30 chapter (Inua Jamii's
   70+ rule, the orphan and disability transfers, NCPWD and the disability tax
   exemption, HELB, NG-CDF bursaries, farmer registration and subsidised fertiliser,
   UFAA unclaimed assets, NSSF benefits) must be in the catalogue, with current

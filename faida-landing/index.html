@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Faida: before you ask, it is handled</title>
-<meta name="description" content="Faida is your agent for benefits, opportunities and everything official. It spots what you qualify for and what is coming due, brings it to you first, and handles it with your OK. And it helps programmes reach the people they were built for.">
+<meta name="description" content="Faida is your agent for everything on offer: grants, jobs, training, bursaries, cover, payouts and more, from every source. It brings you what fits first and takes it up with your OK. And it helps every organisation reach the people its offers are for.">
 <meta name="theme-color" content="#ffc629">
 <meta property="og:title" content="Faida: before you ask, it is handled">
 <meta property="og:description" content="Benefits and opportunities you qualify for but never heard of. Deadlines you would have missed. Faida brings them to you, then handles them when you say yes.">
@@ -27,6 +27,7 @@
     <symbol id="i-stop" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><rect x="9" y="9" width="6" height="6" rx="1"/></symbol>
     <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></symbol>
     <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/><path d="M9 12l2.2 2.2L15 10"/></symbol>
+    <symbol id="i-seal" viewBox="0 0 24 24"><path d="M12 2.8l2.3 1.7 2.9-.1.9 2.7 2.4 1.7-.9 2.7.9 2.7-2.4 1.7-.9 2.7-2.9-.1L12 21.2l-2.3-1.7-2.9.1-.9-2.7-2.4-1.7.9-2.7-.9-2.7 2.4-1.7.9-2.7 2.9.1z"/><path d="M8.6 12.2l2.3 2.3 4.5-4.7"/></symbol>
     <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
   </defs>
@@ -88,7 +89,7 @@
       <p class="title__once" data-sw="Sema habari mara moja. Kisha Faida ndiyo inatafuta.">Say hello once. Then Faida does the looking.</p>
       <a class="textlink" href="#desk"><span data-sw="Naendesha programu au taasisi">I run a programme or organisation</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
     </div>
-    <p class="title__index" data-sw="Msaada wa kijamii · Afya · Pesa · Elimu · Kazi · Kilimo · Msaada wa kisheria · Makazi · Leseni · Kodi · Vitambulisho">Support · Health · Money · Education · Work · Farming · Legal help · Housing · Licences · Tax · IDs</p>
+    <p class="title__index" data-sw="Ruzuku · Kazi · Mafunzo · Basari · Msaada wa pesa · Bima ya afya · Pembejeo · Zabuni · Pesa zisizodaiwa · Vibali · Kodi · na zaidi">Grants · Jobs · Training · Bursaries · Cash support · Health cover · Farm inputs · Tenders · Unclaimed money · Permits · Tax · and more</p>
   </div>
 </header>
 
@@ -284,11 +285,11 @@
 <!-- ================= THE OTHER DESK ================= -->
 <section class="g-cobalt chap" id="desk" aria-labelledby="desk-title">
   <div class="chap__in">
-    <div class="dateline" data-in><span data-sw="Upande wa pili wa kaunta">The other side of the counter</span><small data-sw="Kwa SACCO, kaunti, NGO na waajiri">For SACCOs, counties, NGOs and employers</small></div>
+    <div class="dateline" data-in><span data-sw="Upande wa pili wa kaunta">The other side of the counter</span><small data-sw="Kwa yeyote anayetoa kitu kwa watu">For anyone offering something to people</small></div>
     <div class="spread">
       <div class="col-text" data-in>
-        <h2 id="desk-title" class="display h-chap" data-sw="Kila programu inataka watu wake.">Every programme wants its people.</h2>
-        <p class="lede" data-sw="Kila siku, watu wanaostahili programu yako hawajui ipo. Faida inaziba pengo hilo, kutoka upande wako.">Every day, people who qualify for your programme don't know it exists. Faida closes that gap, from your side.</p>
+        <h2 id="desk-title" class="display h-chap" data-sw="Kila ofa ina watu wake.">Every offer has its people.</h2>
+        <p class="lede" data-sw="Ruzuku, kazi, nafasi ya mafunzo, basari, manufaa ambayo wanachama wako wanastahili. Watu inaowalenga mara nyingi hawasikii kamwe. Faida inaziba pengo hilo, kutoka upande wako.">A grant, a job, a training place, a bursary, a benefit your members are owed. The people it's for usually never hear of it. Faida closes that gap, from your side.</p>
       </div>
       <div class="col-media" data-in style="justify-items:stretch">
         <div class="listing" role="group" aria-label="Example programme listing" data-aria-sw="Mfano wa orodha ya programu">
@@ -299,22 +300,26 @@
           </dl>
           <p class="listing__faida"><b data-sw="Faida itafanya:">Faida will:</b><span data-sw="kuwajulisha wanaostahili waliokubali, kukusanya hati, na kukutumia maombi yaliyokamilika.">tell eligible people who opted in, collect the documents and send you complete applications.</span></p>
         </div>
-        <p class="cap" data-sw="Mfano wa orodha ya programu.">Example programme listing.</p>
+        <p class="cap" data-sw="Mfano wa ofa iliyoorodheshwa.">Example listing.</p>
       </div>
     </div>
     <ul class="desk-list" style="margin-top:var(--sp-8)">
-      <li data-in><h3 class="h-sub" data-sw="Iorodheshe mara moja.">List it once.</h3><p data-sw="Eleza programu yako, nani anastahili na unahitaji nini. Au unganisha mfumo wako.">Describe your programme, who qualifies and what you need. Or connect your system.</p></li>
+      <li data-in><h3 class="h-sub" data-sw="Iorodheshe mara moja.">List it once.</h3><p data-sw="Eleza unachotoa, nani anastahili, unahitaji nini na lini kinafungwa. Kwa fomu, kwenye WhatsApp, au unganisha mfumo wako.">Describe what you offer, who qualifies, what you need and when it closes. Through a form, on WhatsApp, or by connecting your system.</p></li>
       <li data-in><h3 class="h-sub" data-sw="Faida inawatafuta watu wako.">Faida finds your people.</h3><p data-sw="Inawajulisha wanaostahili waliokubali, kwa lugha yao, ikitajwa ni yako. Na kujibu maswali yao ili wafanyakazi wako wasifanye hivyo.">It tells eligible people who opted in, in their language, labelled as yours. It answers their questions so your staff don't have to.</p></li>
+      <li data-in><h3 class="h-sub" data-sw="Wanaostahili kweli.">The people you meant.</h3><p data-sw="Faida inakagua kila mwombaji dhidi ya masharti yako, ili ofa yako iwafikie wale uliowalenga, si wajanja.">Faida checks every applicant against your rules, so your offer reaches the people it was meant for, not the well connected.</p></li>
       <li data-in><h3 class="h-sub" data-sw="Maombi yanafika yamekamilika.">Applications arrive complete.</h3><p data-sw="Yamekaguliwa, hati zimeambatishwa, na kutumwa kwako au kusajiliwa moja kwa moja kwenye mfumo wako.">Checked, with documents attached, then sent to you or enrolled straight into your system.</p></li>
       <li data-in><h3 class="h-sub" data-sw="Ona ulichofikia.">See who it reached.</h3><p data-sw="Mwonekano rahisi: nani alijulishwa, nani aliomba, nani alikubaliwa.">A simple view: who was told, who applied, who was approved.</p></li>
       <li data-in><h3 class="h-sub" data-sw="Itumie kwa njia yako.">Use it your way.</h3><p data-sw="Kwenye WhatsApp ya Faida, au ndani ya njia yako mwenyewe, chini ya jina lako.">On Faida's WhatsApp, or inside your own channel, under your name.</p></li>
     </ul>
     <ul class="who" data-in>
-      <li data-sw="SACCO na taasisi za mikopo">SACCOs and MFIs</li>
-      <li data-sw="Serikali za kaunti">County governments</li>
       <li data-sw="Programu za taifa">National programmes</li>
-      <li data-sw="NGO na mifuko">NGOs and funds</li>
-      <li data-sw="Waajiri na vyuo">Employers and colleges</li>
+      <li data-sw="Kaunti na mabaraza ya miji">Counties and city councils</li>
+      <li data-sw="SACCO na taasisi za mikopo">SACCOs and MFIs</li>
+      <li data-sw="NGO na wakfu">NGOs and foundations</li>
+      <li data-sw="Vyama vya ushirika">Co-operatives</li>
+      <li data-sw="Waajiri">Employers</li>
+      <li data-sw="Vyuo na watoa mafunzo">Colleges and training providers</li>
+      <li data-sw="Washirika wa maendeleo">Development partners</li>
     </ul>
     <p class="fair" data-in data-sw="Haki kwa muundo: watu huchagua kusikia kutoka kwako, ofa huwekewa lebo kila mara, na hakuna anayeweza kulipa kukwepa masharti yako ya kustahili.">Fair by design: people choose to hear from you, offers are always labelled, and no one can pay to skip your eligibility rules.</p>
     <div style="margin-top:var(--sp-6)" data-in><a class="btn" data-org href="mailto:"><span data-sw="Zungumza nasi">Talk to us</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
@@ -351,31 +356,63 @@
       <li data-in><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg><span data-sw="Faida haioni wala kuomba PIN yako ya M-Pesa au ya benki.">Faida never sees or asks for your <span class="nb">M-Pesa</span> or bank PIN.</span></li>
       <li data-in><svg class="icon" aria-hidden="true"><use href="#i-stop"/></svg><span data-sw="Sema SITISHA, inasimama. Wakati wowote.">Say STOP and it stops. At any time.</span></li>
       <li data-in><svg class="icon" aria-hidden="true"><use href="#i-receipt"/></svg><span data-sw="Unapata risiti ya kila inachofanya.">You get a receipt for everything it does.</span></li>
+      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-seal"/></svg><span data-sw="Faida inakuletea tu ofa ilizokagua kuwa ni za kweli.">Faida only brings you offers it has checked are genuine.</span></li>
       <li data-in><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span data-sw="Taarifa zako zinatumika kwa maombi yako tu, na unaweza kuomba zifutwe.">Your details are used only for your applications, and you can ask for them to be deleted.</span></li>
     </ul>
   </div>
 </section>
 
-<!-- ================= WHAT FAIDA HANDLES ================= -->
+<!-- ================= EVERYTHING ON OFFER ================= -->
 <section class="g-sun chap" id="covered" aria-labelledby="covered-title">
   <div class="chap__in">
-    <div class="dateline" data-in><span data-sw="Kila kitu mahali pamoja">Everything in one place</span><small data-sw="Kaunti zote 47">All 47 counties</small></div>
-    <h2 id="covered-title" class="display h-chap" data-in data-sw="Faida inashughulikia nini.">What Faida handles.</h2>
-    <p class="lede covered__lede" data-in data-sw="Manufaa mengi Kenya hayadaiwi kwa sababu moja: wale yanaowalenga hawayasikii kamwe. Malipo kwa wazee na watu wenye ulemavu. Bima ya afya. Ufadhili wa masomo. Pembejeo za kilimo. Msaada wa kisheria. Pesa ambazo tayari ni zako.">Most benefits in Kenya go unclaimed for one reason: the people they're meant for never hear of them. Cash transfers for older people and people with disabilities. Health cover. Bursaries. Farm inputs. Legal aid. Money already in your name.</p>
-    <ul class="index">
-      <li data-in><h3 data-sw="Msaada wa kijamii">Support</h3><p><span data-sw="Inua Jamii kwa wazee">Inua Jamii for older people</span><span data-sw="msaada kwa yatima">support for orphans</span><span data-sw="msaada kwa ulemavu mkubwa">severe disability support</span><span data-sw="usajili wa NCPWD">NCPWD registration</span><span data-sw="msamaha wa kodi kwa walemavu">disability tax exemption</span></p></li>
-      <li data-in><h3 data-sw="Afya">Health</h3><p><span>SHA</span><span>National Fund for the Disabled</span><span data-sw="programu za afya za kaunti">county health programmes</span></p></li>
-      <li data-in><h3 data-sw="Pesa">Money</h3><p><span>Hustler Fund</span><span>Youth Enterprise Fund</span><span>Uwezo Fund</span><span>Women Enterprise Fund</span><span>AGPO tenders</span><span>KIEP</span><span>WIDU Africa</span><span data-sw="mifuko ya kaunti">county funds</span><span data-sw="mikopo ya SACCO">SACCO loans</span></p></li>
-      <li data-in><h3 data-sw="Pesa ambazo ni zako">Money that's yours</h3><p><span data-sw="mali zisizodaiwa (UFAA)">unclaimed assets (UFAA)</span><span data-sw="mafao ya NSSF">NSSF benefits</span></p></li>
-      <li data-in><h3 data-sw="Elimu">Education</h3><p><span>HELB</span><span data-sw="ufadhili wa NG-CDF">NG-CDF bursaries</span><span data-sw="ufadhili wa kaunti">county bursaries</span><span data-sw="udhamini wa masomo">scholarships</span></p></li>
-      <li data-in><h3 data-sw="Kazi na mafunzo">Work and training</h3><p><span>NYS</span><span>KYEP</span><span>Ajira Digital</span><span>Google Hustle Academy</span><span>KCB 2Jiajiri</span></p></li>
-      <li data-in><h3 data-sw="Kilimo">Farming</h3><p><span data-sw="usajili wa wakulima">farmer registration</span><span data-sw="mbolea ya ruzuku">subsidised fertiliser</span><span data-sw="pembejeo za kaunti">county farm inputs</span></p></li>
-      <li data-in><h3 data-sw="Msaada wa kisheria">Legal help</h3><p><span>LSK Legal Aid</span><span>Judiciary Legal Aid</span></p></li>
-      <li data-in><h3 data-sw="Makazi">Housing</h3><p><span>Boma Yangu</span><span data-sw="mipango ya makazi ya kaunti">county housing schemes</span></p></li>
-      <li data-in><h3 data-sw="Leseni na vibali">Licences and permits</h3><p><span data-sw="vibali vya biashara">business permits</span><span data-sw="leseni ya kuendesha">driving licence</span><span data-sw="cheti cha tabia njema">good conduct certificate</span><span data-sw="vibali vya kaunti">county permits</span></p></li>
-      <li data-in><h3 data-sw="Kodi">Tax</h3><p><span>KRA PIN</span><span data-sw="marejesho ya mwaka">annual returns</span><span data-sw="marejesho sifuri">nil returns</span></p></li>
-      <li data-in><h3 data-sw="Vitambulisho">Identity</h3><p><span data-sw="kitambulisho cha taifa">national ID</span><span data-sw="cheti cha kuzaliwa">birth certificate</span><span data-sw="pasipoti">passport</span></p></li>
-    </ul>
+    <div class="dateline" data-in><span data-sw="Kila kinachotolewa">Everything on offer</span><small data-sw="Kutoka kila chanzo, kaunti zote 47">From every source, in all 47 counties</small></div>
+    <h2 id="covered-title" class="display h-chap" data-in data-sw="Kama kipo, Faida inakijua.">If it's on offer, Faida knows about it.</h2>
+    <p class="lede covered__lede" data-in data-sw="Manufaa mengi Kenya hayadaiwi kwa sababu moja: wale yanaowalenga hawayasikii kamwe. Faida inakusanya kila kinachotolewa, kutoka kwa kila anayetoa, inakilinganisha nawe, na kukishughulikia kwa niaba yako.">Most of what's on offer in Kenya goes unclaimed for one reason: the people it's meant for never hear of it. Faida gathers everything on offer, from everyone offering it, matches it to you, and takes it up for you.</p>
+    <div class="offer">
+      <div class="offer__what" data-in>
+        <h3 class="offer__h" data-sw="Kinachotolewa">What's on offer</h3>
+        <ul class="offer__list">
+          <li><b data-sw="Msaada wa pesa">Cash support</b><span data-sw="wazee, yatima, ulemavu, misaada ya dharura">older people, orphans, disability, relief</span></li>
+          <li><b data-sw="Ruzuku">Grants</b><span data-sw="vijana, wanawake, biashara, kaunti">youth, women, business, county</span></li>
+          <li><b data-sw="Mikopo">Loans</b><span data-sw="mifuko ya serikali, SACCO, elimu">government funds, SACCOs, education</span></li>
+          <li><b data-sw="Basari na udhamini">Bursaries and scholarships</b><span data-sw="wadi, eneo bunge, kaunti, wakfu">ward, constituency, county, foundations</span></li>
+          <li><b data-sw="Mafunzo na mafunzo kazini">Training and internships</b><span data-sw="kozi, uanagenzi, mafunzo mafupi">courses, apprenticeships, bootcamps</span></li>
+          <li><b data-sw="Kazi">Jobs</b><span data-sw="za umma, kaunti, binafsi, ng&#x27;ambo, zote zimekaguliwa">public, county, private, overseas, all checked</span></li>
+          <li><b data-sw="Zabuni">Tenders</b><span data-sw="asilimia 30 kwa vijana, wanawake na walemavu">the 30% set aside for youth, women and PWDs</span></li>
+          <li><b data-sw="Bima ya afya na matibabu">Health cover and care</b><span data-sw="SHA, uchunguzi, uzazi, kampeni">SHA, screening, maternity, campaigns</span></li>
+          <li><b data-sw="Pembejeo za kilimo">Farm inputs</b><span data-sw="mbolea ya ruzuku, mbegu, bima ya mazao na mifugo">subsidised fertiliser, seed, crop and livestock insurance</span></li>
+          <li><b data-sw="Makazi na ardhi">Housing and land</b><span data-sw="nyumba nafuu, hati miliki">affordable housing, title deeds</span></li>
+          <li><b data-sw="Pesa ambazo ni zako">Money that&#x27;s yours</b><span data-sw="mali zisizodaiwa, pensheni, marejesho">unclaimed assets, pensions, refunds</span></li>
+          <li><b data-sw="Manufaa ya wanachama">Member benefits</b><span data-sw="gawio la SACCO, bonasi za ushirika, manufaa ya wafanyakazi">SACCO dividends, co-op bonuses, staff benefits</span></li>
+          <li><b data-sw="Msaada wa kisheria">Legal help</b><span data-sw="msaada wa bure, mirathi, hati">free legal aid, succession, documents</span></li>
+          <li><b data-sw="Sauti yako">Your say</b><span data-sw="vikao vya bajeti ya kaunti, usajili">county budget forums, registration drives</span></li>
+          <li><b data-sw="Zawadi na mashindano">Prizes and accelerators</b><span data-sw="changamoto, mashindano, vituo vya ubunifu">challenges, competitions, incubators</span></li>
+          <li><b data-sw="Hati na wajibu">Papers and obligations</b><span data-sw="vitambulisho, vibali, kodi, usasishaji">IDs, permits, tax, renewals</span></li>
+        </ul>
+      </div>
+      <div class="offer__who" data-in style="--d:120ms">
+        <h3 class="offer__h" data-sw="Wanaotoa">Who's offering it</h3>
+        <ul class="offer__src">
+          <li data-sw="Serikali ya taifa na mashirika yake">National government and its agencies</li>
+          <li data-sw="Kaunti, mabaraza ya miji na manispaa">Counties, city and municipal councils</li>
+          <li data-sw="Wadi na maeneo bunge">Wards and constituencies</li>
+          <li data-sw="NGO na mashirika ya kidini">NGOs and faith groups</li>
+          <li data-sw="Wakfu na programu za makampuni">Foundations and company programmes</li>
+          <li data-sw="SACCO, benki na kampuni za bima">SACCOs, banks and insurers</li>
+          <li data-sw="Vyama vya ushirika na kilimo biashara">Co-operatives and agribusiness</li>
+          <li data-sw="Waajiri">Employers</li>
+          <li data-sw="Vyuo na watoa mafunzo">Colleges and training providers</li>
+          <li data-sw="Washirika wa maendeleo">Development partners</li>
+          <li data-sw="Kampeni za afya">Health campaigns</li>
+          <li data-sw="Huduma za umma na mashirika ya makazi">Utilities and housing agencies</li>
+        </ul>
+        <p class="offer__more" data-sw="Na yeyote mwingine anayetoa kitu kwa watu.">And anyone else offering something to people.</p>
+      </div>
+    </div>
+    <div class="offer__foot" data-in>
+      <p><svg class="icon" aria-hidden="true"><use href="#i-seal"/></svg><span data-sw="Kila ofa inakaguliwa kabla haijakufikia. Uliza &quot;hii ni kweli?&quot; kuhusu chochote: tangazo la kazi, ruzuku, ujumbe uliotumiwa.">Every offer is checked before it reaches you. Ask “is this real?” about anything: a job advert, a grant, a message someone forwarded you.</span></p>
+      <a class="textlink" href="#desk"><span data-sw="Unatoa kitu kwa watu? Kiorodheshe mara moja.">Offering something to people? List it once.</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
   </div>
 </section>
 
@@ -389,6 +426,7 @@
       <details><summary><span data-sw="Faida inajuaje kinachonifaa?">How does Faida know what fits me?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Unaiambia machache kukuhusu mara moja: unapoishi, kazi yako, familia yako. Faida inalinganisha kila programu na tarehe na hayo, na kukuandikia kitu kinapokufaa. Unaweza kubadilisha au kufuta taarifa hizo wakati wowote.">You tell it a little about yourself once: where you live, your work, your family. Faida checks every programme and deadline against that and messages you when something fits. You can change or delete those details at any time.</p></details>
       <details><summary><span data-sw="Je, inagharimu kitu?">Does it cost anything?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Kujua kinachokufaa ni bure. Baadhi ya huduma, kama kuwasilisha kwa niaba yako, zinaweza kuwa na ada ndogo, itakayoonyeshwa kabla hujasema NDIYO.">Finding out what fits you is free. Some services, like filing for you, may carry a small fee, always shown before you say YES.</p></details>
       <details><summary><span data-sw="Je, Faida itafanya mambo bila kuniuliza?">Will Faida do things without asking me?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Ni wewe unayeamua. Kwa chaguo-msingi inakuuliza kabla ya kutuma chochote. Unaweza kusema SITISHA wakati wowote.">You decide. By default it asks before anything is sent. You can say STOP at any time.</p></details>
+      <details><summary><span data-sw="Nimetumiwa tangazo la kazi. Faida inaweza kulikagua?">Someone sent me a job offer. Can Faida check it?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Ndiyo. Litume kwa Faida. Inalilinganisha na njia rasmi za shirika husika na kukuambia wazi kama ni la kweli. Ajira za serikali hazihitaji malipo.">Yes. Forward it to Faida. It checks the offer against the organisation's official channels and tells you plainly whether it is genuine. Government recruitment never asks you to pay.</p></details>
       <details><summary><span data-sw="Je, huduma ikishindwa kufanyika mtandaoni?">What if a service can't be done online?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Faida inakuambia hasa cha kubeba na mahali pa kwenda, na kukuonyesha ofisi iliyo karibu nawe.">Faida tells you exactly what to bring and where to go, and shows you the nearest office.</p></details>
       <details><summary><span data-sw="Je, taarifa zangu ziko salama?">Is my information safe?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Taarifa zako ni siri na zinatumika kwa maombi yako tu. Unaweza kuomba tuzifute wakati wowote.">Your details are private and used only for your own applications. You can ask us to delete them at any time.</p></details>
       <details><summary><span data-sw="Ninaendesha SACCO, kaunti au NGO. Tunaanzaje?">I run a SACCO, county or NGO. How do we start?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Zungumza nasi. Tutaorodhesha programu yako na kukuonyesha watakaofikiwa.">Talk to us. We will list your programme and show you who it would reach.</p></details>
