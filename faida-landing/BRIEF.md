@@ -1,126 +1,123 @@
-# Faida landing: design brief
+# Faida landing v2: design brief
 
-Self-authored under explicit creative delegation (the product owner asked for a
-world-class result and left direction to the designer). Evidence comes from the
-repo, `docs/PRODUCT.md` and the Faida Platform Proposal. Assumptions are marked.
+Self-authored under explicit creative delegation. Replaces v1 (split stage, green,
+"bridge draws itself"), which was scrapped on request and remains in git history
+(commit 7f5f887). Evidence: the repo, `docs/PRODUCT.md`, the Faida Platform Proposal.
+
+**This page sells the final state of Faida, not today's bot.** Everything shown is
+the product Faida is being built to be: proactive outreach, voice and USSD, doing
+the filing and paying on the user's behalf, family accounts, standing mandates,
+partner enrolment. Examples are labelled as examples on the page.
 
 ## 1. The eight topics
 
-1. **Vibe.** Plain, warm, trustworthy, a little bold. Closer to a good public
-   noticeboard than a fintech site. Not premium-minimal, not startup-glossy.
-2. **Journey.** Recognise yourself, see the gap, watch it close, see how it
-   works, feel safe, (organisations: see what they get), see what is inside,
-   get answers, start.
-3. **Energy.** Loud at the open and the close, quiet through trust, busy in the
-   middle where the bridge lives.
-4. **Feeling and peak.** See the curve below. Peak: the bridge draws itself.
-5. **One thing no other site does.** The visitor taps a person or a programme
-   and the bridge between them draws itself from real eligibility rules.
-6. **Range.** Editorial and plain, large type, high contrast. Chosen because
-   the main audience reads slowly on small, bright, cheap screens.
-7. **One world or scenes.** Distinct scenes joined by one motif: a thread
-   (the bridge) that starts as a gap and ends as the logo.
-8. **Assets.** None supplied. Everything is real markup, SVG geometry and two
-   self-hosted fonts. No photos, no generated imagery, no fake screenshots.
+1. **Vibe.** Sunlit, plain-spoken, a little bold. A Kenyan shop sign meets a
+   printed feature. Confident but never cold.
+2. **Journey.** The gap, then one ordinary day handled for someone, then the
+   other side of the counter, then control, then everything covered, then start.
+3. **Energy.** Loud title page, a hard full-stop, then a steady human pace that
+   builds to one peak at 9 pm, then a different room (cobalt) for organisations.
+4. **Feeling and peak.** See the curve. Peak: the day, tallied.
+5. **One thing no other site does.** A receipt in the margin that Faida stamps as
+   each moment of the day completes, and that is totalled on stage at the peak.
+6. **Range.** Editorial with signage energy. Large type, strong colour, hard cuts.
+7. **One world or scenes.** Distinct chapters, one recurring object (the receipt)
+   and one recurring act (the DONE stamp).
+8. **Assets.** None supplied. All markup and SVG geometry, two self-hosted fonts.
 
-## 2. Audience and the design consequences
+## 2. Audience and consequences
 
 | Reality | Consequence |
 |---|---|
-| Many users are not technical and use cyber cafes today | Words a cyber cafe attendant would use. No jargon. "Just ask." |
-| Cheap Android phones, bright daylight, patchy data | Light ground, 15:1 body contrast, 135 KB total, no images, no third-party requests |
-| Swahili is the first language for many | EN / SW switch in the corner of every screen, remembered |
-| Low reading fluency for some | Lexend (built for reading ease), 17px+ body, short lines, one idea per screen |
-| Enterprise buyers need their own proof | A full section for organisations, plus a dark ground so it feels like a different room |
-| Trust is the real barrier | "You stay in charge" is its own quiet section, and the chat shows the YES moment |
+| Many users are not technical and use cyber cafes today | The story is a day, not a feature list. Words are the ones a cafe attendant would use |
+| Bright daylight, cheap phones, patchy data | High contrast, sun-yellow and paper grounds, no images, about 110 KB, no third-party requests |
+| Swahili is the first language for many | EN / SW switch always reachable, all copy translated, remembered |
+| Low reading fluency for some | Lexend body text, 17px+, short sentences, one idea per chapter |
+| Basic phones | A chapter shows an SMS reaching a feature phone; USSD is named as a channel |
+| Enterprise buyers need their own room | A full cobalt chapter for SACCOs, counties, NGOs, employers, with a listing sheet and fair-by-design terms |
+| Trust is the real barrier | "You stay in charge" is interactive: four levels, the message changes |
 
-## 3. Page grammar
+## 3. Grammar: chaptered editorial
 
-**Split stage.** Two sides held in tension, resolved by scroll. Light ground =
-people. Dark ground = organisations. One hue (green), two lightnesses, which the
-skill allows for a page that hard-cuts between grounds.
+The page is a printed feature. Chapters are the unit. Each lands on its own ground
+with a hard cut. No pinned acts. Nav is a folio in the margin (the receipt). The
+hero is a title page: type on the ground, no media above the fold. The close is a
+colophon with the call to action set as running lines.
 
-Why the other seven lost: filmic one-shot and continuous world need footage we do
-not have and would hide the argument behind spectacle. Chaptered editorial and
-gallery are one-sided. Live surface is the right idea for the bridge section
-only, and that is where its honesty rule is used (real rules over labelled
-example data). Typographic poster and rhythmic cutlist have no way to hold two
-audiences at once.
+Why the other seven lost: filmic and continuous world need footage we do not have.
+Split stage was v1. Live surface suits a tool, and this is a service. Typographic
+poster has too little room for the breadth. Gallery and rhythmic cutlist fit
+neither the calm or the argument.
 
-Nav: none. The seam is the chrome. Hero labels sit either side of it. Close: the
-collapse (the seam's knot grows to fill the screen).
+**Departures from the grammar, on purpose:** the hero has a filled CTA button
+(low-literacy users need an obvious target), and a sticky CTA appears on phones
+outside the chat chapters.
 
 ## 4. Feeling curve
 
-| Act | Feeling | Caused by |
+| Chapter | Feeling | Caused by |
 |---|---|---|
-| Hero | Recognition, ease | "Just ask. Faida does it." Dots reaching squares across the seam |
-| Gap | Unease, honesty | Both sides' daily frustrations, side by side, one sentence split across the seam |
-| Bridge (peak) | Delight, understanding | Threads draw from a person to every programme that fits, with reasons for the ones that do not |
-| How it works | Relief | A conversation that ends with "Sent" and a reference |
-| Trust | Calm, confidence | Five plain promises, no motion |
-| Organisations | Confidence (their side) | Three steps and a fair-by-design line, on the dark ground |
-| Inside Faida | Reassurance | Real programme names, in plain lists |
-| Questions | Ease | Seven short answers |
-| Close | Resolve | The knot grows to fill the screen, then one action |
+| Title page | Recognition, ease | "Tell Faida. Consider it done." and a stamp landing |
+| The gap | Unease, honesty | Two sentences on ink, then the turn in yellow |
+| 6:40 am | Delight | Faida messages first: you qualify, shall I apply? |
+| 8:05 am | Warmth | A voice note in your own words, an M-Pesa confirmation |
+| 12:30 pm | Care | Mama, on a basic phone, gets an SMS |
+| 3:00 pm | Calm | A ledger of obligations, all filed |
+| 5:40 pm | Relief | A timeline where the office's request was already handled |
+| 9:00 pm (peak) | Satisfaction, awe | The whole day tallied on a receipt, then stamped |
+| The other counter | Confidence (their side) | Cobalt room, one listing becomes complete applications |
+| You decide | Safety | Four levels, one tap each |
+| Handles / FAQ | Reassurance, ease | Plain lists, plain answers |
+| Colophon | Resolve | Two big lines to tap |
 
-**Peak:** the bridge. It has the largest span on the page (3.8 viewport heights
-against 2.6 for the conversation and 1.8 for the close). The gap before it is
-the quietest act.
+**Peak:** the day, tallied. It has the tallest chapter, the darkest ground, the
+quietest chapter just before it (a calm timeline) and the largest type on the page.
 
-**The sentence a visitor would say to a friend:** "I tapped a person and it drew
-lines to every grant they qualify for, and told me why not for the rest."
-
-**Tell-someone sentence:** it is the site where you can watch the gap between
-people and the programmes meant for them close.
+**What a visitor tells a friend:** "It does your whole day of paperwork and hands
+you a receipt with five things done, and you only said yes three times."
 
 ## 5. Signature move
 
-**The bridge draws itself.** Real eligibility rules (from
-`faida-export/src/db/benefits.json`, simplified) run over four example people
-and eight real programmes. Scroll steps through each person, then reverses to a
-programme. Tapping either side takes over. Non-fits explain themselves
-("Not a fit: age 62, needs 18 to 34"). It is two-way on purpose: it is the
-product argument.
+**The receipt.** A paper slip sits in the margin from the first screen. As each
+chapter's moment finishes (a chat completes, a ledger fills) a line is stamped DONE
+on it. On phones it folds into a chip: time and count. At 9 pm it leaves the margin
+and prints on stage, line by line, with a total and a final stamp. It doubles as
+the folio, so nothing else is needed for navigation.
 
-## 6. Device score
+## 6. Fingerprint check (against v1, the only prior build)
 
-| Beat | Device | Why |
-|---|---|---|
-| Hero | Split + arcs drawn on load | Establishes the format at once |
-| Gap | Flow + fill line driven by scroll | The gap closes as you read |
-| Bridge | Pin + live rules + pointer | The peak |
-| How it works | Pin, messages appear with scroll | Time passing in a conversation |
-| Trust | Flow, sticky heading | Stillness |
-| Organisations | Flow on dark ground | A different room |
-| Inside Faida | Plain type lists | Proof without decoration |
-| Questions | Disclosure list | Native, accessible |
-| Close | Pin + clip-path reveal | The collapse |
+| Dimension | v1 | v2 | Differs |
+|---|---|---|---|
+| Grammar | Split stage | Chaptered editorial | yes |
+| Nav treatment | Seam labels, fixed language pill | Receipt folio in the margin, language pill | yes |
+| Hero device | 50/50 split with arcs reaching across | Title page, type only, stamp lands | yes |
+| Act sequence | Hero, gap, pinned bridge, pinned chat, flow sections, pinned close, 14 vh | Eleven hard-cut chapters, no pins, 14 vh | yes |
+| Close pattern | Knot grows to fill the screen | Colophon, CTA as running lines | yes |
+| Signature move | Bridge draws from real rules | Running receipt | yes |
 
-No scrub video, no parallax, no kinetic type. Motion uses transform, opacity,
-clip-path and stroke-dashoffset only.
+Six of six. World also differs: green, light and dark halves, Bricolage, versus
+sun and cobalt, four grounds, Unbounded.
 
 ## 7. Honesty rules applied
 
-- No invented statistics. The only number on the page is 30 (the real count of
-  programmes in the catalogue).
-- Example people and the example conversation are labelled as examples on the
-  page itself.
-- Programme rules come from the repo catalogue and the page says to confirm with
-  the provider.
-- No testimonials, no logos, no "trusted by".
-- **The page describes the agent Faida is meant to become.** Today the bot finds
-  and prepares; it does not yet submit on a user's behalf. The conversation,
-  the "You stay in charge" promises and the organisation steps are product
-  commitments that must be true before launch.
+- No invented statistics. The only numbers are the example day's own.
+- Wanjiru, Mama and every conversation are labelled as examples on the page.
+- No testimonials, logos or "trusted by".
+- **The page describes the finished product.** Before launch these must be true
+  or the copy must change: Faida messages users first; accepts voice notes;
+  works over SMS and USSD; files and pays on a user's behalf; manages family
+  accounts; supports standing mandates with limits; never sees PINs; deletes data
+  on request; enrols users into partner systems; "All 47 counties".
+- "Finding what fits you is free" and "may carry a small fee" are pricing claims
+  taken from the proposal and not yet decided.
 
 ## 8. Verified and not verified
 
-Verified with a headless browser: desktop 1440x900 and 1366x700, phone 390x844
-and 390x720, English and Swahili, reduced motion, no JavaScript, console clean,
-rendered contrast measured on every text element (remaining flags were
-measurement artefacts around rounded buttons and a fixed control).
+Verified headlessly: 1440x900 and 1366x700 desktop; 320, 360, 375, 390, 414 phones;
+768, 1024, 1199, 1280, 1920 for horizontal overflow (none); English and Swahili;
+reduced motion; no JavaScript; console clean; rendered contrast measured on every
+text element (remaining flags were artefacts of borders, shadows, stamps and
+markers inside element boxes).
 
-**Not verified:** a real phone (touch scrolling, iOS Safari toolbar behaviour,
-Low Power Mode), screen-reader pass, Swahili copy by a native speaker, any
-network slower than local.
+**Not verified:** a real phone (touch, iOS Safari toolbars, Low Power Mode), a
+screen reader, Swahili copy by a native speaker, slow networks.

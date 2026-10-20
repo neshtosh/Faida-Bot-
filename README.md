@@ -14,7 +14,7 @@ See [`docs/PRODUCT.md`](docs/PRODUCT.md) for the full product doc.
 |--------|-------------|
 | [`faida-export/`](faida-export/) | The agent's WhatsApp channel and backend (Node.js + Baileys) |
 | [`faida-dashboard/`](faida-dashboard/) | Admin dashboard (Next.js) |
-| [`faida-landing/`](faida-landing/) | Landing page for people and organisations (static HTML) |
+| [`faida-landing/`](faida-landing/) | Landing page that sells the finished platform (static HTML) |
 
 ## Docs
 
