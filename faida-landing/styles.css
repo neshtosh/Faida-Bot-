@@ -136,6 +136,7 @@ svg { display: block; }
 .title__sub { display: grid; gap: var(--sp-5); max-width: 36rem; }
 .title__sub p { font-size: clamp(1.15rem, 1.05rem + 0.5vw, 1.45rem); line-height: 1.5; }
 .title__cta { display: flex; flex-wrap: wrap; gap: var(--sp-4) var(--sp-6); align-items: center; }
+.title__once { order: 3; flex-basis: 100%; margin-top: calc(-1 * var(--sp-2)); font-size: 1rem; font-weight: 600; }
 .title__index { font-size: 0.9375rem; color: var(--soft); max-width: 60ch; padding-top: var(--sp-4); border-top: 2px solid var(--line); }
 .stamp { position: absolute; right: 1%; bottom: calc(100% + 1.25rem); width: clamp(7.5rem, 15vw, 14rem); color: var(--cobalt); transform: rotate(-9deg); opacity: 0; }
 .stamp text { font-family: var(--font-display); font-weight: 800; }
@@ -269,6 +270,8 @@ svg { display: block; }
 
 /* ---------- index ---------- */
 .index li { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: var(--sp-2) clamp(1.5rem, 4vw, 4rem); padding: var(--sp-4) 0; border-top: 2px solid var(--line); align-items: baseline; }
+.index--ch { margin-top: var(--sp-3); }
+.index--ch li { grid-template-columns: minmax(8.5rem, 4fr) minmax(0, 8fr); }
 .index li:last-child { border-bottom: 2px solid var(--line); }
 .index h3 { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.03em; font-size: clamp(1.15rem, 1rem + 0.8vw, 1.6rem); line-height: 1.15; }
 .index p { font-size: clamp(1rem, 0.95rem + 0.25vw, 1.15rem); line-height: 1.5; max-width: 62ch; }
@@ -310,12 +313,13 @@ svg { display: block; }
   .sticky-col { position: static; }
   .h-hero { font-size: clamp(2.35rem, 11.5vw, 3.4rem); }
   .peak .h-hero { font-size: clamp(1.9rem, 8.4vw, 2.9rem); }
-  .title { padding-top: 6rem; }
+  .title { padding-top: 10rem; }
   .title__brand { top: 1rem; font-size: 1.5rem; }
   .title__brand svg { width: 2rem; height: 2rem; }
-  .stamp { width: 6rem; bottom: calc(100% + 0.75rem); right: 0; }
+  .stamp { width: 5.5rem; bottom: calc(100% + 0.75rem); right: 0; }
   .phone__screen { height: min(31rem, 66svh); }
   .desk-list li, .index li { grid-template-columns: 1fr; }
+  .index--ch li { grid-template-columns: 8.5rem minmax(0, 1fr); }
   .promises { grid-template-columns: 1fr; margin-top: var(--sp-6); }
   .stamp--big { right: -0.5rem; width: 6.5rem; }
   .sticky-cta { display: block; }
@@ -337,5 +341,6 @@ html:not(.js) .slip { position: static; width: auto; margin: 1rem; }
 @media (max-width: 420px) {
   .btn { white-space: normal; text-align: left; padding: 0.8rem 1.1rem; min-height: 3.6rem; line-height: 1.25; font-size: 1rem; }
   .title__cta .btn { width: 100%; }
+  .title__once { order: 0; }
   .big-link { font-size: 1.3rem; }
 }

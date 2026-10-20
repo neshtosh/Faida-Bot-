@@ -25,6 +25,11 @@ partner enrolment. Examples are labelled as examples on the page.
    and one recurring act (the DONE stamp).
 8. **Assets.** None supplied. All markup and SVG geometry, two self-hosted fonts.
 
+**Faida moves first.** In every chapter Faida opens the conversation and the
+person only answers. The page never shows a user having to know what to ask for.
+The one thing a visitor starts is the first hello (the CTA), and the hero says so:
+"Say hello once. Then Faida does the looking."
+
 ## 2. Audience and consequences
 
 | Reality | Consequence |
@@ -57,10 +62,10 @@ outside the chat chapters.
 
 | Chapter | Feeling | Caused by |
 |---|---|---|
-| Title page | Recognition, ease | "Tell Faida. Consider it done." and a stamp landing |
+| Title page | Recognition, relief | "No need to ask. Faida finds you." and a stamp landing |
 | The gap | Unease, honesty | Two sentences on ink, then the turn in yellow |
 | 6:40 am | Delight | Faida messages first: you qualify, shall I apply? |
-| 8:05 am | Warmth | A voice note in your own words, an M-Pesa confirmation |
+| 8:05 am | Warmth | Faida flags a permit before it lapses; Wanjiru answers with a voice note |
 | 12:30 pm | Care | Mama, on a basic phone, gets an SMS |
 | 3:00 pm | Calm | A ledger of obligations, all filed |
 | 5:40 pm | Relief | A timeline where the office's request was already handled |

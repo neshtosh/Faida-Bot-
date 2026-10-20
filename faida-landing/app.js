@@ -28,7 +28,7 @@
     else if ((navigator.language || '').toLowerCase().indexOf('sw') === 0) lang = 'sw';
   } catch (e) {}
 
-  var TITLES = { en: 'Faida: tell it once, consider it done', sw: 'Faida: mwambie mara moja, ni kama imekwisha' };
+  var TITLES = { en: 'Faida: before you ask, it is handled', sw: 'Faida: kabla hujauliza, imeshughulikiwa' };
 
   var LEVELS = {
     1: { en: 'Your business permit expires in 30 days.',

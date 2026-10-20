@@ -16,16 +16,21 @@
 
 ## 1. One-liner
 
-**Faida is a personal agent that finds what you're entitled to, does what you're
-obliged to do, and handles the paperwork for both — with your consent.**
+**Faida is a personal agent that makes the first move. It spots what you're
+entitled to and what you owe, brings it to you before you think to ask, and handles
+the paperwork for both, with your consent.**
 
-It is not a directory, a guide or a chatbot that tells you where to go. It does the
-task. WhatsApp is how you talk to it.
+It is not a directory, a guide or a chatbot that waits for questions. It watches,
+it opens the conversation, and it does the task. WhatsApp is where it finds you.
 
 _Faida_ (Kiswahili): benefit, gain, profit.
 
 **The point of Faida is to make public and partner services simple to use.** The
-user says what they need in plain language; Faida's agents work the portals.
+people who most need a service are the least likely to know it exists, so Faida
+does not wait to be asked. It matches programmes and deadlines to each person's
+profile and starts the conversation; most of the time the user's part is to answer
+yes, no or not now. They can still ask anything in plain language. Either way,
+Faida's agents work the portals.
 Applications are submitted by **browser-use agents**, not by people doing it by
 hand. The model to follow is the america.gov bot, applied to Kenyan national and
 county services.
@@ -73,8 +78,10 @@ enough; most of them need it done for them, safely.
 Every Kenyan has their own agent, reachable on WhatsApp (later also SMS/USSD), that:
 
 1. **Knows them**: a consented profile, documents and history, kept securely.
-2. **Looks out for them**: brings up benefits they qualify for and obligations
-   that are coming due, before they ask.
+2. **Gets to them first**: watches every programme and deadline against their
+   profile and opens the conversation when something fits or falls due. This is
+   the default mode, not an add-on: the user should never need to know what to
+   ask for.
 3. **Acts for them**: fills in and submits applications, renewals and registrations
    on the institution's own systems, through an API where one exists and through a
    browser-operating agent where it doesn't.
@@ -89,28 +96,33 @@ and complete enrolment through the same agent.
 
 ### 3.1 Principles
 
-From the proposal, with a fourth added by this doc:
+From the proposal, with a fourth and fifth added by this doc:
 
 1. **Accessibility:** WhatsApp first; works on any phone. SMS for alerts.
 2. **Intelligence:** AI eligibility matching that improves over time.
 3. **Completeness:** every benefit category, and eventually every service, in one place.
 4. **Agency:** Faida does the task, not just explains it (§6–§7).
+5. **First move:** Faida starts the conversation. Success is measured by what it
+   brought to people who would never have found it, not by questions answered.
 
 ### 3.2 Core use cases
 
-Everything Faida builds should serve one of these. A user can start with any of
-them in plain language, in English or Kiswahili.
+Everything Faida builds should serve one of these. **U1 is the default
+experience**; U2–U5 are what a user can also ask for, in plain language, in English
+or Kiswahili.
 
-| # | The user says… | Faida does |
+| # | Who starts | Faida does |
 |---|---|---|
-| U1 | **"Apply for X for me"** / "Renew my business permit" | Checks eligibility, collects what's missing, gets consent, submits through the agent, tracks it to the end |
-| U2 | **"Tell me about X"** / "What do I need for a good conduct certificate?" | Plain-language summary: who it's for, documents, fees, deadlines, where and how, from verified sources |
-| U3 | **"Am I eligible for X?"** | A yes / no / almost, with the reason and what would change the answer |
-| U4 | **"What can I get?"** | Benefits and services that fit the user's profile, ranked by value and ease of application |
-| U5 | *(Faida starts the conversation)* | **Proactive reach:** "The Nairobi youth bursary opens Monday. You qualify. Want me to apply?" Also deadline alerts and obligation reminders |
+| U1 | **Faida** | **Proactive reach:** "The Nairobi youth bursary opens Monday. You qualify. Want me to apply?" / "Your business permit runs out in 9 days. Renew it?" One reply and it moves to U2's flow. Also deadline alerts, renewals and case updates |
+| U2 | Faida or user: **"Apply for X for me"** / "Renew my business permit" | Checks eligibility, collects what's missing, gets consent, submits through the agent, tracks it to the end |
+| U3 | User: **"Tell me about X"** / "What do I need for a good conduct certificate?" | Plain-language summary: who it's for, documents, fees, deadlines, where and how, from verified sources |
+| U4 | User: **"Am I eligible for X?"** | A yes / no / almost, with the reason and what would change the answer |
+| U5 | User: **"What can I get?"** | Benefits and services that fit the user's profile, ranked by value and ease of application |
 
-U5 is the difference from a directory. Programmes are matched to the people who
-qualify for them, not just listed and left for people to find.
+U1 is the difference from a directory. Programmes are matched to the people who
+qualify for them and brought to them, not listed and left for people to find. The
+user only has to start once: say hello, answer a few profile questions, and from
+then on Faida does the looking.
 
 ---
 
@@ -118,7 +130,7 @@ qualify for them, not just listed and left for people to find.
 
 | Segment | Description | Primary need | [Assumption] priority |
 |---|---|---|---|
-| **Everyday citizen** | 18–60, has WhatsApp, low to medium digital confidence, often in a peri-urban or rural county | "Tell me what I qualify for and do it for me" | P0 |
+| **Everyday citizen** | 18–60, has WhatsApp, low to medium digital confidence, often in a peri-urban or rural county | "Tell me what I qualify for before I have to ask, and do it for me" | P0 |
 | **Micro and small business owner** | Kiosk, salon, boda boda, mama mboga, small shop (proposal: 7.4M SMEs) | Permits, KRA, AGPO, loans; staying compliant | P0 |
 | **Youth / job seeker** | 18–35, student or recently graduated | Training, jobs, youth funds, HELB, certificates | P1 |
 | **Vulnerable groups** | PWDs, elderly, women's groups, chamas | Targeted funds, NCPWD registration, cash transfers | P1 |
@@ -136,8 +148,9 @@ case tracker.
 - Matches the profile against a curated catalogue of benefits, plus approved live
   opportunities.
 - Explains *why* the user qualifies and what they still need.
-- Proactive: "New: Nairobi County youth bursary opens Monday. You qualify. Want me
-  to apply?"
+- Proactive by default: "New: Nairobi County youth bursary opens Monday. You
+  qualify. Want me to apply?" Matching runs whenever a programme or a profile
+  changes, not only when the user asks.
 - Ranks by value, likelihood of success and **ease of application**, not just by match.
 
 ### 5.2 Apply (benefits)
@@ -411,8 +424,10 @@ What the repo has now (October 2026), compared with the vision:
 - Pick **3–5 high-volume services** (candidates: SHA registration, KRA PIN + nil
   return, business name registration, county single business permit, certificate
   of good conduct, plus 2–3 benefits such as youth or women's funds).
-- Flow: discover → prepare in chat → user approves → **browser agent submits** →
-  tracked case → status updates on WhatsApp.
+- Flow: **Faida-initiated alert** (opted-in users, approved WhatsApp templates) →
+  prepare in chat → user approves → **browser agent submits** → tracked case →
+  status updates on WhatsApp. Proactive alerts ship here, not later: they are the
+  product, and the matching already exists.
 - Playbooks for each launch portal, hard checkpoints, OTP relay, evidence capture,
   automatic status checks.
 
@@ -420,9 +435,9 @@ What the repo has now (October 2026), compared with the vision:
 - Payments via M-Pesa STK push to official paybills (permits, licences, fees).
 - More playbooks, chosen by demand; county portals.
 
-### Phase 3 — Proactive agent
+### Phase 3 — Standing mandates & family
 - Obligations calendar and standing mandates (L3).
-- Proactive benefit alerts; deeper county coverage.
+- Deeper county coverage, so more of the alerts are local.
 - Proxy / family accounts.
 
 ### Phase 4 — Partners
@@ -436,7 +451,8 @@ What the repo has now (October 2026), compared with the vision:
 | Stage | Metric |
 |---|---|
 | North star | **Cases completed successfully per month** (benefit received or obligation fulfilled) |
-| Activation | % of new users who complete their profile; % who start a case |
+| Reach | % of cases Faida started (target: most of them); alert → YES rate; benefits surfaced per user that they had not heard of |
+| Activation | % of new users who complete their profile; % who say YES to their first Faida-initiated offer |
 | Execution | Case completion rate; median time to complete; playbook success rate; % of cases needing guided self-service |
 | Value | Ksh in benefits unlocked; penalties avoided; cost per case vs cyber café |
 | Trust | Consent decline rate; revocations; complaints; data incidents (target: 0) |
@@ -454,6 +470,8 @@ What the repo has now (October 2026), compared with the vision:
 | Portal changes break playbooks | Failed cases | Monitoring, pause the playbook and fall back to guided self-service, quick re-certification |
 | Portals block automation or forbid it in their terms | Execution blocked | Pursue official intermediary status; guided self-service fallback; work with institutions |
 | WhatsApp number banned (Baileys) | Channel down | Cloud API migration (Phase 0) |
+| Outreach feels like spam, or breaks WhatsApp rules | Opt-outs, number quality rating drops, channel restricted | Explicit opt-in at onboarding; pre-approved templates for messages outside the 24-hour window; only message on a real match or a real deadline; frequency cap; "not now" and STOP in every message |
+| Outbound messaging cost | Business-initiated template messages are billed per message, so proactive reach is the main channel cost | Budget it per user; prefer utility templates for deadlines; SMS where cheaper; partner-funded outreach for partner programmes |
 | Seen as an unofficial broker / fraud vector | Reputation | Verified business identity, clear branding, no upfront fees for benefits, partnerships with institutions |
 | Stale catalogue | Bad recommendations | Partner self-service listings, scraping with admin approval, expiry dates |
 | Partner incentives distort recommendations | User harm | Ranking based on user benefit; sponsored labels; partner vetting |
