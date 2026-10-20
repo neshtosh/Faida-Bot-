@@ -14,7 +14,7 @@ partner enrolment. Examples are labelled as examples on the page.
 1. **Vibe.** Sunlit, plain-spoken, a little bold. A Kenyan shop sign meets a
    printed feature. Confident but never cold.
 2. **Journey.** The gap, then one ordinary day handled for someone, then the
-   other side of the counter, then control, then everything covered, then start.
+   other side of the counter, then control, then everything on offer, then start.
 3. **Energy.** Loud title page, a hard full-stop, then a steady human pace that
    builds to one peak at 9 pm, then a different room (cobalt) for organisations.
 4. **Feeling and peak.** See the curve. Peak: the day, tallied.
@@ -86,7 +86,7 @@ outside the chat chapters.
 | 9:00 pm (peak) | Satisfaction, awe | The whole day tallied on a receipt, then stamped |
 | The other counter | Confidence (their side) | Cobalt room, one listing becomes complete applications |
 | You decide | Safety | Four levels, one tap each |
-| Handles / FAQ | Reassurance, ease | Plain lists, plain answers |
+| Everything on offer / FAQ | Reassurance, ease | Plain lists, plain answers |
 | Colophon | Resolve | Two big lines to tap |
 
 **Peak:** the day, tallied. It has the tallest chapter, the darkest ground, the
@@ -130,7 +130,7 @@ sun and cobalt, four grounds, Unbounded.
 - "Every offer is checked before it reaches you", "Faida only brings you offers
   it has checked are genuine" and "Ask 'is this real?'" need a working
   verification process at launch.
-- Every scheme named in the 12:30 chapter (Inua Jamii's
+- Every scheme named in the 12:30 chapter and in the "What's on offer" examples (Inua Jamii's
   70+ rule, the orphan and disability transfers, NCPWD and the disability tax
   exemption, HELB, NG-CDF bursaries, farmer registration and subsidised fertiliser,
   UFAA unclaimed assets, NSSF benefits) must be in the catalogue, with current

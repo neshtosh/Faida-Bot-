@@ -1,10 +1,12 @@
 # 🌿 Faida — Kenya's Services Agent
 
-> Faida is an agent that handles Kenyans' dealings with government, county, NGO and
-> SACCO services end to end, with their consent: discovery, eligibility,
-> applications, obligations, tracking and proactive alerts. This package is the
-> agent's backend and its first channel, WhatsApp. See
-> [`../docs/PRODUCT.md`](../docs/PRODUCT.md) for the product doc.
+> Faida is an agent that captures everything on offer to Kenyans, from every
+> source (government, counties and wards, NGOs, SACCOs, employers, colleges),
+> brings people what fits them before they ask, and takes it up for them with
+> their consent: matching, eligibility, applications, obligations, tracking and
+> follow-through. This package is the agent's backend and its first channel,
+> WhatsApp. See [`../docs/PRODUCT.md`](../docs/PRODUCT.md) and
+> [`../docs/OPPORTUNITY-MATRIX.md`](../docs/OPPORTUNITY-MATRIX.md).
 
 Built by [Munene](https://munene.dev)
 

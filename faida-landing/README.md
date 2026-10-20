@@ -26,7 +26,7 @@ Then:
 ## Deploy
 
 Any static host. On Vercel or Netlify set the root directory to `faida-landing`.
-Total weight is about 110 KB (21 KB code gzipped, 90 KB fonts). Fonts are
+Total weight is about 115 KB (25 KB code gzipped, 90 KB fonts). Fonts are
 self-hosted, so no third-party requests are made.
 
 ## How it works

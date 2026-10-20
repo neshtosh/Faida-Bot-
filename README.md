@@ -1,12 +1,13 @@
 # Faida — Kenya's Services Agent
 
-Faida is an agent that makes the first move on Kenyans' dealings with government,
-county, NGO and SACCO services. It watches every benefit, opportunity and deadline
-against each person's profile (cash transfers, health cover, bursaries, farm
-inputs, legal aid and unclaimed money as well as funds and permits), messages them
-when something fits or falls due, and then handles it end to end with their
-consent: applying and fulfilling obligations on their behalf (using browser-use
-agents where there's no API) and tracking every case. Nobody has to know what to
+Faida is an agent that captures everything on offer to Kenyans, from every source:
+national government, counties and wards, NGOs, foundations, SACCOs, co-operatives,
+employers and colleges. Grants, jobs, training, bursaries, cash transfers, health
+cover, farm inputs, tenders, unclaimed money, permits and tax. It messages people
+when something fits them or falls due, then takes it up end to end with their
+consent (using browser-use agents where there's no API, and guiding them where it
+has to be USSD, paper or in person) and tracks every case. Organisations list an
+offer once and Faida brings it to the people it's for. Nobody has to know what to
 ask for. WhatsApp is its first channel.
 
 See [`docs/PRODUCT.md`](docs/PRODUCT.md) for the full product doc.

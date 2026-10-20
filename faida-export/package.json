@@ -1,7 +1,7 @@
 {
   "name": "faida",
   "version": "1.0.0",
-  "description": "Faida — Kenya's services agent. Backend and WhatsApp channel for an agent that finds, applies for and tracks government, county, NGO and SACCO services on users' behalf.",
+  "description": "Faida — Kenya's services agent. Backend and WhatsApp channel for an agent that captures everything on offer from every source, brings users what fits them first, and takes it up and tracks it on their behalf.",
   "main": "src/bot/index.js",
   "scripts": {
     "start": "node src/bot/index.js",

@@ -10,7 +10,7 @@
     whatsappNumber: '',            // digits only with country code, e.g. '2547XXXXXXXX'
     whatsappText: { en: 'Hi Faida', sw: 'Habari Faida' },
     orgEmail: '',                  // e.g. 'partners@yourdomain.co.ke'
-    orgSubject: { en: 'Faida for our organisation', sw: 'Faida kwa taasisi yetu' }
+    orgSubject: { en: 'Listing an offer with Faida', sw: 'Kuorodhesha ofa na Faida' }
   };
 
   var doc = document.documentElement;

@@ -1,6 +1,6 @@
 # Faida — Product Document
 
-> **Status:** Draft v0.2 · October 2026
+> **Status:** Draft v0.3 · October 2026
 > **Owner:** _TBD_
 > **What this is:** The product intent for Faida, written down for the first time.
 > **Faida is an agent.** It handles a citizen's dealings with institutions **end to
@@ -9,6 +9,9 @@
 > **Sources:** the codebase (October 2026), the build chat logs in
 > [`docs/archive/`](archive/), and the internal *Faida Platform Proposal*
 > (Munene, August 2026).
+> **Companion:** [`OPPORTUNITY-MATRIX.md`](OPPORTUNITY-MATRIX.md) maps everything
+> Faida captures and takes up: who offers it, what it is, which life moments
+> trigger it, and how uptake happens.
 > Statements marked **[Assumption]** are inferred and need confirming. Open
 > questions are collected in [§14](#14-open-questions).
 
@@ -76,8 +79,11 @@ For most Kenyans, dealing with institutions is slow, confusing and expensive:
 - **The workaround costs money and is risky.** People pay cyber cafés, "agents" or
   brokers, hand over their ID and passwords, and get no record of what was done.
 
-The gap isn't information. It's **execution**. Telling someone how to apply isn't
-enough; most of them need it done for them, safely.
+The gap isn't only information. It's **reach and execution**. The people an offer
+is meant for rarely hear of it in time, and telling someone how to apply isn't
+enough; most of them need it done for them, safely. On the other side, whoever is
+offering (a county, a ward, an NGO, a SACCO, an employer, a college) has no
+reliable way to reach the people it is for, or to know the applicants are genuine.
 
 ---
 
@@ -86,21 +92,33 @@ enough; most of them need it done for them, safely.
 Every Kenyan has their own agent, reachable on WhatsApp (later also SMS/USSD), that:
 
 1. **Knows them**: a consented profile, documents and history, kept securely.
-2. **Gets to them first**: watches every programme and deadline against their
-   profile and opens the conversation when something fits or falls due. This is
+2. **Gets to them first**: watches everything on offer, from every source, and
+   every deadline against their profile and life moments, and opens the
+   conversation when something fits or falls due. This is
    the default mode, not an add-on: the user should never need to know what to
    ask for.
-3. **Acts for them**: fills in and submits applications, renewals and registrations
-   on the institution's own systems, through an API where one exists and through a
-   browser-operating agent where it doesn't.
-4. **Keeps them informed**: tracks every case to the end, relays official replies,
-   and keeps a receipt of every action taken in their name.
-5. **Asks before it acts**: nothing is submitted, signed or paid without the user's
+3. **Acts for them**: takes the offer up however it has to be taken up. It
+   submits on the organisation's own system (by API, or by browser agent where
+   there's none), guides the user through a USSD-only application, pre-fills a
+   paper form, or books them into an in-person drive with what to bring.
+4. **Keeps them informed and on track**: tracks every case to the end, relays
+   official replies, keeps a receipt of every action taken in their name, and
+   after approval keeps them on track (training days, reports, repayments).
+5. **Checks it's real**: brings only verified offers, and answers "is this real?"
+   about anything a user is sent, such as a job advert.
+6. **Asks before it acts**: nothing is submitted, signed or paid without the user's
    explicit consent for that action.
 
-It starts with government and county services, then opens to **SACCOs, NGOs and
-private providers**, who can reach eligible, opted-in users with their own benefits
-and complete enrolment through the same agent.
+The supply side is **everyone who offers something to people**: national
+government and its agencies, counties and city councils, wards and
+constituencies, development partners, NGOs and faith groups, foundations,
+SACCOs, banks and insurers, co-operatives, employers, colleges, health campaigns
+and utilities. Offers range from cash transfers, grants, loans and bursaries to
+training, jobs, tenders, health cover, farm inputs, housing, legal help, money
+already in a person's name, member benefits and civic participation (full map in
+the [matrix](OPPORTUNITY-MATRIX.md)). Faida is the exchange between the two sides:
+it captures and verifies offers, matches them, takes them up for people, and
+reports uptake back to whoever is offering.
 
 ### 3.1 Principles
 
@@ -108,7 +126,8 @@ From the proposal, with a fourth and fifth added by this doc:
 
 1. **Accessibility:** WhatsApp first; works on any phone. SMS for alerts.
 2. **Intelligence:** AI eligibility matching that improves over time.
-3. **Completeness:** every benefit category, and eventually every service, in one place.
+3. **Completeness:** everything on offer, from every source, in one place (not a
+   hand-picked list of programmes).
 4. **Agency:** Faida does the task, not just explains it (§6–§7).
 5. **First move:** Faida starts the conversation. Success is measured by what it
    brought to people who would never have found it, not by questions answered.
@@ -116,21 +135,22 @@ From the proposal, with a fourth and fifth added by this doc:
 ### 3.2 Core use cases
 
 Everything Faida builds should serve one of these. **U1 is the default
-experience**; U2–U5 are what a user can also ask for, in plain language, in English
+experience**; U2–U6 are what a user can also ask for, in plain language, in English
 or Kiswahili.
 
 | # | Who starts | Faida does |
 |---|---|---|
-| U1 | **Faida** | **Proactive reach:** "The Nairobi youth bursary opens Monday. You qualify. Want me to apply?" / "Your business permit runs out in 9 days. Renew it?" One reply and it moves to U2's flow. Also deadline alerts, renewals and case updates |
-| U2 | Faida or user: **"Apply for X for me"** / "Renew my business permit" | Checks eligibility, collects what's missing, gets consent, submits through the agent, tracks it to the end |
+| U1 | **Faida** | **Proactive reach:** "The Nairobi youth bursary opens Monday. You qualify. Want me to apply?" / "Cucu has turned 70 and now qualifies for Inua Jamii. Prepare her registration?" / "Your SACCO's school-fees loan opens Monday." / "Your business permit runs out in 9 days. Renew it?" One reply and it moves to U2's flow. Also deadline alerts, renewals and case updates |
+| U2 | Faida or user: **"Apply for X for me"** / "Renew my business permit" | Checks eligibility, collects what's missing, gets consent, takes it up through the right route (API, browser agent, USSD guidance, paper form, in-person drive), tracks it to the end |
 | U3 | User: **"Tell me about X"** / "What do I need for a good conduct certificate?" | Plain-language summary: who it's for, documents, fees, deadlines, where and how, from verified sources |
 | U4 | User: **"Am I eligible for X?"** | A yes / no / almost, with the reason and what would change the answer |
-| U5 | User: **"What can I get?"** | Benefits and services that fit the user's profile, ranked by value and ease of application |
+| U5 | User: **"What can I get?"** | Everything on offer that fits the user's profile, ranked by value and ease of uptake |
+| U6 | User: **"Is this real?"** (forwards a job advert, grant or message) | Checks it against the organisation's official channels and says plainly whether it is genuine |
 
-U1 is the difference from a directory. Programmes are matched to the people who
-qualify for them and brought to them, not listed and left for people to find. The
-user only has to start once: say hello, answer a few profile questions, and from
-then on Faida does the looking.
+U1 is the difference from a directory. Offers, from every source, are matched to
+the people who qualify for them and brought to them, not listed and left for
+people to find. The user only has to start once: say hello, answer a few profile
+questions, and from then on Faida does the looking.
 
 ---
 
@@ -143,7 +163,7 @@ then on Faida does the looking.
 | **Youth / job seeker** | 18–35, student or recently graduated | Training, jobs, youth funds, HELB, certificates | P1 |
 | **Vulnerable groups** | PWDs, elderly, women's groups, chamas | Targeted funds, NCPWD registration, cash transfers | P1 |
 | **Diaspora / proxy helpers** | Family members acting for a parent or relative | Act on someone else's behalf, with consent | P2 |
-| **Partners (B2B)** | SACCOs and MFIs (proposal: 14,000+ SACCOs), 47 county governments, NGOs, employers | Reach eligible people and complete enrolment | P2, but the proposal sees B2B as the fastest route to revenue |
+| **Organisations offering something (B2B)** | Anyone in the matrix's supply side: SACCOs and MFIs (proposal: 14,000+ SACCOs), 47 county governments and city councils, wards and constituencies, national programmes, NGOs, foundations, co-operatives, employers, colleges | Reach eligible people, receive complete and genuine applications, see uptake | P2, but the proposal sees B2B as the fastest route to revenue |
 
 ---
 
@@ -152,21 +172,36 @@ then on Faida does the looking.
 Six capabilities. All of them work through the same profile, document vault and
 case tracker.
 
-### 5.1 Discover & Recommend
-- Matches the profile against a curated catalogue of benefits, plus approved live
-  opportunities.
+### 5.1 Capture, Discover & Recommend
+- **Captures** offers from every source type into one offer schema
+  ([matrix §6.9](OPPORTUNITY-MATRIX.md#6-findings-that-change-the-product)): who
+  offers it, who qualifies, what's needed, the window, capacity, how to take it up,
+  and what follows. Sources: an offer-listing desk any organisation or ward officer
+  can use in minutes (form or WhatsApp), partner APIs, official publications, and
+  scraping with human approval. Today's ~30 curated benefits are the seed.
+- **Verifies** every offer before it reaches a user.
+- Matches the profile, and **life moments** (turning 18, exam results, a new
+  business, a birth, turning 70, a death, planting season), against everything on
+  offer.
+- Plans **unlock chains**: "You're two steps from qualifying for X. Shall I start
+  step one?"
 - Explains *why* the user qualifies and what they still need.
 - Proactive by default: "New: Nairobi County youth bursary opens Monday. You
   qualify. Want me to apply?" Matching runs whenever a programme or a profile
   changes, not only when the user asks.
 - Ranks by value, likelihood of success and **ease of application**, not just by match.
 
-### 5.2 Apply (benefits)
+### 5.2 Take up (anything on offer)
 - Collects only the information that's missing, reusing the vault (ID, KRA PIN,
   photos, certificates).
 - Prepares the application, shows the user a summary, gets their consent, then
   **submits it on the provider's system**.
+- Where there's no portal: guides the user through USSD-only applications,
+  pre-fills paper forms to print, and books in-person drives with date, venue and
+  what to bring, with a reminder the day before.
 - Captures proof: confirmation numbers, screenshots, receipts.
+- After approval, keeps the user on track with any follow-on obligations
+  (attendance, reports, repayments), which is what organisations measure.
 
 ### 5.3 Fulfil (obligations)
 - An obligations calendar per user: KRA annual returns (by 30 June), SHA
@@ -194,6 +229,9 @@ case tracker.
   account problems). Support fixes problems; it doesn't do submissions.
 - Directions to the nearest Huduma Centre or office when something must be done
   in person.
+- **"Is this real?"**: checks any offer a user forwards (job adverts, grants,
+  messages) against official channels. Fake KDF, police and TSC recruitment is
+  common.
 
 ---
 
@@ -265,9 +303,18 @@ For each service, Faida uses the highest rung available:
    M-Taji, M-Pesa Daraja for payments, SACCO core-banking APIs).
 2. **Browser agent (computer use)**: a sandboxed browser driven by an AI agent
    following a **playbook** for that portal.
-3. **Guided self-service**: Faida prepares everything and walks the user through
+3. **USSD guidance**: for USSD-only applications (e.g. NYOTA on `*254#`), Faida
+   can't dial from the user's line, so it walks them through each step live, or
+   partners with the programme for a direct route.
+4. **Offline preparation**: for paper forms and in-person drives (ward bursaries,
+   Inua Jamii registration), Faida pre-fills the form, lists documents, gives the
+   venue and hours, and reminds them the day before.
+5. **Guided self-service**: Faida prepares everything and walks the user through
    doing it themselves, or sends them to a Huduma Centre. This is the fallback
-   when a playbook is broken or a step has to be done in person.
+   when a playbook is broken.
+
+Rungs 3 and 4 aren't edge cases. For bursaries and cash transfers they are the
+main path.
 
 No rung has people submitting for users. When the agent needs something only the
 user can give (an OTP, a CAPTCHA, a photo, a decision), it asks over WhatsApp and
@@ -311,10 +358,15 @@ WhatsApp ─► Orchestrator (LLM) ─► Case engine ─► Executor
 
 ## 8. Partners & distribution (B2B)
 
-**Who:** SACCOs, county governments, NGOs, MFIs, insurers, employers, training
-providers.
+**Who:** anyone offering something to people: national programmes and agencies,
+counties and city councils, wards and constituencies, development partners, NGOs
+and faith groups, foundations, SACCOs, MFIs, banks and insurers, co-operatives,
+employers, colleges and training providers (matrix §2).
 
 **What they get:**
+- **Offer-listing desk:** list an offer in minutes (what, who qualifies, what's
+  needed, when it closes), by form, on WhatsApp, or by API. See its likely reach
+  before it goes out.
 - **Featured listings** (NGOs, programmes): shown to users who are eligible, not to everyone.
 - **Citizen outreach** (counties, national programmes): announce a programme and
   reach the residents who qualify, with enrolment built in.
@@ -322,6 +374,11 @@ providers.
   eligible, opted-in users.
 - **Enrolment:** Faida completes sign-up through the partner's API or form (same
   execution ladder).
+- **Verified applicants:** every applicant checked against the offer's rules, so it
+  reaches the people it was meant for (AGPO, for example, has been captured by
+  proxy companies).
+- **Follow-through:** uptake tracked after approval (attendance, reports,
+  repayments), not just applications.
 - **Partner portal:** listings, eligibility rules, funnel analytics (matched →
   interested → applied → approved), applicant hand-off.
 - **White-label / API (later):** Faida's matching and agent inside a SACCO's own
@@ -332,6 +389,9 @@ providers.
   partner.
 - Partners are verified before listing; consumer-credit products are checked for
   fair terms.
+- **Opportunity, not advert:** an offer must give the person something (money, a
+  service, a place, a job, a right) on transparent terms. Commercial products come
+  only from regulated providers and are always labelled.
 - Ranking is based on what's good for the user; partners can't pay to override
   eligibility.
 - Partners only receive applicant data the user has consented to share for that
@@ -352,6 +412,8 @@ From the proposal. Figures are the proposal's targets, not validated.
 | B2B white-label | SACCOs, MFIs | Ksh 50K–200K / year per org | **Fastest route to revenue:** one Ksh 100K deal beats the initial $3,000 target |
 | NGO featured listings | NGOs | Ksh 20K–50K / listing / month | Shown only to eligible users, clearly labelled |
 | Government contracts | Counties, national programmes | Ksh 500K–2M per contract | Largest upside: outreach and enrolment for public programmes |
+| Placement / enrolment fee | SACCOs, MFIs, insurers, employers, training providers | Per verified application or enrolment (not in the proposal) | Paid on outcomes, not impressions |
+| Donor / development-partner funding | Development partners | Programme-based | Financial inclusion and social protection goals |
 
 The proposal runs B2B in parallel with the consumer base, since each helps the other.
 
@@ -361,8 +423,9 @@ The proposal runs B2B in parallel with the consumer base, since each helps the o
   Kenyans actually find information.
 - **WhatsApp-first:** spreads through family groups and church chats without a
   marketing budget.
-- **Data moat:** a verified, maintained database of Kenyan benefits and services,
-  plus the portal playbooks (§7), takes real work to copy.
+- **Data moat:** a verified, live database of everything on offer in Kenya, with
+  windows, eligibility rules and uptake routes, plus the portal playbooks (§7),
+  takes real work to copy.
 - **An agent, not a directory:** it matches, then does the task, from enquiry to
   confirmation.
 - **First mover:** no direct competitor in Kenya today (proposal claim).
@@ -373,12 +436,6 @@ Catalyst Fund (grant), Antler Africa (equity), KIEP 250+ / World Bank (grant),
 Developpp Ventures (grant), Google Hustle Academy (non-dilutive), WIDU Africa (grant).
 Themes: financial inclusion, government service digitisation, AI for social impact.
 
----|---|---|
-| Partner placement / enrolment fee | SACCOs, MFIs, insurers, training providers | Per qualified application or per enrolment |
-| Government / county contracts | Counties, programmes | Faida as an outreach and enrolment channel for public programmes |
-| Donor / NGO funding | Development partners | Financial inclusion and social protection goals |
-| User service fee | Users | Small fee for obligations (e.g. filing, permit renewal), cheaper than a cyber café. Benefits discovery stays free. |
-| White-label licence | SACCOs, counties | Later stage |
 
 ---
 
@@ -389,7 +446,7 @@ Themes: financial inclusion, government service digitisation, AI for social impa
 | Week | Deliverable | Status |
 |---|---|---|
 | 1 | 20–30 verified benefits with eligibility tags | ✅ 30 in `benefits.json`, synced to Supabase, editable in the dashboard |
-| 1 | Landing page with "Try on WhatsApp" + email capture | ❌ Not in the repo |
+| 1 | Landing page with "Try on WhatsApp" + email capture | ✅ [`faida-landing/`](../faida-landing/) (sells the finished platform); ❌ no email capture yet |
 | 2 | WhatsApp bot with 5-question eligibility flow + follow-up steps | ✅ 6 questions, EN/SW, on Baileys. The proposal's income question isn't asked |
 | 3 | Soft launch: 10 WhatsApp groups, LinkedIn, 3 SACCO pilot conversations | ❓ Unknown |
 | 4+ | Health and employment categories, web dashboard, funding applications | ✅ All 5 categories; dashboard built. Funding: unknown |
@@ -407,13 +464,13 @@ What the repo has now (October 2026), compared with the vision:
 |---|---|---|
 | Channel | WhatsApp via Baileys (unofficial), QR-linked | Move to WhatsApp Cloud API; SMS/USSD fallback |
 | Profile | 6-question questionnaire (EN/SW), long-term memory in Supabase | Income (in the proposal), richer profile, document vault, proxy users |
-| Discover | ~30 curated benefits + rule/keyword matching; approved scraped opportunities (M-Taji, World Bank, USAID) | Bigger, maintained catalogue; county coverage; better ranking; proactive alerts |
+| Discover | ~30 curated benefits + rule/keyword matching; approved scraped opportunities (M-Taji, World Bank, USAID) | One offer schema for every source type; offer-listing desk; verification; windows and capacity; life-moment triggers; unlock chains; proactive alerts |
 | Apply | Guided in-chat forms (8 field templates), reference code, PDF export; `FORM <url>` reads verified web forms | **No submission.** Needs consent flow, executors, evidence |
 | Fulfil obligations | — | Obligations calendar, playbooks for KRA, eCitizen, SHA, county permits |
 | Track | Applications stored; admin can set status manually | Case engine, status checks on portals, user-facing status |
 | Communicate | Deadline reminders on WhatsApp, feedback | SMS alerts, unified case thread, OTP relay, document requests |
-| Assist | AI chat (OpenAI/Claude) limited to verified sources; nearest office | Support escalation; console to replay and debug agent runs |
-| Partners | Admin dashboard (one shared password) for benefits and opportunities | Partner portal, roles and permissions, analytics |
+| Assist | AI chat (OpenAI/Claude) limited to verified sources; nearest office | "Is this real?" checks; support escalation; console to replay and debug agent runs |
+| Partners | Admin dashboard (one shared password) for benefits and opportunities | Offer-listing desk for any organisation; partner portal, roles and permissions, analytics, uptake tracking |
 | Trust & compliance | Hashed user IDs, encrypted reminder contacts, rate limiting | Consent records, DPIA, ODPC registration, credential vault, audit trail for users |
 
 ---
@@ -421,7 +478,9 @@ What the repo has now (October 2026), compared with the vision:
 ## 11. Roadmap (proposed)
 
 ### Phase 0 — Foundations (no new user features)
-- Landing page and early-signup capture (outstanding from the proposal).
+- Early-signup capture on the landing page (the page exists; capture doesn't).
+- **Offer schema** (matrix §6.9) and a first, simple listing desk (form + WhatsApp)
+  so offers can come in from any source, with admin verification.
 - WhatsApp Cloud API (verified business number); retire Baileys.
 - Consent and terms flow; DPIA; ODPC registration started.
 - **Case model** (one record per request, with status history and evidence).
@@ -438,6 +497,9 @@ What the repo has now (October 2026), compared with the vision:
   product, and the matching already exists.
 - Playbooks for each launch portal, hard checkpoints, OTP relay, evidence capture,
   automatic status checks.
+- USSD guidance and offline preparation (forms, venues, reminders) for launch
+  offers that need them, such as ward bursaries.
+- "Is this real?" checks for forwarded offers.
 
 ### Phase 2 — Payments & more services
 - Payments via M-Pesa STK push to official paybills (permits, licences, fees).
@@ -449,7 +511,9 @@ What the repo has now (October 2026), compared with the vision:
 - Proxy / family accounts.
 
 ### Phase 4 — Partners
-- Partner portal, SACCO and county onboarding, enrolment via API or agent.
+- Partner portal open to every source type (counties, wards, NGOs, SACCOs,
+  employers, colleges), enrolment via API or agent, verified applicants, uptake
+  tracking after approval.
 - SMS/USSD channel; white-label API.
 
 ---
@@ -465,7 +529,8 @@ What the repo has now (October 2026), compared with the vision:
 | Value | Ksh in benefits unlocked; penalties avoided; cost per case vs cyber café |
 | Trust | Consent decline rate; revocations; complaints; data incidents (target: 0) |
 | Retention | Users with 2+ cases in 90 days; reminder → action rate |
-| Partners | Qualified applications per partner; approval rate |
+| Partners | Qualified applications per partner; approval rate; completion after approval |
+| Supply | Live offers by source type and county; % verified; median time from announcement to listing; % of offers with windows Faida caught in time |
 
 ---
 
@@ -483,6 +548,8 @@ What the repo has now (October 2026), compared with the vision:
 | Seen as an unofficial broker / fraud vector | Reputation | Verified business identity, clear branding, no upfront fees for benefits, partnerships with institutions |
 | Stale catalogue | Bad recommendations | Partner self-service listings, scraping with admin approval, expiry dates |
 | Partner incentives distort recommendations | User harm | Ranking based on user benefit; sponsored labels; partner vetting |
+| A listed offer turns out to be a scam or bad deal | User harm, lost trust | Verify organisations and offers before listing; "is this real?" checks; quick takedown; opportunity-not-advert rule |
+| Offline supply missed | Matching blind spots (ward bursaries, barazas) | Listing desk on WhatsApp; ward-level contributors; county partnerships |
 
 ---
 
@@ -503,6 +570,9 @@ What the repo has now (October 2026), compared with the vision:
 10. **Headline numbers:** sources for 58M+ eligible and Ksh 5B+ unclaimed.
 11. **Pricing:** does the Ksh 299/month premium tier still make sense once the agent
     does the work, or does a per-application fee fit better?
+12. **Supply side:** listing free for public bodies and NGOs, paid for commercial
+    partners? What makes an organisation "verified"? Who lists ward-level offers?
+    Which commercial categories are in or out? (Matrix §8.)
 
 ---
 
