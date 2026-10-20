@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Faida: just ask, and it gets done</title>
+<meta name="description" content="Faida is an agent on WhatsApp that finds the grants, health cover and services you qualify for, applies for you with your OK, and keeps you updated. For people, and for the organisations that want to reach them.">
+<meta name="theme-color" content="#f3f5ee">
+<meta property="og:title" content="Faida: just ask, and it gets done">
+<meta property="og:description" content="Finds what you qualify for, applies for you with your OK, and keeps you updated. On WhatsApp.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%230a7b48'/%3E%3Ccircle cx='12' cy='32' r='5' fill='%23fff'/%3E%3Ccircle cx='36' cy='32' r='5' fill='%235fe29a'/%3E%3Cpath d='M12 32C12 10 36 10 36 32' fill='none' stroke='%23fff' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preload" href="fonts/bricolage-500-800.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/lexend-400-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="mark" viewBox="0 0 48 34">
+      <path d="M8 27C8 3 40 3 40 27" fill="none" stroke="#0a7b48" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="8" cy="27" r="6" fill="#0f2018"/>
+      <circle cx="40" cy="27" r="6" fill="#0a7b48"/>
+    </symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5.5h16v11H10l-4.5 3.5v-3.5H4z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-yes" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.5"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 018 0v2.5"/><path d="M12 14.5v2.5"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><rect x="9" y="9" width="6" height="6" rx="1"/></symbol>
+    <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/><path d="M9 12l2.2 2.2L15 10"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="M4 17l5-4 4 3 3-2 4 3"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  </defs>
+</svg>
+
+<a class="skip" href="#main" data-sw="Ruka hadi maudhui">Skip to content</a>
+
+<div class="lang" role="group" aria-label="Language / Lugha">
+  <button type="button" data-lang="en" aria-pressed="true">EN</button>
+  <button type="button" data-lang="sw" aria-pressed="false">SW</button>
+</div>
+
+<main id="main">
+
+<!-- ================= HERO: the split ================= -->
+<header class="hero" id="top">
+  <div class="hero__top">
+    <a class="brand" href="#top" aria-label="Faida"><svg aria-hidden="true"><use href="#mark"/></svg>Faida</a>
+    <a class="side-link side-link--people" href="#bridge"><span data-sw="Kwa wananchi">For people</span></a>
+    <a class="side-link side-link--org" href="#organisations"><span data-sw="Kwa taasisi">For organisations</span></a>
+  </div>
+
+  <div class="hero__side hero__side--people">
+    <div class="hero__copy">
+      <h1 class="display h1" data-sw="Uliza tu. Faida inafanya.">Just ask. Faida does it.</h1>
+      <p class="lede" data-sw="Ruzuku, bima ya afya, vibali na zaidi. Mwandikie Faida WhatsApp. Inatafuta, inaomba na kukupa taarifa.">Grants, health cover, permits and more. Message Faida on WhatsApp and it finds, applies and keeps you updated.</p>
+      <a class="btn" data-wa href="https://wa.me/"><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg><span data-sw="Wasiliana kwenye WhatsApp">Chat on WhatsApp</span></a>
+    </div>
+  </div>
+
+  <div class="hero__side hero__side--org on-dark">
+    <div class="hero__copy">
+      <h2 class="display h1" data-sw="Wafikie wote wanaostahili.">Reach everyone who qualifies.</h2>
+      <p class="lede" data-sw="SACCO, kaunti na NGO: wafikie watu uliowaundia programu na upokee maombi yaliyokamilika, tayari kukaguliwa.">SACCOs, counties and NGOs: reach the people you built it for and receive applications that are ready to review.</p>
+      <a class="btn btn--ghost" data-org href="mailto:"><span data-sw="Zungumza nasi">Talk to us</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+
+  <svg class="hero__art" aria-hidden="true" focusable="false"></svg>
+  <div class="seam-knot" aria-hidden="true"><svg><use href="#mark"/></svg></div>
+</header>
+
+<!-- ================= THE GAP ================= -->
+<section class="gap" aria-labelledby="gap-title">
+  <h2 id="gap-title" class="gap__lead display">
+    <span class="gap__a" data-sw="Pande zote zinasubiri.">Both sides are waiting.</span>
+    <span class="gap__b" data-sw="Hakuna anayempata mwenzake.">Neither can find the other.</span>
+  </h2>
+  <div class="gap__cols" id="gapcols">
+    <div class="gap__side gap__side--people">
+      <h3 class="h3" data-sw="Ukihitaji msaada leo">If you need help today</h3>
+      <ul class="gap__list">
+        <li data-in data-sw="Unapanga foleni kwenye cyber café.">You queue at the cyber café.</li>
+        <li data-in style="--d:70ms" data-sw="Unamlipa mtu akuandikie.">You pay someone to type it for you.</li>
+        <li data-in style="--d:140ms" data-sw="Unampa kitambulisho na nenosiri lako.">You hand over your ID and your password.</li>
+        <li data-in style="--d:210ms" data-sw="Unatumai maombi yamefika.">You hope it went through.</li>
+      </ul>
+    </div>
+    <div class="gap__side gap__side--org on-dark">
+      <h3 class="h3" data-sw="Ukiendesha programu leo">If you run a programme today</h3>
+      <ul class="gap__list">
+        <li data-in data-sw="Mabango na redio huwafikia wachache.">Posters and radio reach some people.</li>
+        <li data-in style="--d:70ms" data-sw="Tovuti yako inasubiri wageni.">Your portal waits for visitors.</li>
+        <li data-in style="--d:140ms" data-sw="Maombi huja yakiwa pungufu.">Applications arrive incomplete.</li>
+        <li data-in style="--d:210ms" data-sw="Pesa zilizokusudiwa wananchi hazitumiki.">Money meant for people goes unused.</li>
+      </ul>
+    </div>
+    <div class="gap__channel" aria-hidden="true"><i></i><b></b><em data-sw="Pengo">The gap</em></div>
+  </div>
+</section>
+
+<!-- ================= THE BRIDGE (peak) ================= -->
+<section class="act" id="bridge" data-act="bridge" style="--span:3.8" aria-labelledby="bridge-title">
+  <div class="stage bridge-stage">
+    <div class="bridge__head">
+      <div class="bridge__title">
+        <h2 id="bridge-title" class="display h2" data-sw="Faida ni daraja.">Faida is the bridge.</h2>
+        <div class="bridge__aside">
+          <p class="bridge__pill"><span data-sw="Gusa mtu, au gusa programu.">Tap a person, or tap a programme.</span></p>
+          <p class="note" data-sw="Watu wa mfano na programu halisi kutoka orodha ya Faida. Imerahisishwa. Thibitisha kila mara na mtoaji.">Example people, real programmes from Faida's catalogue. Simplified. Always confirm with the provider.</p>
+        </div>
+      </div>
+    </div>
+    <div class="bridge__body" id="bridgebody">
+      <div class="bridge__people" id="people" role="group" aria-label="Example people"></div>
+      <div class="bridge__progs" id="progs" role="group" aria-label="Programmes"></div>
+      <svg class="bridge__threads" id="threads" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="tg-h" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0a7b48"/><stop offset="1" stop-color="#5fe29a"/></linearGradient>
+          <linearGradient id="tg-v" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a7b48"/><stop offset="1" stop-color="#5fe29a"/></linearGradient>
+        </defs>
+        <g id="thread-layer"></g>
+      </svg>
+      <div class="bridge__caption"><p id="caption" aria-live="polite"></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ONE REQUEST, START TO FINISH ================= -->
+<section class="act" id="how" data-act="chat" style="--span:2.6" aria-labelledby="how-title">
+  <div class="stage chat-stage">
+    <div class="chat__grid">
+      <div class="chat__copy">
+        <h2 id="how-title" class="display h2" data-sw="Kutoka ujumbe wako hadi maombi yaliyotumwa.">From your message to a sent application.</h2>
+        <ol class="steps" id="steps">
+          <li><span class="dot"></span><span data-sw="Unauliza kwa maneno yako.">You ask in your own words.</span></li>
+          <li><span class="dot"></span><span data-sw="Faida inatafuta kinachokufaa.">Faida finds what fits.</span></li>
+          <li><span class="dot"></span><span data-sw="Faida inakusanya inachohitaji.">Faida gets what it needs.</span></li>
+          <li class="is-yes"><span class="dot"></span><span data-sw="Unasema NDIYO.">You say YES.</span></li>
+          <li><span class="dot"></span><span data-sw="Faida inatuma na kufuatilia.">Faida sends it and follows up.</span></li>
+        </ol>
+      </div>
+      <div>
+        <div class="phone" role="img" aria-label="Example WhatsApp conversation with Faida" data-aria-sw="Mfano wa mazungumzo ya WhatsApp na Faida">
+          <div class="phone__screen">
+            <div class="phone__bar"><span class="phone__av"><svg aria-hidden="true"><use href="#mark"/></svg></span><div><b>Faida</b><small data-sw="mtandaoni">online</small></div></div>
+            <div class="phone__msgs" id="msgs">
+              <div class="msg msg--me" data-step="0" data-sw="Nahitaji pesa kukuza saluni yangu.">I need money to grow my salon.</div>
+              <div class="msg" data-step="1" data-sw="Habari Wanjiru. Nimepata programu 7 zinazokufaa. Bora kwa saluni yako ni <b>YEDF</b>. Niombe kwa niaba yako?">Hello Wanjiru. I found 7 programmes for you. The best fit for your salon is <b>YEDF</b>. Shall I apply for you?</div>
+              <div class="msg msg--me" data-step="2" data-sw="Ndiyo">Yes</div>
+              <div class="msg" data-step="2" data-sw="Tafadhali nitumie nambari ya kitambulisho na picha yake. Mengine nitafanya mimi.">Please send your ID number and a photo of it. I will do the rest.</div>
+              <div class="msg msg--me" data-step="2"><span class="att"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg><span data-sw="Picha ya kitambulisho">ID photo</span></span></div>
+              <div class="msg" data-step="3" data-sw="Maombi yako yako tayari: Wanjiru W., saluni, Kisumu. Jibu <b>NDIYO</b> kutuma, au <b>HAPANA</b> kubadilisha.">Your application is ready: Wanjiru W., salon, Kisumu. Reply <b>YES</b> to send it, or <b>NO</b> to change anything.</div>
+              <div class="msg msg--me" data-step="3" data-sw="NDIYO">YES</div>
+              <div class="msg" data-step="4" data-sw="Imetumwa YEDF. Namba yako ya kumbukumbu ni <b>FD-7K2Q</b>. Nitakujulisha wakijibu.">Sent to YEDF. Your reference is <b>FD-7K2Q</b>. I will tell you as soon as they reply.</div>
+              <div class="msg" data-step="4" data-sw="Habari: YEDF imepokea maombi yako na inayakagua.">Update: YEDF has your application and is reviewing it.</div>
+            </div>
+          </div>
+        </div>
+        <p class="note chat__label" data-sw="Mfano wa mazungumzo. Si mtumiaji halisi.">Example conversation. Not a real user.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TRUST ================= -->
+<section class="trust" aria-labelledby="trust-title">
+  <div class="wrap trust__grid">
+    <div class="trust__head" data-in>
+      <h2 id="trust-title" class="display h2" data-sw="Wewe ndiye mwenye uamuzi.">You stay in charge.</h2>
+      <p class="lede" data-sw="Msaidizi unayemwamini hufanya ulichoomba, na kukuonyesha.">A helper you can trust does what you ask, and shows you.</p>
+    </div>
+    <ul class="trust__list">
+      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-yes"/></svg><span data-sw="Hakuna kinachotumwa bila NDIYO yako.">Nothing is sent without your YES.</span></li>
+      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg><span data-sw="Faida haiombi PIN yako ya <span class=&quot;nb&quot;>M-Pesa</span> wala ya benki.">Faida never asks for your <span class="nb">M-Pesa</span> or bank PIN.</span></li>
+      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-stop"/></svg><span data-sw="Sema SITISHA, inasimama. Wakati wowote.">Say STOP and it stops. At any time.</span></li>
+      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-receipt"/></svg><span data-sw="Unapata risiti ya kila inachofanya.">You get a receipt for everything it does.</span></li>
+      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span data-sw="Taarifa zako zinatumika kwa maombi yako tu.">Your details are used only for your applications.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= ORGANISATIONS ================= -->
+<section class="org on-dark" id="organisations" aria-labelledby="org-title">
+  <div class="wrap">
+    <div class="org__top" data-in>
+      <h2 id="org-title" class="display h2" data-sw="Patikana na wanaostahili.">Be found by the people who qualify.</h2>
+      <p class="lede" data-sw="Kila siku, watu wanaostahili programu yako hawajui ipo. Faida inaziba pengo hilo." style="max-width:44ch">Every day, people who qualify for your programme don't know it exists. Faida closes that gap.</p>
+    </div>
+    <ol class="org__steps">
+      <li data-in>
+        <h3 class="h3" data-sw="Tuambie ni kwa nani.">Tell us who it's for.</h3>
+        <p data-sw="Orodhesha programu yako mara moja: nani anastahili na unahitaji nini kutoka kwao.">List your programme once: who qualifies and what you need from them.</p>
+      </li>
+      <li data-in>
+        <h3 class="h3" data-sw="Faida inawatafuta na kuwauliza.">Faida finds them and asks.</h3>
+        <p data-sw="Wanaokufaa wanaarifiwa WhatsApp, kwa lugha yao. Waliokubali pekee. Daima ikitajwa ni yako.">People who fit hear about it on WhatsApp, in their own language. Only people who opted in. Always labelled as yours.</p>
+      </li>
+      <li data-in>
+        <h3 class="h3" data-sw="Maombi yanafika yamekamilika.">Applications arrive complete.</h3>
+        <p data-sw="Majibu yamekaguliwa, hati zimeambatishwa, na kutumwa kwako au kusajiliwa moja kwa moja kwenye mfumo wako.">Answers checked, documents attached, then sent to you or enrolled straight into your system.</p>
+      </li>
+    </ol>
+    <div class="org__foot" data-in>
+      <p class="org__who" data-sw="Kwa SACCO na taasisi za mikopo, serikali za kaunti, NGO na mifuko, waajiri na watoa mafunzo.">Built for SACCOs and MFIs, county governments, NGOs and funds, employers and training providers.</p>
+      <div>
+        <p class="org__fair" data-sw="Haki kwa muundo: watu huchagua kusikia kutoka kwako, ofa huwekewa lebo, na hakuna anayeweza kulipa kukwepa masharti yako.">Fair by design: people choose to hear from you, offers are always labelled, and no one can pay to skip your eligibility rules.</p>
+        <div class="org__actions">
+          <a class="btn" data-org href="mailto:"><span data-sw="Zungumza nasi">Talk to us</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHAT IS ALREADY INSIDE ================= -->
+<section class="covered" aria-labelledby="covered-title">
+  <div class="wrap">
+    <div class="covered__head" data-in>
+      <h2 id="covered-title" class="display h2" data-sw="Tayari ndani ya Faida.">Already inside Faida.</h2>
+      <p class="lede" data-sw="Programu 30 katika maeneo matano. Mpya huongezwa zinapofunguliwa.">30 programmes across five areas. New ones are added as they open.</p>
+    </div>
+    <ul class="covered__rows">
+      <li data-in>
+        <h3 class="h3" data-sw="Pesa">Money</h3>
+        <p><span>Hustler Fund</span><span>YEDF</span><span>Uwezo Fund</span><span>Women Enterprise Fund</span><span>AGPO tenders</span><span>KIEP 250+</span><span>WIDU Africa</span><span>Ward SME Grant</span><span>Inua Jamii</span><span>HSNP</span><span>NG-CDF Bursary</span><span>County Youth &amp; Women Funds</span><span>Equity Fanikisha Loan</span><span>Tony Elumelu Foundation</span> <em style="font-style:normal;color:var(--ink-soft)" data-sw="na 5 zaidi">and 5 more</em></p>
+      </li>
+      <li data-in>
+        <h3 class="h3" data-sw="Afya">Health</h3>
+        <p><span>SHA health cover</span><span>National Fund for the Disabled (NFDK)</span></p>
+      </li>
+      <li data-in>
+        <h3 class="h3" data-sw="Kazi na mafunzo">Work and training</h3>
+        <p><span>Google Hustle Academy</span><span>NYS recruitment</span><span>KYEP</span><span>Ajira Digital</span><span>KCB 2Jiajiri</span><span>Mastercard Foundation Scholars</span></p>
+      </li>
+      <li data-in>
+        <h3 class="h3" data-sw="Msaada wa kisheria">Legal help</h3>
+        <p><span>LSK Legal Aid</span><span>Judiciary Legal Aid Service</span></p>
+      </li>
+      <li data-in>
+        <h3 class="h3" data-sw="Makazi">Housing</h3>
+        <p><span>Boma Yangu</span></p>
+      </li>
+    </ul>
+    <p class="covered__next" data-in data-sw="Inayofuata: leseni, kodi (KRA), vibali vya kaunti na bidhaa za SACCO yako.">Coming next: licences, tax (KRA), county permits and your SACCO's own products.</p>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="faq" aria-labelledby="faq-title">
+  <div class="wrap faq__grid">
+    <h2 id="faq-title" class="display h2" data-in data-sw="Maswali ya kawaida">Questions people ask</h2>
+    <div data-in>
+      <details>
+        <summary><span data-sw="Je, nahitaji kupakua programu?">Do I need to download an app?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+        <p data-sw="Hapana. Ukiwa na WhatsApp, una kila kitu unachohitaji.">No. If you have WhatsApp, you have everything you need.</p>
+      </details>
+      <details>
+        <summary><span data-sw="Je, kujua ninachostahili kunagharimu?">Does it cost anything to find out what I qualify for?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+        <p data-sw="Hapana. Kujua kinachokufaa ni bure.">No. Finding out what fits you is free.</p>
+      </details>
+      <details>
+        <summary><span data-sw="Naweza kuandika Kiswahili?">Can I write in Kiswahili?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+        <p data-sw="Ndiyo. Faida inazungumza Kiswahili na Kiingereza.">Yes. Faida speaks English and Kiswahili.</p>
+      </details>
+      <details>
+        <summary><span data-sw="Je, Faida itafanya mambo bila kuniuliza?">Will Faida do things without asking me?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+        <p data-sw="Hapana. Inakuuliza kabla ya kutuma chochote. Unaweza kusema SITISHA wakati wowote.">No. It asks you before anything is sent. You can say STOP at any time.</p>
+      </details>
+      <details>
+        <summary><span data-sw="Je, huduma ikishindwa kufanyika mtandaoni?">What if a service can't be done online?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+        <p data-sw="Faida inakuambia hasa cha kubeba na mahali pa kwenda, na inakuonyesha ofisi iliyo karibu nawe.">Faida tells you exactly what to bring and where to go, and shows you the nearest office.</p>
+      </details>
+      <details>
+        <summary><span data-sw="Je, taarifa zangu ziko salama?">Is my information safe?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+        <p data-sw="Taarifa zako ni siri na zinatumika kwa maombi yako tu. Unaweza kuomba tuzifute.">Your details are kept private and used only for your own applications. You can ask us to delete them.</p>
+      </details>
+      <details>
+        <summary><span data-sw="Ninaendesha SACCO, kaunti au NGO. Tunaanzaje?">I run a SACCO, county or NGO. How do we start?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+        <p data-sw="Zungumza nasi. Tutaorodhesha programu yako na kukuonyesha watakaofikiwa.">Talk to us. We will list your programme and show you who it would reach.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CLOSE: the collapse ================= -->
+<section class="act" id="start" data-act="close" style="--span:1.8" aria-label="Start">
+  <div class="stage close-stage">
+    <div class="close__halves" aria-hidden="true">
+      <div class="close__half close__half--people"><p class="display" data-sw="Uliza tu.">Just ask.</p></div>
+      <div class="close__half close__half--org on-dark"><p class="display" data-sw="Patikana.">Be found.</p></div>
+    </div>
+    <div class="close__knot" aria-hidden="true"><svg><use href="#mark"/></svg></div>
+    <div class="close__final" id="final">
+      <svg class="close__art" aria-hidden="true" focusable="false" viewBox="0 0 48 34"><path d="M8 27C8 3 40 3 40 27" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="27" r="3.2" fill="#fff"/><circle cx="40" cy="27" r="3.2" fill="#5fe29a"/></svg>
+      <h2 class="display" data-sw="Uliza tu.">Just ask.</h2>
+      <p class="big" data-sw="Hakuna programu ya kupakua. Hakuna foleni. Anza na ujumbe mmoja.">No app. No queue. Start with one message.</p>
+      <a class="btn" data-wa href="https://wa.me/"><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg><span data-sw="Wasiliana kwenye WhatsApp">Chat on WhatsApp</span></a>
+      <div class="close__org">
+        <p data-sw="Unaendesha programu ya SACCO, kaunti au NGO?">Run a SACCO, county or NGO programme?</p>
+        <a class="btn btn--ghost" data-org href="mailto:"><span data-sw="Zungumza nasi">Talk to us</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Faida</strong> · <span data-sw="Imetengenezwa Kenya.">Built in Kenya.</span></p>
+    <p data-sw="Watu na mazungumzo ya mfano kwenye ukurasa huu ni ya kuonyesha tu. Masharti ya programu hutoka kwa watoa programu; thibitisha nao kila mara.">The people and conversations on this page are examples. Programme rules come from each provider, so always confirm with them.</p>
+  </div>
+</footer>
+
+<div class="sticky-cta" id="sticky"><a class="btn" data-wa href="https://wa.me/"><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg><span data-sw="Wasiliana kwenye WhatsApp">Chat on WhatsApp</span></a></div>
+
+<script>requestAnimationFrame(function(){document.documentElement.classList.add('ready')})</script>
+<script src="app.js" defer></script>
+</body>
+</html>

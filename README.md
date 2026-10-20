@@ -14,10 +14,12 @@ See [`docs/PRODUCT.md`](docs/PRODUCT.md) for the full product doc.
 |--------|-------------|
 | [`faida-export/`](faida-export/) | The agent's WhatsApp channel and backend (Node.js + Baileys) |
 | [`faida-dashboard/`](faida-dashboard/) | Admin dashboard (Next.js) |
+| [`faida-landing/`](faida-landing/) | Landing page for people and organisations (static HTML) |
 
 ## Docs
 
 - [`docs/PRODUCT.md`](docs/PRODUCT.md) — product vision, delegation model, roadmap
+- [`faida-landing/BRIEF.md`](faida-landing/BRIEF.md) — landing page design brief
 - [`docs/archive/`](docs/archive/) — early build conversations
 
 ## Quick start (agent backend)
