@@ -22,6 +22,7 @@ See [`docs/PRODUCT.md`](docs/PRODUCT.md) for the full product doc.
 ## Docs
 
 - [`docs/PRODUCT.md`](docs/PRODUCT.md) — product vision, delegation model, roadmap
+- [`docs/OPPORTUNITY-MATRIX.md`](docs/OPPORTUNITY-MATRIX.md) — everything Faida can match and take up, and who offers it
 - [`faida-landing/BRIEF.md`](faida-landing/BRIEF.md) — landing page design brief
 - [`docs/archive/`](docs/archive/) — early build conversations
 
