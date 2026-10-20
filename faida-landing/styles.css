@@ -130,15 +130,32 @@ svg { display: block; }
 .title { min-height: 100vh; min-height: 100svh; display: grid; align-content: end; padding-top: 7rem; padding-bottom: clamp(2.5rem, 8vh, 5rem); position: relative; overflow: clip; }
 .title__brand { position: absolute; top: 1.25rem; left: calc(var(--m) + var(--gutter)); display: inline-flex; align-items: center; gap: var(--sp-2); font-family: var(--font-display); font-weight: 800; letter-spacing: -0.04em; font-size: 1.75rem; text-decoration: none; }
 .title__brand svg { width: 2.25rem; height: 2.25rem; --tick: var(--sun); color: var(--ink); }
-.title__in { max-width: 72rem; display: grid; gap: var(--sp-6); position: relative; }
-.title h1 { max-width: 14ch; }
+@media (max-width: 1199px) { .title__brand { top: 4.75rem; } .title { padding-top: 9rem; } }
+.title__in { display: grid; gap: var(--sp-6); position: relative; }
+.title h1 { max-width: 24ch; font-size: clamp(2.35rem, 0.5rem + 4.3vw, 4.5rem); }
 .title h1 span { display: block; }
-.title__sub { display: grid; gap: var(--sp-5); max-width: 40rem; }
+.title__sub { display: grid; gap: var(--sp-5); max-width: 46rem; }
 .title__sub p { font-size: clamp(1.15rem, 1.05rem + 0.5vw, 1.45rem); line-height: 1.5; }
 .title__cta { display: flex; flex-wrap: wrap; gap: var(--sp-4) var(--sp-6); align-items: center; }
 .title__once { order: 3; flex-basis: 100%; margin-top: calc(-1 * var(--sp-2)); font-size: 1rem; font-weight: 600; }
-.title__index { font-size: 0.9375rem; color: var(--soft); max-width: 48rem; padding-top: var(--sp-4); border-top: 2px solid var(--line); }
-.stamp { position: absolute; right: 1%; bottom: calc(100% + 1.25rem); width: clamp(7.5rem, 15vw, 14rem); color: var(--cobalt); transform: rotate(-9deg); opacity: 0; }
+/* the offer board: everything out there, drifting past; the ones that fit are marked */
+.board { margin: calc(-1 * var(--sp-3)) calc(-1 * var(--gutter)); min-width: 0; }
+.board__rows { display: grid; gap: 0.35rem; padding: 0.9rem 0 0.5rem; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
+.board__row { display: flex; width: max-content; padding: 0.5rem 0; animation: drift 80s linear infinite; }
+.board__row--b { animation-duration: 95s; animation-direction: reverse; margin-left: -6rem; }
+.board.is-paused .board__row { animation-play-state: paused; }
+@keyframes drift { to { transform: translate3d(-50%, 0, 0); } }
+.tag { flex: none; position: relative; display: grid; gap: 2px; max-width: 16rem; margin-right: 0.85rem; padding: 0.6rem 0.9rem 0.65rem; background: rgba(255, 255, 255, 0.5); border: 2px solid rgba(14, 16, 32, 0.12); border-radius: 6px; transform: rotate(var(--r, 0deg)); }
+.tag:nth-child(2n) { --r: 0.9deg; }
+.tag:nth-child(3n) { --r: -1.3deg; }
+.tag small { font-size: 0.75rem; color: var(--soft); font-weight: 600; }
+.tag b { font-weight: 700; font-size: 0.9375rem; line-height: 1.25; }
+.tag--yours { background: var(--cobalt); border-color: var(--cobalt); color: #fff; box-shadow: 0 10px 22px -12px rgba(22, 55, 232, 0.7); }
+.tag--yours small { color: #d6dcff; }
+.tag--yours i { position: absolute; top: -0.7rem; right: -0.45rem; padding: 0.2rem 0.45rem; border-radius: 4px; background: var(--ink); color: var(--sun); font-style: normal; font-family: var(--font-display); font-weight: 800; font-size: 0.65rem; letter-spacing: 0.06em; transform: rotate(7deg); }
+.board__cap { margin-top: var(--sp-2); padding: 0 var(--gutter); font-size: 0.8125rem; color: var(--soft); }
+.rm .board__row, html:not(.js) .board__row { animation: none; }
+.stamp { position: absolute; right: 2%; bottom: 0; width: clamp(7.5rem, 11vw, 10.5rem); color: var(--cobalt); transform: rotate(-9deg); opacity: 0; }
 .stamp text { font-family: var(--font-display); font-weight: 800; }
 .js .stamp.is-in { animation: stamp-in 520ms var(--ease) 100ms both; }
 .rm .stamp, html:not(.js) .stamp { opacity: 1; }
@@ -329,8 +346,9 @@ svg { display: block; }
   .sticky-col { position: static; }
   .h-hero { font-size: clamp(2.35rem, 11.5vw, 3.4rem); }
   .peak .h-hero { font-size: clamp(1.9rem, 8.4vw, 2.9rem); }
+  .title h1 { font-size: clamp(1.9rem, 8.6vw, 3.2rem); }
   .title { padding-top: 10rem; }
-  .title__brand { top: 1rem; font-size: 1.5rem; }
+  .title__brand { top: 4.75rem; font-size: 1.5rem; }
   .title__brand svg { width: 2rem; height: 2rem; }
   .stamp { width: 5.5rem; bottom: calc(100% + 0.75rem); right: 0; }
   .phone__screen { height: min(31rem, 66svh); }

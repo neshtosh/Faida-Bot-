@@ -173,6 +173,14 @@
   function observers() {
     var plain = reduce || !('IntersectionObserver' in window);
 
+    // the board only drifts while it is on screen
+    var board = $('#board');
+    if (board && !plain) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (en) { board.classList.toggle('is-paused', !en.isIntersecting); });
+      }).observe(board);
+    }
+
     // reveal on entry
     var revealEls = $$('[data-in], #ledger');
     if (plain) revealEls.forEach(function (e) { e.classList.add('in'); });
@@ -205,6 +213,10 @@
     langEl = $('.lang'); stickyEl = $('#sticky'); heroEl = $('#top'); startEl = $('#start');
     peak = $('#c6'); bigLines = $$('#bigLines li'); bigTotal = $('#bigTotal'); bigStamp = $('#bigStamp');
 
+    // the offer board loops seamlessly: each row is doubled before the language pass
+    $$('.board__row').forEach(function (r) {
+      Array.prototype.slice.call(r.children).forEach(function (li) { r.appendChild(li.cloneNode(true)); });
+    });
     waves();
     applyLang(lang, true);
     observers();

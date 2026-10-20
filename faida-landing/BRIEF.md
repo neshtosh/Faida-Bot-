@@ -30,8 +30,14 @@ person only answers. The page never shows a user having to know what to ask for.
 The one thing a visitor starts is the first hello (the CTA), and the hero says so:
 "Say hello once. Then Faida does the looking."
 
-**Benefits and opportunities, not just funds and permits.** The hero leads with
-"Benefits and opportunities you qualify for but never heard of." The day mixes
+**The hero is the exchange in one picture.** Headline: "Everything on offer.
+Faida brings you yours." Under it, a board of example offers from many sources
+(county, NG-CDF, ministry, SACCO, UFAA, employer, co-op) drifts past in two rows;
+the ones that fit Wanjiru are cobalt and tagged YOURS. It loops on transform only,
+pauses off screen, and stands still with reduced motion or no JavaScript. The
+board's offers are labelled as examples.
+
+**Benefits and opportunities, not just funds and permits.** The day mixes
 an opportunity (youth fund), a benefit nobody asked for (Inua Jamii for Cucu) and
 obligations.
 
@@ -76,7 +82,7 @@ outside the chat chapters.
 
 | Chapter | Feeling | Caused by |
 |---|---|---|
-| Title page | Recognition, relief | "No need to ask. Faida finds you." and a stamp landing |
+| Title page | Recognition, relief | "Everything on offer. Faida brings you yours." over a drifting board of offers from every source, with the ones that fit marked YOURS, then a stamp landing |
 | The gap | Unease, honesty | Two sentences on ink, then the turn in yellow |
 | 6:40 am | Delight | Faida messages first: you qualify, shall I apply? |
 | 8:05 am | Warmth | Faida flags a permit before it lapses; Wanjiru answers with a voice note |
