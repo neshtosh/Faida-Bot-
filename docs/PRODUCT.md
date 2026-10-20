@@ -16,9 +16,10 @@
 
 ## 1. One-liner
 
-**Faida is a personal agent that makes the first move. It spots what you're
-entitled to and what you owe, brings it to you before you think to ask, and handles
-the paperwork for both, with your consent.**
+**Faida is a personal agent that makes the first move. It spots the benefits and
+opportunities you qualify for but never heard of, and the obligations you'd
+otherwise miss, brings them to you before you think to ask, and handles the
+paperwork for both, with your consent.**
 
 It is not a directory, a guide or a chatbot that waits for questions. It watches,
 it opens the conversation, and it does the task. WhatsApp is where it finds you.
@@ -56,9 +57,16 @@ For most Kenyans, dealing with institutions is slow, confusing and expensive:
   website. KIEP is on a separate portal. Ward grants need a physical office visit.
   NGO funding depends on knowing the right people.
 
-- **Entitlements go unclaimed.** Government funds (Hustler Fund, YEDF, Uwezo, WEF,
-  AGPO), county programmes, NGO grants and SACCO products exist, but people don't
-  know about them, can't tell whether they qualify, or give up partway through applying.
+- **Benefits and opportunities go unclaimed.** This is wider than funds and
+  permits. Social protection (Inua Jamii cash transfers for older people, orphans
+  and people with severe disabilities; NCPWD registration and the disability tax
+  exemption), health cover (SHA), education (HELB, NG-CDF and county bursaries),
+  farm inputs (subsidised fertiliser through farmer registration), legal aid, money
+  already in people's names (unclaimed assets held by UFAA, NSSF benefits), plus
+  government funds (Hustler Fund, YEDF, Uwezo, WEF, AGPO), county programmes, NGO
+  grants and SACCO products. People don't know they exist, can't tell whether they
+  qualify, or give up partway through applying. The ones who most need them are
+  the least likely to hear of them.
 - **Obligations get missed.** KRA returns, SHA contributions, business permits, licence
   renewals and certificates all have deadlines and penalties. Missing them blocks
   access to other services (for example, tax compliance is needed for AGPO tenders).

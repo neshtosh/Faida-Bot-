@@ -30,6 +30,12 @@ person only answers. The page never shows a user having to know what to ask for.
 The one thing a visitor starts is the first hello (the CTA), and the hero says so:
 "Say hello once. Then Faida does the looking."
 
+**Benefits and opportunities, not just funds and permits.** The hero leads with
+"Benefits and opportunities you qualify for but never heard of." The day mixes
+an opportunity (youth fund), a benefit nobody asked for (Inua Jamii for Cucu) and
+obligations, and "What Faida handles" opens with Support, Education, Farming and
+Money that's yours before licences and tax.
+
 ## 2. Audience and consequences
 
 | Reality | Consequence |
@@ -66,7 +72,7 @@ outside the chat chapters.
 | The gap | Unease, honesty | Two sentences on ink, then the turn in yellow |
 | 6:40 am | Delight | Faida messages first: you qualify, shall I apply? |
 | 8:05 am | Warmth | Faida flags a permit before it lapses; Wanjiru answers with a voice note |
-| 12:30 pm | Care | Mama, on a basic phone, gets an SMS |
+| 12:30 pm | Care, surprise | Cucu has turned 70 and qualifies for Inua Jamii; she gets an SMS on a basic phone |
 | 3:00 pm | Calm | A ledger of obligations, all filed |
 | 5:40 pm | Relief | A timeline where the office's request was already handled |
 | 9:00 pm (peak) | Satisfaction, awe | The whole day tallied on a receipt, then stamped |
@@ -106,13 +112,18 @@ sun and cobalt, four grounds, Unbounded.
 ## 7. Honesty rules applied
 
 - No invented statistics. The only numbers are the example day's own.
-- Wanjiru, Mama and every conversation are labelled as examples on the page.
+- Wanjiru, Cucu and every conversation are labelled as examples on the page.
 - No testimonials, logos or "trusted by".
 - **The page describes the finished product.** Before launch these must be true
   or the copy must change: Faida messages users first; accepts voice notes;
   works over SMS and USSD; files and pays on a user's behalf; manages family
   accounts; supports standing mandates with limits; never sees PINs; deletes data
   on request; enrols users into partner systems; "All 47 counties".
+- Every scheme named in "What Faida handles" and the 12:30 chapter (Inua Jamii's
+  70+ rule, the orphan and disability transfers, NCPWD and the disability tax
+  exemption, HELB, NG-CDF bursaries, farmer registration and subsidised fertiliser,
+  UFAA unclaimed assets, NSSF benefits) must be in the catalogue, with current
+  eligibility rules, before launch.
 - "Finding what fits you is free" and "may carry a small fee" are pricing claims
   taken from the proposal and not yet decided.
 

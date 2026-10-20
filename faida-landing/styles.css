@@ -133,11 +133,11 @@ svg { display: block; }
 .title__in { max-width: 72rem; display: grid; gap: var(--sp-6); position: relative; }
 .title h1 { max-width: 14ch; }
 .title h1 span { display: block; }
-.title__sub { display: grid; gap: var(--sp-5); max-width: 36rem; }
+.title__sub { display: grid; gap: var(--sp-5); max-width: 40rem; }
 .title__sub p { font-size: clamp(1.15rem, 1.05rem + 0.5vw, 1.45rem); line-height: 1.5; }
 .title__cta { display: flex; flex-wrap: wrap; gap: var(--sp-4) var(--sp-6); align-items: center; }
 .title__once { order: 3; flex-basis: 100%; margin-top: calc(-1 * var(--sp-2)); font-size: 1rem; font-weight: 600; }
-.title__index { font-size: 0.9375rem; color: var(--soft); max-width: 60ch; padding-top: var(--sp-4); border-top: 2px solid var(--line); }
+.title__index { font-size: 0.9375rem; color: var(--soft); max-width: 48rem; padding-top: var(--sp-4); border-top: 2px solid var(--line); }
 .stamp { position: absolute; right: 1%; bottom: calc(100% + 1.25rem); width: clamp(7.5rem, 15vw, 14rem); color: var(--cobalt); transform: rotate(-9deg); opacity: 0; }
 .stamp text { font-family: var(--font-display); font-weight: 800; }
 .js .stamp.is-in { animation: stamp-in 520ms var(--ease) 100ms both; }
@@ -271,11 +271,12 @@ svg { display: block; }
 /* ---------- index ---------- */
 .index li { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: var(--sp-2) clamp(1.5rem, 4vw, 4rem); padding: var(--sp-4) 0; border-top: 2px solid var(--line); align-items: baseline; }
 .index--ch { margin-top: var(--sp-3); }
+.covered__lede { margin: var(--sp-4) 0 var(--sp-6); max-width: 46rem; }
 .index--ch li { grid-template-columns: minmax(8.5rem, 4fr) minmax(0, 8fr); }
 .index li:last-child { border-bottom: 2px solid var(--line); }
 .index h3 { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.03em; font-size: clamp(1.15rem, 1rem + 0.8vw, 1.6rem); line-height: 1.15; }
 .index p { font-size: clamp(1rem, 0.95rem + 0.25vw, 1.15rem); line-height: 1.5; max-width: 62ch; }
-.index p span { display: inline-block; white-space: nowrap; }
+.index p span { display: inline-block; max-width: 100%; }
 .index p span::after { content: ","; margin-right: 0.3em; }
 .index p span:last-child::after { content: ""; margin: 0; }
 
