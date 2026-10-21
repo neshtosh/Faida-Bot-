@@ -25,7 +25,14 @@ Then:
 
 ## Deploy
 
-Any static host. On Vercel or Netlify set the root directory to `faida-landing`.
+**Vercel:** import the repo and leave the project's Root Directory as the repo
+root. The root `vercel.json` skips install and build and publishes
+`faida-landing/` as the site, so the page is served at `/`. (If you set Root
+Directory to `faida-landing` instead, Vercel ignores the root `vercel.json`;
+that also works, just without the font caching header.)
+
+**Elsewhere:** any static host, with `faida-landing` as the site root.
+
 Total weight is about 115 KB (25 KB code gzipped, 90 KB fonts). Fonts are
 self-hosted, so no third-party requests are made.
 
