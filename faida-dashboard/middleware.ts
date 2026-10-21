@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { SESSION_COOKIE, verifySessionToken } from "@/lib/auth";
 
-// Routes reachable without an admin session. /api/cron/scrape checks CRON_SECRET itself.
-const PUBLIC_PATHS = ["/login", "/api/auth/login", "/api/auth/logout", "/api/cron/scrape"];
+// Routes reachable without an admin session. "/" is the public landing page (see
+// rewrites in next.config.js) and its assets live under /site. /api/cron/scrape
+// checks CRON_SECRET itself.
+const PUBLIC_PATHS = ["/", "/login", "/api/auth/login", "/api/auth/logout", "/api/cron/scrape"];
 
 export async function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
@@ -21,5 +23,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|site/).*)"],
 };

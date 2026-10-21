@@ -6,10 +6,10 @@ import type { FC } from "react";
 
 const NAV_ITEMS = [
   {
-    href: "/",
+    href: "/admin",
     label: "Overview",
     icon: "📊",
-    match: (path: string) => path === "/",
+    match: (path: string) => path === "/admin",
   },
   {
     href: "/benefits",

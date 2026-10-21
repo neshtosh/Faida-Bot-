@@ -446,7 +446,7 @@ Themes: financial inclusion, government service digitisation, AI for social impa
 | Week | Deliverable | Status |
 |---|---|---|
 | 1 | 20–30 verified benefits with eligibility tags | ✅ 30 in `benefits.json`, synced to Supabase, editable in the dashboard |
-| 1 | Landing page with "Try on WhatsApp" + email capture | ✅ [`faida-landing/`](../faida-landing/) (sells the finished platform); ❌ no email capture yet |
+| 1 | Landing page with "Try on WhatsApp" + email capture | ✅ [`faida-dashboard/public/site/`](../faida-dashboard/public/site/) (sells the finished platform); ❌ no email capture yet |
 | 2 | WhatsApp bot with 5-question eligibility flow + follow-up steps | ✅ 6 questions, EN/SW, on Baileys. The proposal's income question isn't asked |
 | 3 | Soft launch: 10 WhatsApp groups, LinkedIn, 3 SACCO pilot conversations | ❓ Unknown |
 | 4+ | Health and employment categories, web dashboard, funding applications | ✅ All 5 categories; dashboard built. Funding: unknown |
