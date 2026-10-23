@@ -252,7 +252,8 @@ In Railway: **Project → your service → Variables → Raw Editor**, add:
 | `PUBLIC_URL` | No | `https://your-service.up.railway.app` |
 | `SUPABASE_URL` | No* | `https://xxx.supabase.co` |
 | `SUPABASE_SERVICE_ROLE_KEY` | No* | your service_role key (needed to write sessions/applications) |
-| `REMINDER_ENCRYPTION_KEY` | No | random string — reminders survive restarts (needs migration 08) |
+| `FAIDA_ENCRYPTION_KEY` | Recommended | random string — encrypts form ID/bank numbers and reminder contacts (needs migration 08) |
+| `PRIVACY_CONTACT` | Recommended | email or phone shown in the privacy notice |
 | `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` | No | enables the AI assistant (`AI_PROVIDER` picks one) |
 | `ANTHROPIC_MODEL` | No | defaults to `claude-opus-5-5` |
 | `MTAJI_SUPABASE_URL` / `MTAJI_SUPABASE_ANON_KEY` | No | M-Taji partner opportunities feed |

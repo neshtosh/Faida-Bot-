@@ -662,7 +662,7 @@ DROP POLICY IF EXISTS apps_authenticated_read ON applications;
 -- Deadline reminders need a way to message users after the bot restarts,
 -- but users are otherwise stored only as a salted hash. For users who send
 -- REMINDERS ON, the bot stores their WhatsApp ID encrypted with
--- AES-256-GCM (key: REMINDER_ENCRYPTION_KEY, never stored in the database).
+-- AES-256-GCM (key: FAIDA_ENCRYPTION_KEY, never stored in the database).
 -- REMINDERS OFF sets it back to NULL.
 -- =====================================================================
 

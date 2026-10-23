@@ -9,7 +9,15 @@ const { matchBenefits, scoreQueryKeywords } = require("../lib/eligibility");
 const { isProfileComplete } = require("../lib/profile");
 const { getBenefits } = require("../lib/benefits-store");
 const { handleMessage, processMessage } = require("./handler");
-const { createSession, getOrCreate, clearSession } = require("../lib/session");
+const {
+  createSession,
+  getOrCreate,
+  getSession,
+  clearSession,
+  sessionToRow,
+  rowToSession,
+} = require("../lib/session");
+const { CONSENT_VERSION, maskPii } = require("../lib/privacy");
 const { isAiAvailable } = require("../lib/ai");
 const { formatOpportunitiesList } = require("../lib/opportunities");
 const { isVerifiedUrl } = require("../lib/sources");
@@ -212,7 +220,9 @@ async function runFlowTests() {
     createSession(userId);
     await handleMessage(userId, "hi", await getOrCreate(userId));
     let sess2 = await getOrCreate(userId);
-    await handleMessage(userId, "1", sess2);
+    await handleMessage(userId, "1", sess2); // English
+    sess2 = await getOrCreate(userId);
+    await handleMessage(userId, "1", sess2); // agree to privacy notice
     sess2 = await getOrCreate(userId);
     const reply = replyText(await handleMessage(userId, "twenty five", sess2));
     expect(reply).toContain("valid age");
@@ -248,7 +258,10 @@ async function runFlowTests() {
     await handleMessage(flowId, "hi", sess);
 
     sess = await getOrCreate(flowId);
-    await handleMessage(flowId, "1", sess);
+    await handleMessage(flowId, "1", sess); // English
+
+    sess = await getOrCreate(flowId);
+    await handleMessage(flowId, "1", sess); // agree to privacy notice
 
     sess = await getOrCreate(flowId);
     await handleMessage(flowId, "25", sess);
@@ -404,6 +417,133 @@ async function runFlowTests() {
     const support = getSubmissionSupport("https://www.m-taji.co.ke/opportunities/abc-123");
     expect(support.supported).toBe(true);
     expect(support.partner).toBe("m-taji");
+  });
+
+  // ── Privacy / data protection ──────────────────────────────────────
+
+  await test("Privacy notice is shown before any personal questions", async () => {
+    const id = "test-consent-001";
+    createSession(id);
+    await handleMessage(id, "hi", await getOrCreate(id));
+    const reply = replyText(await handleMessage(id, "1", await getOrCreate(id)));
+    expect(reply).toContain("Your privacy");
+    expect((await getOrCreate(id)).step).toBe("ask_consent");
+  });
+
+  await test("Agreeing records consent and starts the questions", async () => {
+    const id = "test-consent-002";
+    createSession(id);
+    await handleMessage(id, "hi", await getOrCreate(id));
+    await handleMessage(id, "1", await getOrCreate(id));
+    const reply = replyText(await handleMessage(id, "1", await getOrCreate(id)));
+    expect(reply).toContain("How old are you");
+    const sess = await getOrCreate(id);
+    expect(sess.consent.version).toBe(CONSENT_VERSION);
+  });
+
+  await test("Declining consent erases the session", async () => {
+    const id = "test-consent-003";
+    createSession(id);
+    await handleMessage(id, "hi", await getOrCreate(id));
+    await handleMessage(id, "2", await getOrCreate(id)); // Kiswahili
+    const reply = replyText(await handleMessage(id, "2", await getOrCreate(id)));
+    expect(reply).toContain("HI");
+    expect(getSession(id)).toBe(null);
+  });
+
+  await test("Existing user without consent is asked once, then resumes", async () => {
+    const id = "test-consent-004";
+    const sess = createSession(id);
+    Object.assign(sess, {
+      step: "menu",
+      language: "en",
+      profileComplete: true,
+      profile: { age: 30, gender: "female", county: "Nairobi", categoriesWanted: ["financial"] },
+    });
+    const first = replyText(await handleMessage(id, "RESULTS", await getOrCreate(id)));
+    expect(first).toContain("updated how Faida handles");
+    const second = replyText(await handleMessage(id, "1", await getOrCreate(id)));
+    expect(second).toContain("Main Menu");
+    expect((await getOrCreate(id)).step).toBe("menu");
+  });
+
+  await test("DELETE MY DATA asks for confirmation, then erases", async () => {
+    const id = "test-delete-001";
+    const sess = createSession(id);
+    Object.assign(sess, { step: "menu", language: "en", consent: { version: CONSENT_VERSION } });
+    const ask = replyText(await handleMessage(id, "DELETE MY DATA", await getOrCreate(id)));
+    expect(ask).toContain("Delete all your data");
+    const done = replyText(await handleMessage(id, "YES", await getOrCreate(id)));
+    expect(done).toContain("has been deleted");
+    expect(getSession(id)).toBe(null);
+  });
+
+  await test("DELETE MY DATA is cancelled by any other reply", async () => {
+    const id = "test-delete-002";
+    const sess = createSession(id);
+    Object.assign(sess, { step: "menu", language: "en", consent: { version: CONSENT_VERSION } });
+    await handleMessage(id, "DELETE MY DATA", await getOrCreate(id));
+    const reply = replyText(await handleMessage(id, "no", await getOrCreate(id)));
+    expect(reply).toContain("nothing was deleted");
+    expect((await getOrCreate(id)).step).toBe("menu");
+  });
+
+  await test("PRIVACY command works without consent", async () => {
+    const id = "test-privacy-001";
+    createSession(id);
+    const reply = replyText(await handleMessage(id, "PRIVACY", await getOrCreate(id)));
+    expect(reply).toContain("How Faida handles your information");
+  });
+
+  await test("Form answers with ID numbers are encrypted at rest", async () => {
+    const prevKey = process.env.FAIDA_ENCRYPTION_KEY;
+    process.env.FAIDA_ENCRYPTION_KEY = "test-key";
+    try {
+      const sess = {
+        step: "application", language: "en", profile: {}, lastMatches: [],
+        application: {
+          benefitId: "yedf-loan", currentFieldIndex: 2, templateId: "loans-personal",
+          answers: { fullName: "Jane Wanjiru", idNumber: "12345678", county: "Nairobi" },
+          startedAt: 1,
+          completedApps: [{ benefitId: "x", refCode: "R1", answers: { idNumber: "87654321" } }],
+        },
+      };
+      const row = sessionToRow("u@s", sess);
+      const stored = JSON.stringify(row);
+      expect(stored.includes("12345678")).toBe(false);
+      expect(stored.includes("87654321")).toBe(false);
+      expect(stored.includes("Jane Wanjiru")).toBe(false);
+      expect(row.profile.__app.answers.county).toBe("Nairobi");
+      const restored = rowToSession({ ...row, created_at: new Date(), last_activity: new Date() });
+      expect(restored.application.answers.idNumber).toBe("12345678");
+    } finally {
+      if (prevKey === undefined) delete process.env.FAIDA_ENCRYPTION_KEY;
+      else process.env.FAIDA_ENCRYPTION_KEY = prevKey;
+    }
+  });
+
+  await test("Without a key, ID numbers are not stored at all", async () => {
+    const saved = [process.env.FAIDA_ENCRYPTION_KEY, process.env.REMINDER_ENCRYPTION_KEY];
+    delete process.env.FAIDA_ENCRYPTION_KEY;
+    delete process.env.REMINDER_ENCRYPTION_KEY;
+    try {
+      const row = sessionToRow("u@s", {
+        step: "application", profile: {}, lastMatches: [],
+        application: { benefitId: "yedf-loan", answers: { idNumber: "12345678" }, completedApps: [] },
+      });
+      expect(JSON.stringify(row).includes("12345678")).toBe(false);
+    } finally {
+      if (saved[0] !== undefined) process.env.FAIDA_ENCRYPTION_KEY = saved[0];
+      if (saved[1] !== undefined) process.env.REMINDER_ENCRYPTION_KEY = saved[1];
+    }
+  });
+
+  await test("Log masking hides ID and phone numbers", () => {
+    const masked = maskPii("My ID is 12345678, call 0712 345 678 or jane@example.com");
+    expect(masked.includes("12345678")).toBe(false);
+    expect(masked.includes("345 678")).toBe(false);
+    expect(masked.includes("jane@example.com")).toBe(false);
+    expect(maskPii("I am 25 years old")).toBe("I am 25 years old");
   });
 }
 

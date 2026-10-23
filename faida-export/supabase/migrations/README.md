@@ -108,8 +108,9 @@ FAIDA_HASH_SALT=change-this-to-a-random-string
 # Required in production — protects the /qr WhatsApp pairing page
 QR_ACCESS_TOKEN=<random string, 16+ chars>
 
-# Optional — lets deadline reminders survive restarts (needs migration 08)
-REMINDER_ENCRYPTION_KEY=<random string>
+# Recommended — encrypts personal data at rest (needs migration 08)
+FAIDA_ENCRYPTION_KEY=<random string>
+PRIVACY_CONTACT=<email or phone for data requests>
 ```
 
 ### 2) Dashboard — `faida-dashboard/.env.local`

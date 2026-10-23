@@ -43,6 +43,7 @@ function buildMatchProfile(session) {
 const QUESTIONNAIRE_STEPS = new Set([
   "welcome",
   "ask_language",
+  "ask_consent",
   "ask_age",
   "ask_gender",
   "ask_county",

@@ -5,7 +5,63 @@
  * Use getMessages(lang) to retrieve the correct language set.
  */
 
+/** "Privacy questions: <contact>" line, when PRIVACY_CONTACT is configured. */
+function privacyContactLine(label) {
+  const contact = process.env.PRIVACY_CONTACT;
+  return contact ? `\n${label}: ${contact}\n` : "";
+}
+
+const PRIVACY_BODY_EN = () =>
+  `To match you to benefits, Faida asks for your age, gender, county, work status and whether you have a disability. ` +
+  `If you apply through Faida, we also ask for details like your ID and phone number.\n\n` +
+  `• We use this only to find benefits and prepare applications for you. We never sell it.\n` +
+  `• You're stored under a coded ID, not your phone number. Sensitive form details are encrypted.\n` +
+  `• If you use *CHAT*, your messages and profile are sent to our AI provider to write answers.\n` +
+  `• Type *PRIVACY* to read this again, or *DELETE MY DATA* to erase everything — anytime.\n` +
+  privacyContactLine("Privacy questions");
+
+const PRIVACY_BODY_SW = () =>
+  `Ili kukulinganisha na fursa, Faida inauliza umri, jinsia, kaunti, hali ya kazi na kama una ulemavu. ` +
+  `Ukiomba kupitia Faida, tunauliza pia maelezo kama namba ya kitambulisho na ya simu.\n\n` +
+  `• Tunatumia taarifa hizi tu kukutafutia fursa na kuandaa maombi yako. Hatuziuzi kamwe.\n` +
+  `• Umehifadhiwa kwa namba ya siri, si namba yako ya simu. Maelezo nyeti ya fomu yamesimbwa.\n` +
+  `• Ukitumia *CHAT*, ujumbe na wasifu wako hutumwa kwa mtoa huduma wetu wa AI ili kuandika majibu.\n` +
+  `• Andika *PRIVACY* kusoma haya tena, au *DELETE MY DATA* kufuta kila kitu — wakati wowote.\n` +
+  privacyContactLine("Maswali kuhusu faragha");
+
 const MESSAGES_EN = {
+  consentNotice: () =>
+    `🔒 *Your privacy — please read*\n\n` +
+    PRIVACY_BODY_EN() +
+    `\nReply *1* — I agree\nReply *2* — No, thanks`,
+
+  consentUpdated: () =>
+    `We've updated how Faida handles your information. Please review it before we continue.\n\n` +
+    MESSAGES_EN.consentNotice(),
+
+  consentRequired: () =>
+    `Please reply *1* to agree or *2* to decline.\n\n` + MESSAGES_EN.consentNotice(),
+
+  consentDeclined: () =>
+    `No problem — we haven't kept your answers.\n\n` +
+    `Faida can't match you to benefits without this, so message *HI* if you change your mind.`,
+
+  privacyNotice: () => `🔒 *How Faida handles your information*\n\n` + PRIVACY_BODY_EN(),
+
+  deleteConfirm: () =>
+    `⚠️ *Delete all your data?*\n\n` +
+    `This erases your profile, matches, saved and completed applications, and reminders from Faida. It can't be undone.\n\n` +
+    `Reply *YES* to delete, or anything else to cancel.`,
+
+  deleteDone: () =>
+    `✅ *Your data has been deleted.*\n\n` +
+    `Faida no longer has your profile or applications. Message *HI* anytime to start again.`,
+
+  deleteFailed: () =>
+    `Sorry, we couldn't delete your data right now. Please try again in a few minutes.`,
+
+  deleteCancelled: () => `Okay — nothing was deleted. Type *MENU* to continue.`,
+
   askLanguage: () =>
     `🌿 *Habari! Welcome to Faida.*\n\n` +
     `Faida is *completely free* and *confidential*. We help Kenyans find government grants, NGO support, and benefits they qualify for — in minutes.\n\n` +
@@ -106,7 +162,7 @@ const MESSAGES_EN = {
     `3. We show you everything you qualify for — with exact steps to apply\n\n` +
     `*Is my information safe?*\n` +
     `Yes. Faida is free and confidential. We don't sell your data.\n\n` +
-    `*Commands:* MENU · RESULTS · CHAT · OPPORTUNITIES · NEAREST · FEEDBACK · REMINDERS ON/OFF · RESTART (new profile)\n\n` +
+    `*Commands:* MENU · RESULTS · CHAT · OPPORTUNITIES · NEAREST · FEEDBACK · REMINDERS ON/OFF · RESTART (new profile) · PRIVACY · DELETE MY DATA\n\n` +
     `Built by Munene · munene.dev`,
 
   aiWelcome: () =>
@@ -349,6 +405,38 @@ const MESSAGES_EN = {
 };
 
 const MESSAGES_SW = {
+  consentNotice: () =>
+    `🔒 *Faragha yako — tafadhali soma*\n\n` +
+    PRIVACY_BODY_SW() +
+    `\nJibu *1* — Nakubali\nJibu *2* — Hapana, asante`,
+
+  consentUpdated: () =>
+    `Tumesasisha jinsi Faida inavyoshughulikia taarifa zako. Tafadhali zisome kabla hatujaendelea.\n\n` +
+    MESSAGES_SW.consentNotice(),
+
+  consentRequired: () =>
+    `Tafadhali jibu *1* kukubali au *2* kukataa.\n\n` + MESSAGES_SW.consentNotice(),
+
+  consentDeclined: () =>
+    `Sawa — hatujahifadhi majibu yako.\n\n` +
+    `Faida haiwezi kukutafutia fursa bila ridhaa hii, kwa hivyo tuma *HI* ukibadilisha nia.`,
+
+  privacyNotice: () => `🔒 *Jinsi Faida inavyoshughulikia taarifa zako*\n\n` + PRIVACY_BODY_SW(),
+
+  deleteConfirm: () =>
+    `⚠️ *Futa taarifa zako zote?*\n\n` +
+    `Hii itafuta wasifu wako, fursa ulizolinganishwa nazo, maombi yaliyohifadhiwa na yaliyokamilika, na kumbusho kutoka Faida. Haiwezi kurudishwa.\n\n` +
+    `Jibu *NDIO* kufuta, au chochote kingine kughairi.`,
+
+  deleteDone: () =>
+    `✅ *Taarifa zako zimefutwa.*\n\n` +
+    `Faida haina tena wasifu wala maombi yako. Tuma *HI* wakati wowote kuanza upya.`,
+
+  deleteFailed: () =>
+    `Samahani, hatukuweza kufuta taarifa zako sasa hivi. Tafadhali jaribu tena baada ya dakika chache.`,
+
+  deleteCancelled: () => `Sawa — hakuna kilichofutwa. Andika *MENU* kuendelea.`,
+
   askLanguage: MESSAGES_EN.askLanguage,
 
   welcome: () =>
@@ -443,7 +531,7 @@ const MESSAGES_SW = {
     `3. Tunakuonyesha kila unachostahili — pamoja na hatua za kuomba\n\n` +
     `*Taarifa zangu ziko salama?*\n` +
     `Ndiyo. Faida ni bure na siri. Hatuuzi data yako.\n\n` +
-    `*Amri:* MENU · START · RESULTS · CHAT · OPPORTUNITIES · NEAREST · FEEDBACK · REMINDERS ON/OFF\n\n` +
+    `*Amri:* MENU · START · RESULTS · CHAT · OPPORTUNITIES · NEAREST · FEEDBACK · REMINDERS ON/OFF · PRIVACY · DELETE MY DATA\n\n` +
     `Imetengenezwa na Munene · munene.dev`,
 
   aiWelcome: () =>

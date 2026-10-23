@@ -11,7 +11,9 @@ const {
   persistCompletedApplication,
   recordAnalyticsEvent,
   syncReminderContact,
+  deleteUserData,
 } = require("../lib/session");
+const { CONSENT_VERSION } = require("../lib/privacy");
 const { getMessages } = require("../lib/messages");
 const { findNearestOffice, formatOfficeMessage } = require("../lib/offices");
 const { logEligibilityMatches, logEvent, logError } = require("../lib/logger");
@@ -99,6 +101,15 @@ const SUBMIT_TRIGGERS = ["submit", "wasilisha", "tuma"];
 const FORM_TRIGGERS = ["form", "fomu", "fetch"];
 const IDK_TRIGGERS = ["0", "i don't know", "i dont know", "idk", "don't know", "dont know", "sijui", "unknown"];
 
+const PRIVACY_TRIGGERS = ["privacy", "faragha"];
+const DELETE_TRIGGERS = [
+  "delete my data", "delete my info", "delete data", "delete me",
+  "futa data yangu", "futa taarifa zangu", "futa data",
+];
+const DELETE_CONFIRM_TRIGGERS = ["yes", "yes delete", "ndio", "ndiyo"];
+const CONSENT_YES = ["1", "yes", "agree", "i agree", "ndio", "ndiyo", "nakubali", "kubali"];
+const CONSENT_NO = ["2", "no", "no thanks", "decline", "hapana"];
+
 const APPLY_CANCEL_TRIGGERS = ["cancel", "stop", "sitisha", "cha", "acha"];
 const APPLY_BACK_TRIGGERS = ["back", "rudi", "prev", "previous", "karibu"];
 
@@ -119,6 +130,58 @@ async function handleMessage(userId, text, session, meta = {}) {
     return { reply: msgs().rateLimited() };
   }
   meta = { ...meta, rateChecked: true };
+
+  // ── Privacy commands — available at any step, before or after consent ──
+  if (PRIVACY_TRIGGERS.includes(input)) {
+    return { reply: msgs().privacyNotice() };
+  }
+
+  if (DELETE_TRIGGERS.includes(input)) {
+    updateSession(userId, { step: "confirm_delete", stepBeforeDelete: session.step });
+    return { reply: msgs().deleteConfirm() };
+  }
+
+  if (session.step === "confirm_delete") {
+    if (DELETE_CONFIRM_TRIGGERS.includes(input)) {
+      const lang = session.language;
+      const ok = await deleteUserData(userId);
+      logEvent(ok ? "user_data_deleted" : "user_data_delete_failed", {});
+      return { reply: ok ? getMessages(lang).deleteDone() : getMessages(lang).deleteFailed() };
+    }
+    updateSession(userId, { step: session.stepBeforeDelete || "menu", stepBeforeDelete: null });
+    return { reply: msgs().deleteCancelled() };
+  }
+
+  // ── Consent (Kenya Data Protection Act) ──
+  if (session.step === "ask_consent") {
+    if (CONSENT_YES.includes(input)) {
+      const resumeStep = session.consentResumeStep || "ask_age";
+      updateSession(userId, {
+        consent: { version: CONSENT_VERSION, at: new Date().toISOString() },
+        step: resumeStep,
+        consentResumeStep: null,
+      });
+      return {
+        reply:
+          resumeStep === "ask_age"
+            ? msgs().welcome()
+            : questionnairePromptForStep({ ...session, step: resumeStep }),
+      };
+    }
+    if (CONSENT_NO.includes(input)) {
+      const lang = session.language;
+      await deleteUserData(userId);
+      return { reply: getMessages(lang).consentDeclined() };
+    }
+    return { reply: msgs().consentRequired() };
+  }
+
+  // Users who started before the consent step existed: ask once, then resume
+  if (session.language && !hasCurrentConsent(session) && !["welcome", "ask_language"].includes(session.step)) {
+    const resumeStep = isInQuestionnaire(session.step) ? session.step : "menu";
+    updateSession(userId, { step: "ask_consent", consentResumeStep: resumeStep });
+    return { reply: msgs().consentUpdated() };
+  }
 
   // ── Web form filling (async) ──
   if (session.step === "web_form") {
@@ -314,6 +377,13 @@ async function handleMessage(userId, text, session, meta = {}) {
     }
   }
   return { reply };
+}
+
+/**
+ * Returns true when the user agreed to the current privacy notice.
+ */
+function hasCurrentConsent(session) {
+  return (session.consent?.version || 0) >= CONSENT_VERSION;
 }
 
 /**
@@ -538,6 +608,8 @@ function questionnairePromptForStep(session) {
   switch (session.step) {
     case "ask_language":
       return getMessages("en").askLanguage();
+    case "ask_consent":
+      return msgs.consentNotice();
     case "ask_age":
       return msgs.welcome();
     case "ask_gender":
@@ -789,16 +861,17 @@ function processMessage(text, session, meta = {}) {
 
   // ── Language selection ────────────────────────────────────
   if (step === "ask_language" || step === "welcome") {
-    if (["1", "english", "en"].includes(input)) {
+    const language = ["1", "english", "en"].includes(input)
+      ? "en"
+      : ["2", "swahili", "kiswahili", "sw"].includes(input)
+        ? "sw"
+        : null;
+    if (language) {
+      // Privacy notice + consent come before any personal questions
+      const consented = hasCurrentConsent(workingSession);
       return {
-        reply: getMessages("en").welcome(),
-        updates: { ...baseUpdates, step: "ask_age", language: "en" },
-      };
-    }
-    if (["2", "swahili", "kiswahili", "sw"].includes(input)) {
-      return {
-        reply: getMessages("sw").welcome(),
-        updates: { ...baseUpdates, step: "ask_age", language: "sw" },
+        reply: consented ? getMessages(language).welcome() : getMessages(language).consentNotice(),
+        updates: { ...baseUpdates, step: consented ? "ask_age" : "ask_consent", language },
       };
     }
     return { reply: getMessages("en").invalidLanguage(), updates: baseUpdates };

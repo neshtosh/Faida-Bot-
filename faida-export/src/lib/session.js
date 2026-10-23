@@ -37,16 +37,73 @@ const {
   encryptUserId,
   decryptUserId,
   isReminderEncryptionConfigured,
+  encryptJson,
+  decryptJson,
+  maskPii,
+  PII_FIELD_KEYS,
 } = require("./privacy");
-const { getSupabaseClient } = require("./supabase");
+const { getSupabaseClient, isSupabaseConfigured } = require("./supabase");
 const { logSessionCreated, logSessionExpired } = require("./logger");
 
 const RESERVED_PROFILE_KEYS = ["__app", "__meta"];
 
 const sessions = new Map();
 const pendingLoads = new Map();
+// Per-user chain of Supabase writes, so writes land in order and a data
+// deletion can wait for in-flight writes instead of racing them.
+const persistChains = new Map();
 
 const SESSION_TTL_MS = 30 * 60 * 1000;
+const SWEEP_INTERVAL_MS = 10 * 60 * 1000;
+
+/**
+ * Splits form answers for storage: identity / financial fields are
+ * encrypted into `__enc`, or dropped when no encryption key is set.
+ */
+function protectAnswers(answers) {
+  const plain = {};
+  const secret = {};
+  for (const [key, value] of Object.entries(answers || {})) {
+    if (key === "__enc") continue;
+    (PII_FIELD_KEYS.includes(key) ? secret : plain)[key] = value;
+  }
+  if (Object.keys(secret).length === 0) return plain;
+  const enc = encryptJson(secret);
+  return enc ? { ...plain, __enc: enc } : plain;
+}
+
+/**
+ * Reverses protectAnswers. Rows written before encryption existed may hold
+ * plaintext; those values are kept and get encrypted on the next save.
+ */
+function revealAnswers(stored) {
+  if (!stored || typeof stored !== "object") return {};
+  const { __enc, ...plain } = stored;
+  const secret = __enc ? decryptJson(__enc) : null;
+  return { ...plain, ...(secret || {}) };
+}
+
+/** Application state as stored: PII protected, finished apps keep no answers. */
+function applicationForStorage(app) {
+  return {
+    ...app,
+    answers: protectAnswers(app.answers),
+    completedApps: (app.completedApps || []).map(({ answers, ...rest }) => rest),
+  };
+}
+
+/** Web form state as stored: answers encrypted as one blob (or dropped). */
+function webFormForStorage(webForm) {
+  const { answers, ...rest } = webForm;
+  const answersEnc = encryptJson(answers || {});
+  return answersEnc ? { ...rest, answersEnc } : { ...rest, answers: {} };
+}
+
+function webFormFromStorage(stored) {
+  if (!stored) return null;
+  const { answersEnc, ...rest } = stored;
+  return { ...rest, answers: (answersEnc ? decryptJson(answersEnc) : stored.answers) || {} };
+}
 
 const memoryAnalytics = {
   totalUsers: 0,
@@ -146,15 +203,16 @@ function rowToSession(row) {
     remindersOptIn: row.reminders_opt_in || false,
     remindersSent: row.reminders_sent || {},
     profileComplete: !!meta.profileComplete,
+    consent: meta.consent || null,
     aiHistory: Array.isArray(meta.aiHistory) ? meta.aiHistory : [],
-    webForm: meta.webForm || null,
+    webForm: webFormFromStorage(meta.webForm),
     application:
       p.__app && typeof p.__app === "object"
         ? {
             benefitId: p.__app.benefitId || null,
             currentFieldIndex: p.__app.currentFieldIndex || 0,
             templateId: p.__app.templateId || null,
-            answers: p.__app.answers || {},
+            answers: revealAnswers(p.__app.answers),
             startedAt: p.__app.startedAt || null,
             completedApps: p.__app.completedApps || [],
           }
@@ -181,17 +239,21 @@ function sessionToRow(userId, session) {
   const __meta = {
     profileComplete: !!session.profileComplete || isProfileComplete(session),
   };
+  if (session.consent) __meta.consent = session.consent;
   if (session.aiHistory && session.aiHistory.length > 0) {
-    __meta.aiHistory = session.aiHistory.slice(-20);
+    // Users sometimes type ID / phone numbers into chat — don't keep them
+    __meta.aiHistory = session.aiHistory
+      .slice(-20)
+      .map((m) => ({ ...m, content: maskPii(m.content) }));
   }
-  if (session.webForm) __meta.webForm = session.webForm;
+  if (session.webForm) __meta.webForm = webFormForStorage(session.webForm);
 
   const hasApp =
     session.application &&
     (session.application.benefitId ||
       (session.application.completedApps && session.application.completedApps.length > 0));
   const profilePayload = hasApp
-    ? { ...rawProfile, __meta, __app: session.application }
+    ? { ...rawProfile, __meta, __app: applicationForStorage(session.application) }
     : { ...rawProfile, __meta };
   return {
     user_id_hash: hashUserId(userId),
@@ -231,9 +293,44 @@ async function loadSessionFromSupabase(userId) {
 }
 
 /**
- * Persists a session to Supabase in the background.
+ * Persists a session to Supabase in the background. Writes for the same
+ * user are queued so they land in order.
  */
-async function persistSession(userId, session) {
+function persistSession(userId, session) {
+  if (!getSupabaseClient()) return Promise.resolve(false);
+
+  const previous = persistChains.get(userId) || Promise.resolve();
+  const next = previous.then(() => writeSession(userId, session));
+  persistChains.set(userId, next);
+  next.then(() => {
+    if (persistChains.get(userId) === next) persistChains.delete(userId);
+  });
+  return next;
+}
+
+/**
+ * Erases everything stored about a user: the users row (which cascades to
+ * sessions, applications and application_fields; analytics events keep no
+ * link to the user) and the in-memory session. Returns false on DB error.
+ */
+async function deleteUserData(userId) {
+  sessions.delete(userId);
+  await (persistChains.get(userId) || Promise.resolve());
+
+  const supabase = getSupabaseClient();
+  if (!supabase) return true;
+
+  const hash = hashUserId(userId);
+  try {
+    const { error: sessionError } = await supabase.from("sessions").delete().eq("user_id_hash", hash);
+    const { error: userError } = await supabase.from("users").delete().eq("user_id_hash", hash);
+    return !sessionError && !userError;
+  } catch (_) {
+    return false;
+  }
+}
+
+async function writeSession(userId, session) {
   const supabase = getSupabaseClient();
   if (!supabase) return false;
 
@@ -311,6 +408,26 @@ function trackAnalyticsFromUpdates(userId, updates, previousSession) {
     }
   }
 }
+
+/**
+ * Drops idle sessions from memory so form answers don't linger there.
+ * Only when Supabase holds the durable copy — without it, memory is the
+ * only store and reminders depend on it.
+ */
+function sweepIdleSessions() {
+  if (!isSupabaseConfigured()) return 0;
+  const cutoff = Date.now() - SESSION_TTL_MS;
+  let evicted = 0;
+  for (const [userId, session] of sessions.entries()) {
+    if (session.lastActivity < cutoff && !persistChains.has(userId)) {
+      sessions.delete(userId);
+      evicted++;
+    }
+  }
+  return evicted;
+}
+
+setInterval(sweepIdleSessions, SWEEP_INTERVAL_MS).unref();
 
 /**
  * Gets a session from memory if it exists and is not expired.
@@ -677,13 +794,15 @@ async function loadUserMemoryFromSupabase(userId) {
       !!meta.profileComplete ||
       isProfileComplete({ profile, profileComplete: meta.profileComplete });
 
-    if (!profileComplete && Object.keys(profile).length === 0) return null;
+    const consent = meta.consent || null;
+    if (!profileComplete && !consent && Object.keys(profile).length === 0) return null;
 
     return {
       language: data.language || null,
       remindersOptIn: !!data.reminder_opt_in,
       profile,
       profileComplete,
+      consent,
     };
   } catch (_) {
     return null;
@@ -696,6 +815,7 @@ async function loadUserMemoryFromSupabase(userId) {
 function applyUserMemoryToSession(session, memory) {
   if (!memory) return session;
   if (memory.language) session.language = memory.language;
+  if (memory.consent && !session.consent) session.consent = memory.consent;
   if (memory.remindersOptIn) session.remindersOptIn = memory.remindersOptIn;
   if (memory.profile && Object.keys(memory.profile).length > 0) {
     session.profile = { ...session.profile, ...memory.profile };
@@ -718,10 +838,14 @@ async function mergeLongTermUserMemory(userId, session) {
  */
 function profileSnapshotForUsersTable(session) {
   const profile = cleanProfileFields(session?.profile || {});
-  if (Object.keys(profile).length === 0) return {};
+  const consent = session?.consent || null;
+  if (Object.keys(profile).length === 0) return consent ? { __meta: { consent } } : {};
   const complete = !!session?.profileComplete || isProfileComplete(session || {});
-  if (complete) return { ...profile, __meta: { profileComplete: true } };
-  return profile;
+  const __meta = {
+    ...(complete ? { profileComplete: true } : {}),
+    ...(consent ? { consent } : {}),
+  };
+  return Object.keys(__meta).length > 0 ? { ...profile, __meta } : profile;
 }
 
 /**
@@ -779,14 +903,9 @@ async function ensureUserRecord(userId, sessionOrProfile) {
 function buildAnswersSummary(answers) {
   if (!answers) return {};
   const safe = {};
-  const PII_KEYS = [
-    "fullName", "idNumber", "phoneNumber", "email", "parentGuardianId",
-    "studentIdNumber", "kraPin", "bankAccountNumber", "mpesaNumber",
-    "ncpwdCertNumber", "businessRegNo", "groupRegNo",
-  ];
   for (const [k, v] of Object.entries(answers)) {
     if (v == null) continue;
-    if (PII_KEYS.includes(k)) {
+    if (PII_FIELD_KEYS.includes(k)) {
       safe[k] = "[redacted]";
     } else if (typeof v === "string" && v.length > 80) {
       safe[k] = v.slice(0, 77) + "...";
@@ -853,13 +972,15 @@ async function persistCompletedApplication(params) {
         if (!Object.prototype.hasOwnProperty.call(answers, key)) return;
         const raw = answers[key];
         if (raw == null) return;
-        const isNumeric = field.type === "number" && !isNaN(Number(raw));
+        // Data minimisation: the dashboard never needs raw ID / bank / phone values
+        const redacted = PII_FIELD_KEYS.includes(key);
+        const isNumeric = !redacted && field.type === "number" && !isNaN(Number(raw));
         rows.push({
           application_id: applicationId,
           field_name: key,
           field_label: field.label?.en || key,
           field_type: field.type || "text",
-          value_text: isNumeric ? null : String(raw),
+          value_text: redacted ? "[redacted]" : isNumeric ? null : String(raw),
           value_number: isNumeric ? Number(raw) : null,
           field_index: idx,
         });
@@ -892,6 +1013,10 @@ module.exports = {
   createSession,
   updateSession,
   clearSession,
+  deleteUserData,
+  sweepIdleSessions,
+  sessionToRow,
+  rowToSession,
   getOrCreate,
   getAnalytics,
   getReminderRecipients,

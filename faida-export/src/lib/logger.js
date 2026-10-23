@@ -11,7 +11,7 @@ const fs = require("fs");
 const path = require("path");
 const { Writable } = require("stream");
 const pino = require("pino");
-const { hashUserId } = require("./privacy");
+const { hashUserId, maskPii } = require("./privacy");
 
 const LOGS_DIR = path.join(__dirname, "../../logs");
 const LOG_FILE = path.join(LOGS_DIR, "faida.log");
@@ -120,7 +120,7 @@ function logIncoming(userId, text, meta = {}) {
       user: userHash(userId),
       isVoice: !!meta.isVoice,
       textLength: (text || "").length,
-      preview: meta.isVoice ? "[voice]" : (text || "").slice(0, 80),
+      preview: meta.isVoice ? "[voice]" : maskPii((text || "").slice(0, 80)),
     },
     "Incoming message"
   );
@@ -135,7 +135,7 @@ function logReply(userId, reply) {
       event: "message_out",
       user: userHash(userId),
       textLength: (reply || "").length,
-      preview: (reply || "").slice(0, 80),
+      preview: maskPii((reply || "").slice(0, 80)),
     },
     "Reply sent"
   );

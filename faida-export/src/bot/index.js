@@ -143,10 +143,10 @@ async function startBot() {
       if (!messageContent.trim() && !isVoice) continue;
 
       const userId = msg.key.remoteJid;
-      const senderName = msg.pushName || "Friend";
 
       logIncoming(userId, messageContent, { isVoice });
-      console.log(`📨 ${senderName}: "${isVoice ? "[voice message]" : messageContent}"`);
+      // No display name or raw text on the console — form answers include ID numbers
+      console.log(`📨 Message (${isVoice ? "voice" : `${messageContent.length} chars`})`);
 
       try {
         const session = await getOrCreate(userId);

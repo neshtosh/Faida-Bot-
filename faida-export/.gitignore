@@ -3,6 +3,7 @@
 
 # WhatsApp auth session
 .auth/
+.auth.old*/
 
 # Logs
 logs/
