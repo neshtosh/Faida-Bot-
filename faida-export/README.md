@@ -1,13 +1,21 @@
-# 🌿 Faida — Kenya Benefits Access Platform
+# 🌿 Faida — Kenya's Services Agent
 
-> A WhatsApp bot that connects every Kenyan to the government grants, NGO support,
-> and private sector benefits they qualify for — in minutes.
+> Faida is an agent that captures everything on offer to Kenyans, from every
+> source (government, counties and wards, NGOs, SACCOs, employers, colleges),
+> brings people what fits them before they ask, and takes it up for them with
+> their consent: matching, eligibility, applications, obligations, tracking and
+> follow-through. This package is the agent's backend and its first channel,
+> WhatsApp. See [`../docs/PRODUCT.md`](../docs/PRODUCT.md) and
+> [`../docs/OPPORTUNITY-MATRIX.md`](../docs/OPPORTUNITY-MATRIX.md).
 
 Built by [Munene](https://munene.dev)
 
 ---
 
-## What It Does
+## What It Does Today
+
+The agent can't yet submit on a user's behalf; that's the main gap (see
+[`docs/PRODUCT.md` §10](../docs/PRODUCT.md#10-where-we-are-today)). Today:
 
 A Kenyan texts the bot. The bot asks 6 questions. The bot returns every benefit
 they qualify for — with exact steps to apply. No website needed. No app to download.

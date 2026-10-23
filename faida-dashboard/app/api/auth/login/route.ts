@@ -9,8 +9,8 @@ import {
 
 /** Only allow same-site relative redirects after login. */
 function safeNext(value: FormDataEntryValue | null): string {
-  const next = typeof value === "string" ? value : "/";
-  return next.startsWith("/") && !next.startsWith("//") ? next : "/";
+  const next = typeof value === "string" ? value : "/admin";
+  return next.startsWith("/") && !next.startsWith("//") ? next : "/admin";
 }
 
 export async function POST(req: NextRequest) {

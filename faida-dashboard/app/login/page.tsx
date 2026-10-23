@@ -22,7 +22,7 @@ export default function LoginPage({
           <span className="text-2xl">🌿</span>
           <h1 className="text-lg font-semibold text-slate-800">Faida Admin</h1>
         </div>
-        <input type="hidden" name="next" value={searchParams.next || "/"} />
+        <input type="hidden" name="next" value={searchParams.next || "/admin"} />
         <div>
           <label className="label" htmlFor="password">
             Password

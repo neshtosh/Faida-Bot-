@@ -23,7 +23,7 @@ export default function PlaceholderPage({
           🚧 {roadmapNote}
         </div>
         <div className="mt-8">
-          <Link href="/" className="btn-primary">
+          <Link href="/admin" className="btn-primary">
             ← Back to Overview
           </Link>
         </div>
