@@ -24,6 +24,8 @@ See [`docs/PRODUCT.md`](docs/PRODUCT.md) for the full product doc.
 - [`docs/PRODUCT.md`](docs/PRODUCT.md) — product vision, delegation model, roadmap
 - [`docs/OPPORTUNITY-MATRIX.md`](docs/OPPORTUNITY-MATRIX.md) — everything Faida can match and take up, and who offers it
 - [`docs/landing/BRIEF.md`](docs/landing/BRIEF.md) — landing page design brief; [`README`](docs/landing/README.md) for run and deploy
+- [`docs/landing/COPY-REVIEW.md`](docs/landing/COPY-REVIEW.md) — copy and presentation review of the landing page, with proposed rewrites
+- [`.agents/product-marketing.md`](.agents/product-marketing.md) — positioning, audience, objections and voice, read by the marketing skills
 - [`docs/archive/`](docs/archive/) — early build conversations
 
 ## Quick start (agent backend)
