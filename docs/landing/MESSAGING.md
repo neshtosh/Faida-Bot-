@@ -1,12 +1,13 @@
 # Messaging map: from the opportunity matrix to the page
 
-> **Status:** v1 · 5 November 2026
+> **Status:** v2 · 7 November 2026 (v1: 5 November)
 > **What this is:** the opportunity matrix turned into messages for each audience
 > Faida sells to. Every message on the landing page should trace back to a row
 > here, and every row here traces back to the matrix.
 > **Inputs:** [`OPPORTUNITY-MATRIX.md`](../OPPORTUNITY-MATRIX.md) (§2 sources,
 > §3 offer types, §4 life moments, §5 uptake channels, §6 findings),
-> [`PRODUCT.md`](../PRODUCT.md), [`COPY-REVIEW.md`](COPY-REVIEW.md),
+> [`PRODUCT.md`](../PRODUCT.md), [`PRODUCT_UPDATED2.md`](../PRODUCT_UPDATED2.md)
+> (programme delivery, feedback, field, intelligence), [`COPY-REVIEW.md`](COPY-REVIEW.md),
 > [`.agents/product-marketing.md`](../../.agents/product-marketing.md).
 > **Method:** the `marketingskills` copywriting skill (the Human Action Model of
 > discomfort, vision and path; the "Now you can" test; claims must be
@@ -14,7 +15,19 @@
 
 ---
 
-## 1. One need, three audiences
+## 0. Decisions (7 November 2026)
+
+1. **Organisations are the main target market.** The organisations page is the
+   main page, at `/`. The people page moves to `/people`.
+2. **Both pages sell the finished product.** Everything in the product docs is
+   shown, without "coming soon" labels. `BRIEF.md` §7 lists what must be true
+   at launch.
+3. **Feedback is shown on both sides.** On the people page, Wanjiru's 5:40 pm
+   moment is a concern raised by voice note, with a reference number. On the
+   organisations page, the same conversation runs through to resolution.
+4. **Product docs are left as they are** for now.
+
+## 1. One need, four audiences
 
 The matrix's reframe (§1) is a two-sided exchange: organisations offer things,
 people need them, and the two don't meet in time. That single gap gives three
@@ -24,9 +37,10 @@ audiences one shared need:
 |---|---|---|---|
 | **People** | The demand side: anyone, matched on who they are and what's happening in their life (§4) | "I didn't know it existed until it closed." "I don't know if this is real." "The forms are too much." | Hear first, know it's real, have it done with your yes |
 | **Organisations** | The supply side, S1–S15: national programmes, agencies, counties, wards, NGOs, foundations, SACCOs, co-ops, employers, colleges, health campaigns, utilities | "Our people never hear about it in time." "Applications come in incomplete, or from the wrong people." "They drop out after approval." | Your offer reaches the people it's for, and complete, genuine applications come back |
-| **Organisations' own people** | The same people, seen from the organisation's side: its residents, members, beneficiaries, applicants and trainees | "I'm a member, but I never read the circulars." "I qualified but heard on the last day." | They hear about *your* offer under your name, in their language, and get help finishing it |
+| **Organisations' own people** | The same people, seen from the organisation's side: its residents, members, beneficiaries, applicants and trainees | "I'm a member, but I never read the circulars." "I qualified but heard on the last day." "Who do I tell when something goes wrong?" | They hear about *your* offer under your name, in their language, get help finishing it, and can raise a concern privately, with a reference number, without it affecting their place |
+| **Programme teams and their funders** *(from `PRODUCT_UPDATED2.md`)* | NGO and foundation programme leads, M&E staff, county programme officers, development partners | "We lose people between selection and the last session." "We can count applications but can't say where delivery fails." "Our grievance route is a suggestion box." | Run the whole programme in the conversation, from enrolment to closure, and see where delivery is failing |
 
-The third row is what ties the page together. The person in the day story
+The third row is what ties the two pages together. The person in the day story
 (Wanjiru) is the end user of every organisation in the cobalt chapter. Her 6:40
 message starts as a listing from a county. So the page shows each organisation
 what its own people receive, not just what Faida does.
@@ -130,9 +144,47 @@ own end users:
 
 ---
 
-## 4. Message hierarchy for the page
+## 4. Page structures
 
-1. **Hero (both audiences, consumer-first):** "Everything on offer. Faida brings
+### 4.1 Organisations (`/`, the main page)
+
+Built on the copywriting skill's B2B template (outcome headline, business pain,
+solution, use cases by role, trust, contact), with the three offerings from
+`PRODUCT_UPDATED2.md` §2.
+
+1. **Hero:** "Reach the people your programmes are meant for." A subhead
+   covering reach, complete applications, staying to the outcome and showing
+   where delivery stalls. Button: "Tell us about your programme". A link for
+   individuals. Signature visual: a programme report (labelled example figures)
+   that prints and is stamped, echoing the people page's receipt.
+2. **The gap (their pain):** three scenes from matrix §2 (forms at the ward
+   office, incomplete or ineligible applications, nobody knowing who still
+   attends), then the turn.
+3. **From first contact to lasting outcomes:** reach and intake, run the
+   programme, learn and report, and the chain "you list once … Faida follows up
+   on delivery and outcomes".
+4. **Reach and intake:** a listing that becomes Wanjiru's message (what their
+   people receive), and three steps.
+5. **Run the programme:** four stages (set up; intake and selection; enrol and
+   deliver; follow up and close) and one participant's case timeline.
+6. **Feedback and accountability:** the feedback journey as a chat, and six
+   principles (feedback never affects eligibility, private grievances,
+   safeguarding to authorised staff only, and so on).
+7. **In the field:** distributions and drives, field officer lists, offline
+   capture, and an SMS to a basic phone.
+8. **Learn and report:** the six programme-intelligence questions, and
+   disaggregated reach and funder reports.
+9. **Who it's for:** six buyer groups (§3 above).
+10. **Fair by design:** an opportunity, never an advert.
+11. **Your people's side:** the same Faida in their pocket; "They get a receipt.
+    You get the report." Links to `/people`.
+12. **FAQ:** flooding, genuine applicants, smartphones, existing systems,
+    participant data, advertising, cost, starting small.
+13. **Close:** one line for organisations, one for individuals.
+
+### 4.2 People (`/people`)
+
+1. **Hero (people first):** "Everything on offer. Faida brings
    you yours." The subhead names concrete offers from §3 and the three promises
    (hear first, it's real, done with your yes). A quiet link to organisations.
 2. **The gap (people's discomfort):** three scenes from §3's barriers (the
@@ -145,10 +197,13 @@ own end users:
 6. **What Faida finds (range and trust):** §3 offer types and §2 sources, and an
    "is this real?" example (§6.4).
 7. **FAQ:** people's objections, including "is this the government?".
-8. **Organisations (the other side of the counter):** the shared gap, a listing
-   that becomes Wanjiru's message (their people's view), the six buyer groups,
-   the three steps, fair by design.
+8. **Organisations teaser:** "Wanjiru's youth fund started as a county's
+   listing." Links to `/`.
 9. **Close:** two lines, one for each audience.
+
+The day's 5:40 pm moment is the feedback moment: Faida asks how the YEDF
+training went, Wanjiru answers by voice note, and the concern gets a reference
+number and never affects her place.
 
 ---
 

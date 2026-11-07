@@ -1,7 +1,7 @@
 # Product Marketing Context
 
-**Document version:** v1
-**Last updated:** 2026-11-05
+**Document version:** v2
+**Last updated:** 2026-11-07
 
 Shared context for marketing work on Faida. The `marketingskills` skills
 (copywriting, copy-editing, cro and the rest) read this file before they do
@@ -24,8 +24,11 @@ where it can, and tracks it to the end, keeping a receipt of everything.
 "look for bursaries", "look for youth funds", "check if a job is real", "go to
 the cyber". Faida competes with those habits, not with an app category.
 
-**Product type:** consumer agent on WhatsApp, plus a B2B listing and outreach
-service for organisations.
+**Product type:** three connected offerings (`docs/PRODUCT_UPDATED2.md`):
+**Faida for organisations** (reach and intake), **Faida for programmes**
+(running programmes: enrolment, cases, delivery, feedback and grievances, field
+operations, monitoring and reporting) and **Faida for people** (the personal
+agent on WhatsApp). Organisations are the main target market.
 
 **Business model:** discovery and eligibility free for users. Paid: filing on
 the user's behalf (proposal: Ksh 500–2,000 per application; Ksh 299/month
@@ -43,7 +46,15 @@ real?" checks, the organisation listing desk.
 
 ## Target Audience
 
-**Primary (P0):**
+**Main target market (buyers):** organisations offering something to people,
+and the programme teams who run it: counties, wards and constituencies; national
+programmes and agencies; NGOs, foundations and development partners; SACCOs,
+co-operatives, banks and insurers; employers, colleges and training providers;
+health, agriculture, housing and utilities. The site's main page (`/`) is for them.
+
+**End users (the people they serve, and Faida's own users), at `/people`:**
+
+**Primary end users (P0):**
 - Everyday citizen, 18–60, on WhatsApp, low to medium digital confidence,
   often peri-urban or rural.
 - Micro and small business owner: kiosk, salon, boda boda, mama mboga, small
@@ -79,6 +90,9 @@ June (KRA).
 | SACCO / MFI manager | Member uptake, loan book quality, retention | Members don't read circulars; branch visits are costly | Members told about products that fit them, under your name; complete applications |
 | NGO / foundation programme lead | Reaching the target group, completion rates, donor reporting | Reaching people outside their networks; drop-off after approval | Outreach to opted-in eligible people; follow-up on attendance, reports, repayments |
 | Employer / college | Qualified applicants, fewer scams using their name | Fake adverts; unqualified floods | Verified listing, matched applicants, "is this real?" protection |
+| NGO / foundation programme lead | Participants completing, safeguarding, outcomes | People drop off between selection and the last session; grievance routes nobody uses | Enrolment, cases, reminders, feedback and private grievances in one WhatsApp thread |
+| M&E officer | Reliable reach and outcome data | Data collected after the fact, on paper or with survey links nobody opens | Attendance, completion, feedback and outcomes recorded as the programme runs; reach broken down by ward, gender, age and disability |
+| Development partner / funder | Evidence the money reached the target group and changed something | Reports count applications, not delivery | Funder reports from the same records that run the programme |
 
 ## Problems & Pain Points
 
@@ -195,9 +209,12 @@ official source before publishing; see the matrix's Sources and Caveats):
 
 ## Goals
 
-**Primary business goal:** cases completed (benefit received or obligation met).
-**Key conversion action:** start a WhatsApp chat ("Hi Faida") and finish the 6-question profile.
-**Secondary:** an organisation gets in touch to list an offer.
+**Primary business goal:** organisations running programmes on Faida; cases
+completed (benefit received, obligation met, programme finished).
+**Key conversion action (main page):** an organisation gets in touch about a
+programme ("Tell us about your programme").
+**Key conversion action (`/people`):** start a WhatsApp chat ("Hi Faida") and
+finish the 6-question profile.
 **Current metrics:** `[NEED]`
 
 ## Learnings
@@ -206,4 +223,7 @@ _Empty. Add what tests and launches teach us, with dates._
 
 ## Changelog
 
+- v2, 2026-11-07: organisations made the main target market; added Faida for
+  programmes (from `docs/PRODUCT_UPDATED2.md`) and the programme lead, M&E and
+  funder personas.
 - v1, 2026-11-05: auto-drafted from the repo during the landing copy review (`docs/landing/COPY-REVIEW.md`).

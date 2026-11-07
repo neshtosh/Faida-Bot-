@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Faida: before you ask, it is handled</title>
-<meta name="description" content="Faida is your agent for everything on offer: grants, jobs, training, bursaries, cover, payouts and more, from every source. It brings you what fits first and takes it up with your OK. And it helps every organisation reach the people its offers are for.">
+<title>Faida for organisations: reach the people your programmes are meant for</title>
+<meta name="description" content="Faida tells the people who qualify for your programme, on WhatsApp, before the window closes. Applications come back complete and checked, and Faida stays with each participant through enrolment, delivery and feedback to the outcome.">
 <meta name="theme-color" content="#ffc629">
-<meta property="og:title" content="Faida: before you ask, it is handled">
-<meta property="og:description" content="Benefits and opportunities you qualify for but never heard of. Deadlines you would have missed. Faida brings them to you, then handles them when you say yes.">
+<meta property="og:title" content="Faida: reach the people your programmes are meant for">
+<meta property="og:description" content="For counties, national programmes, NGOs, foundations, SACCOs, employers and colleges. From first contact to lasting outcomes, in a conversation your people already use.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%23ffc629'/%3E%3Cpath d='M9 10h30a3 3 0 013 3v17a3 3 0 01-3 3H22l-8 7v-7h-5a3 3 0 01-3-3V13a3 3 0 013-3z' fill='%230e1020'/%3E%3Cpath d='M15 22l6 6 12-12' fill='none' stroke='%23ffc629' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preload" href="/site/fonts/unbounded-500-900.woff2" as="font" type="font/woff2" crossorigin>
@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="/site/styles.css">
 <script>document.documentElement.classList.add('js')</script>
 </head>
-<body>
+<body class="org">
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
@@ -28,6 +28,8 @@
     <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></symbol>
     <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/><path d="M9 12l2.2 2.2L15 10"/></symbol>
     <symbol id="i-seal" viewBox="0 0 24 24"><path d="M12 2.8l2.3 1.7 2.9-.1.9 2.7 2.4 1.7-.9 2.7.9 2.7-2.4 1.7-.9 2.7-2.9-.1L12 21.2l-2.3-1.7-2.9.1-.9-2.7-2.4-1.7.9-2.7-.9-2.7 2.4-1.7.9-2.7 2.9.1z"/><path d="M8.6 12.2l2.3 2.3 4.5-4.7"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 4v16M7 20h10"/><path d="M5 8h14"/><path d="M5 8l-2.5 6a2.5 2 0 005 0z"/><path d="M19 8l-2.5 6a2.5 2 0 005 0z"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3.5 12.5V4.5h8l9 9-8 8z"/><circle cx="8" cy="9" r="1.5"/></symbol>
     <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
   </defs>
@@ -40,402 +42,279 @@
   <button type="button" data-lang="sw" aria-pressed="false">SW</button>
 </div>
 
-<!-- The receipt: tallies what Faida did, as you pass each moment of the day -->
-<aside class="slip" id="slip" aria-label="Wanjiru's day, example" data-aria-sw="Siku ya Wanjiru, mfano">
-  <button class="slip__chip" type="button" id="slipChip" aria-expanded="false" aria-controls="slipPanel">
-    <svg aria-hidden="true"><use href="#mark"/></svg>
-    <span class="t" id="chipTime">6:00</span>
-    <span class="n"><b id="chipCount">0</b> <span data-sw="imekamilika">done</span></span>
-  </button>
-  <div class="slip__panel" id="slipPanel">
-    <div class="receipt-wrap">
-      <div class="receipt">
-        <div class="receipt__head">
-          <div class="receipt__brand"><svg aria-hidden="true"><use href="#mark"/></svg>Faida</div>
-          <small data-sw="Siku ya Wanjiru. Mfano, si mtumiaji halisi.">Wanjiru's day. Example, not a real user.</small>
-        </div>
-        <p class="slip__now" id="slipNow" aria-live="polite"></p>
-        <ol class="receipt__lines" id="slipLines">
-          <li data-line="1"><time>6:41</time><span data-sw="Imeomba: mfuko wa vijana Kisumu">Applied: Kisumu youth fund</span><b class="done" data-sw="IMEKAMILIKA">DONE</b></li>
-          <li data-line="2"><time>8:12</time><span data-sw="Imesasishwa: kibali cha biashara">Renewed: business permit</span><b class="done" data-sw="IMEKAMILIKA">DONE</b></li>
-          <li data-line="3"><time>12:35</time><span data-sw="Imeandaliwa: Inua Jamii ya Cucu">Prepared: Cucu's Inua Jamii</span><b class="done" data-sw="IMEKAMILIKA">DONE</b></li>
-          <li data-line="4"><time>3:00</time><span data-sw="Imewasilishwa: marejesho ya KRA">Filed: KRA return</span><b class="done" data-sw="IMEKAMILIKA">DONE</b></li>
-          <li data-line="5"><time>5:48</time><span data-sw="Imetumwa: picha ya saluni kwa YEDF">Sent: salon photo to YEDF</span><b class="done" data-sw="IMEKAMILIKA">DONE</b></li>
-        </ol>
-      </div>
-    </div>
-  </div>
-</aside>
-
 <main id="main">
 
 <!-- ================= TITLE PAGE ================= -->
-<header class="title g-sun chap" id="top">
-  <a class="title__brand" href="#top" aria-label="Faida"><svg aria-hidden="true"><use href="#mark"/></svg>Faida</a>
+<header class="title title--org g-sun" id="top">
+  <a class="title__brand" href="/" aria-label="Faida"><svg aria-hidden="true"><use href="#mark"/></svg>Faida</a>
   <div class="title__in">
-    <svg class="stamp" id="heroStamp" aria-hidden="true" focusable="false" viewBox="0 0 200 200">
-      <defs><path id="ring" d="M100,100 m-70,0 a70,70 0 1,1 140,0 a70,70 0 1,1 -140,0"/></defs>
-      <circle cx="100" cy="100" r="95" fill="none" stroke="currentColor" stroke-width="5"/>
-      <circle cx="100" cy="100" r="86" fill="none" stroke="currentColor" stroke-width="1.5"/>
-      <text font-size="14" letter-spacing="1" fill="currentColor"><textPath href="#ring" textLength="436" lengthAdjust="spacing">IMEKAMILIKA · DONE · IMEKAMILIKA · DONE ·</textPath></text>
-      <path d="M62 104l26 26 52-58" fill="none" stroke="currentColor" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    <h1 class="display h-hero"><span data-sw="Kila kinachotolewa.">Everything on offer.</span><span data-sw="Faida inakuletea chako.">Faida brings you yours.</span></h1>
-    <div class="board" id="board">
-      <div class="board__rows" role="img" aria-label="Examples of offers from many sources, with the ones that fit Wanjiru marked as hers" data-aria-sw="Mifano ya ofa kutoka vyanzo vingi, zile zinazomfaa Wanjiru zimewekwa alama">
-        <ul class="board__row board__row--a">
-            <li class="tag tag--yours"><small data-sw="Kaunti ya Kisumu">Kisumu County</small><b data-sw="Mfuko wa vijana unafunguliwa leo">Youth fund opens today</b><i data-sw="CHAKO">YOURS</i></li>
-            <li class="tag"><small data-sw="NG-CDF">NG-CDF</small><b data-sw="Fomu za basari ofisi za wadi">Bursary forms at ward offices</b></li>
-            <li class="tag"><small data-sw="Wizara ya Leba">Ministry of Labour</small><b data-sw="Kazi za ng&#x27;ambo zilizothibitishwa">Verified jobs abroad</b></li>
-            <li class="tag tag--yours"><small data-sw="SACCO yako">Your SACCO</small><b data-sw="Mkopo wa karo umefunguliwa">School-fees loan now open</b><i data-sw="CHAKO">YOURS</i></li>
-            <li class="tag"><small data-sw="Afya ya kaunti">County health</small><b data-sw="Uchunguzi wa bure Jumamosi">Free screening on Saturday</b></li>
-            <li class="tag"><small data-sw="Chuo cha TVET">TVET college</small><b data-sw="Usajili wa Januari umefunguliwa">January intake open</b></li>
-            <li class="tag"><small data-sw="Ofisi ya wadi">Ward office</small><b data-sw="Usajili wa wakulima kwa mbolea ya ruzuku">Farmer registration for subsidised fertiliser</b></li>
-            <li class="tag"><small data-sw="NGO ya msaada wa kisheria">Legal aid NGO</small><b data-sw="Kliniki ya sheria ya bure">Free legal clinic</b></li>
-        </ul>
-        <ul class="board__row board__row--b">
-            <li class="tag tag--yours"><small data-sw="Hifadhi ya Jamii">Social Protection</small><b data-sw="Usajili wa Inua Jamii kwa Cucu">Inua Jamii registration for Cucu</b><i data-sw="CHAKO">YOURS</i></li>
-            <li class="tag"><small data-sw="Mwajiri">Employer</small><b data-sw="Mafunzo kazini kwa wahitimu">Graduate internships</b></li>
-            <li class="tag"><small data-sw="Bunge la kaunti">County assembly</small><b data-sw="Kikao cha bajeti wadi yako">Budget forum in your ward</b></li>
-            <li class="tag tag--yours"><small data-sw="UFAA">UFAA</small><b data-sw="Pesa zilizoshikiliwa kwa jina lako">Money held in your name</b><i data-sw="CHAKO">YOURS</i></li>
-            <li class="tag"><small data-sw="Wakfu">Foundation</small><b data-sw="Udhamini wa shule ya upili">Secondary school scholarships</b></li>
-            <li class="tag"><small data-sw="Serikali">Government</small><b data-sw="Zabuni zilizotengwa kwa vijana">Tenders set aside for youth</b></li>
-            <li class="tag"><small data-sw="Makazi">Housing</small><b data-sw="Awamu ya nyumba nafuu">Affordable homes round</b></li>
-            <li class="tag"><small data-sw="Ushirika wa maziwa">Dairy co-op</small><b data-sw="Malipo ya bonasi kwa wanachama">Member bonus payout</b></li>
-        </ul>
+    <div class="title__text">
+      <p class="eyebrow" data-sw="Kwa kaunti, programu za kitaifa, NGO, wakfu, SACCO, waajiri na vyuo">For counties, national programmes, NGOs, foundations, SACCOs, employers and colleges</p>
+      <h1 class="display" data-sw="Wafikie watu ambao programu zako zinawalenga.">Reach the people your programmes are meant for.</h1>
+      <p class="title__lede" data-sw="Faida inawaambia wanaostahili, kwenye WhatsApp, kabla dirisha lako halijafungwa. Maombi yao yanarudi yamekamilika na kukaguliwa. Kisha Faida inakaa na kila mshiriki hadi matokeo, na kukuonyesha mahali utoaji unakwama.">Faida tells the people who qualify, on WhatsApp, before your window closes. Their applications come back complete and checked. Then Faida stays with each participant to the outcome, and shows you where delivery stalls.</p>
+      <div class="title__cta">
+        <a class="btn" data-org href="mailto:"><span data-sw="Tuambie kuhusu programu yako">Tell us about your programme</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="textlink" href="/people"><span data-sw="Unatafuta kitu chako mwenyewe?">Looking for something for yourself?</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </div>
-      <p class="board__cap" data-sw="Mifano. Kila kitu kilicho nje, kutoka kwa kila anayetoa. Faida inaweka alama vile vinavyokufaa.">Examples. Everything out there, from everyone offering it. Faida marks what fits you.</p>
     </div>
-    <div class="title__sub">
-      <p data-sw="Kutoka serikali, kaunti na wadi yako, NGO, SACCO, waajiri na vyuo. Faida inafuatilia yote, inakuambia kinachokufaa, na kukishughulikia ukisema ndiyo.">From government, your county and ward, NGOs, SACCOs, employers and colleges. Faida watches it all, tells you what fits, and takes it up when you say yes.</p>
-    </div>
-    <div class="title__cta">
-      <a class="btn" data-wa href="https://wa.me/"><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg><span data-sw="Pata Faida WhatsApp">Get Faida on WhatsApp</span></a>
-      <p class="title__once" data-sw="Sema habari mara moja. Kisha Faida ndiyo inatafuta.">Say hello once. Then Faida does the looking.</p>
-      <a class="textlink" href="#desk"><span data-sw="Taasisi yangu ina kitu cha kutoa">My organisation has something to offer</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    <div class="title__sheet">
+      <div class="receipt-wrap">
+        <div class="receipt sheet" id="sheet">
+          <div class="receipt__head">
+            <div class="receipt__brand"><svg aria-hidden="true"><use href="#mark"/></svg><span data-sw="Ripoti ya programu">Programme report</span></div>
+            <small data-sw="Mfuko wa vijana wa kaunti. Mfano: takwimu ni za kuonyesha tu.">County youth fund. Example: figures are illustrative.</small>
+          </div>
+          <ol class="receipt__lines sheet__lines">
+            <li><span data-sw="Wakazi wanaostahili walioambiwa">Eligible residents told</span><b>2,140</b></li>
+            <li><span data-sw="Maombi, kamili na yamekaguliwa">Applications, complete and checked</span><b>1,320</b></li>
+            <li><span data-sw="Waliochaguliwa">Selected</span><b>400</b></li>
+            <li><span data-sw="Waliosajiliwa">Enrolled</span><b>388</b></li>
+            <li><span data-sw="Walimaliza mafunzo">Finished training</span><b>351</b></li>
+            <li><span data-sw="Malalamiko yaliyotatuliwa">Concerns resolved</span><b>11 / 12</b></li>
+          </ol>
+          <div class="total sheet__total"><b data-sw="Orodha moja.">One listing.</b><span data-sw="Kila kesi imefuatiliwa hadi mwisho.">Every case followed to the end.</span></div>
+        </div>
+      </div>
+      <svg class="stamp--big sheet__stamp" id="sheetStamp" aria-hidden="true" focusable="false" viewBox="0 0 200 200">
+        <defs><path id="ringS" d="M100,100 m-70,0 a70,70 0 1,1 140,0 a70,70 0 1,1 -140,0"/></defs>
+        <circle cx="100" cy="100" r="95" fill="none" stroke="currentColor" stroke-width="6"/>
+        <circle cx="100" cy="100" r="86" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text font-family="Unbounded, sans-serif" font-weight="800" font-size="14" letter-spacing="1" fill="currentColor"><textPath href="#ringS" textLength="436" lengthAdjust="spacing">RIPOTI · REPORT · RIPOTI · REPORT ·</textPath></text>
+        <path d="M62 104l26 26 52-58" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </div>
   </div>
 </header>
 
-<!-- ================= INTERTITLE: the gap ================= -->
-<section class="g-ink chap inter" aria-label="The gap" data-aria-sw="Pengo">
+<!-- ================= INTERTITLE: the gap, from the organisation's side (matrix §2) ================= -->
+<section class="g-ink chap inter inter--scenes" aria-label="The gap" data-aria-sw="Pengo">
   <div class="chap__in">
-    <p data-in data-sw="Watu hawasikii kinachotolewa.">People never hear what's on offer.</p>
-    <p data-in style="--d:120ms" data-sw="Wanaotoa hawawapati watu wao.">Those offering can't find their people.</p>
-    <p class="acc" data-in style="--d:240ms" data-sw="Faida inawaleta pamoja. Hakuna anayehitaji kutafuta.">Faida brings them together. Nobody has to go looking.</p>
+    <p data-in data-sw="Fomu zako za basari zilikaa ofisi ya wadi kwa siku sita. Wazazi walioihitaji zaidi hawakusikia.">Your bursary forms sat at the ward office for six days. The parents who needed them most never heard.</p>
+    <p data-in style="--d:120ms" data-sw="Maombi yalirudi bila hati, mengine kutoka kwa watu wasiostahili.">The applications came back missing documents, some from people who never qualified.</p>
+    <p data-in style="--d:240ms" data-sw="Miezi mitatu baadaye, hakuna aliyejua nani bado anahudhuria.">Three months later, nobody could say who was still attending.</p>
+    <p class="acc" data-in style="--d:360ms" data-sw="Faida inawafikia watu wako kwa wakati, na kukaa nao hadi matokeo.">Faida reaches your people in time and stays with them to the outcome.</p>
   </div>
 </section>
 
-<!-- ================= 6:40 am ================= -->
-<section class="g-paper chap" id="c1" data-chap data-stamp="1" data-time-en="6:40 am" data-time-sw="6:40 asubuhi" data-title-en="Good news before breakfast." data-title-sw="Habari njema kabla ya chai.">
+<!-- ================= HOW IT FITS: three offerings ================= -->
+<section class="g-paper chap" id="how" aria-labelledby="how-title">
   <div class="chap__in">
-    <div class="dateline" data-in><span data-sw="6:40 asubuhi">6:40 am</span><small data-sw="Siku moja na Faida">One day with Faida</small></div>
+    <div class="dateline" data-in><span data-sw="Jinsi Faida inavyofanya kazi">How Faida works</span><small data-sw="Sehemu tatu, mazungumzo moja">Three parts, one conversation</small></div>
+    <h2 id="how-title" class="display h-chap" data-in data-sw="Kutoka mawasiliano ya kwanza hadi matokeo ya kudumu.">From first contact to lasting outcomes.</h2>
+    <ol class="trio">
+      <li data-in><span class="trio__n">1</span><h3 class="h-sub" data-sw="Fikia na upokee maombi">Reach and intake</h3><p data-sw="Orodhesha programu mara moja. Faida inawaambia wanaostahili na kurudisha maombi yaliyokamilika na kukaguliwa.">List a programme once. Faida tells the people who qualify and brings their applications back complete and checked.</p></li>
+      <li data-in style="--d:100ms"><span class="trio__n">2</span><h3 class="h-sub" data-sw="Endesha programu">Run the programme</h3><p data-sw="Usajili, miadi, siku za mafunzo, ugawaji, kesi, maoni na malalamiko, yote kwenye mazungumzo yale yale ya WhatsApp.">Enrolment, appointments, training days, distributions, cases, feedback and complaints, all in the same WhatsApp thread.</p></li>
+      <li data-in style="--d:200ms"><span class="trio__n">3</span><h3 class="h-sub" data-sw="Jifunze na uripoti">Learn and report</h3><p data-sw="Ona mahali watu wanaacha, masharti yanayowazuia, na kama waliochaguliwa walipata huduma. Ripoti kwa wafadhili kwa wadi, jinsia, umri na ulemavu.">See where people drop out, which requirements stop them, and whether selected people got the service. Report to funders by ward, gender, age and disability.</p></li>
+    </ol>
+    <p class="chain" data-in data-sw="Unaorodhesha programu mara moja. Faida inawafikia watu sahihi. Wanaomba kupitia Faida yao wenyewe. Unaendesha programu. Faida inafuatilia utoaji na matokeo.">You list a programme once. Faida reaches the right people. They apply through their own Faida. You run the programme. Faida follows up on delivery and outcomes.</p>
+  </div>
+</section>
+
+<!-- ================= REACH AND INTAKE ================= -->
+<section class="g-cobalt chap" id="reach" aria-labelledby="reach-title">
+  <div class="chap__in">
+    <div class="dateline" data-in><span data-sw="Fikia na upokee maombi">Reach and intake</span><small data-sw="Kwa yeyote anayetoa kitu kwa watu">For anyone offering something to people</small></div>
     <div class="spread">
       <div class="col-text" data-in>
-        <h2 class="display h-chap" data-sw="Habari njema kabla ya chai.">Good news before breakfast.</h2>
-        <p class="lede" data-sw="Huhitaji kujua kilichopo. Faida inafuatilia kila kinachotolewa, na serikali, kaunti na wadi yako, NGO, SACCO, waajiri na vyuo, na kukilinganisha na maisha yako. Kinapokufaa, unasikia kutoka kwa Faida kwanza, pamoja na ombi tayari kutumwa.">You don't need to know what exists. Faida watches everything on offer, from government, your county and ward, NGOs, SACCOs, employers and colleges, and checks it against your life. When something fits, you hear it from Faida first, with the application ready to go.</p>
+        <h2 id="reach-title" class="display h-chap" data-sw="Iorodheshe mara moja. Watu wako wanasikia kwanza.">List it once. Your people hear first.</h2>
+        <p class="lede" data-sw="Watu ambao programu inawalenga mara nyingi husikia kuchelewa, kama husikia kabisa. Faida inalinganisha programu yako na kila mtu aliyekubali kusikia, inamwandikia kwanza kwa lugha yake, chini ya jina lako, na kumsaidia kuimaliza.">The people a programme is meant for usually hear late, if they hear at all. Faida matches your programme to everyone who chose to hear, writes to them first in their language, under your name, and helps them finish.</p>
       </div>
-      <div class="col-media">
-        <div class="phone" data-play role="img" aria-label="Example WhatsApp conversation" data-aria-sw="Mfano wa mazungumzo ya WhatsApp">
-          <div class="phone__screen">
-            <div class="phone__bar"><span class="phone__av"><svg aria-hidden="true"><use href="#mark"/></svg></span><div><b>Faida</b><small data-sw="mtandaoni">online</small></div></div>
-            <div class="phone__msgs">
-              <div class="msg" data-sw="Habari za asubuhi, Wanjiru. Mfuko wa vijana wa Kaunti ya Kisumu unafunguliwa leo, na unastahili.">Good morning, Wanjiru. The Kisumu County youth fund opens today, and you qualify.</div>
-              <div class="msg"><span data-sw="Niombe kwa niaba yako?">Shall I apply for you?</span><div class="qr"><span data-sw="Ndiyo, omba">Yes, apply</span><span data-sw="Sio sasa">Not now</span></div></div>
-              <div class="msg msg--me" data-sw="Ndiyo, omba">Yes, apply</div>
-              <div class="msg" data-sw="Nimemaliza. Nimetumia taarifa zako zilizohifadhiwa. Nitakujulisha watakapojibu.">Done. I used your saved details. I will tell you when they reply.</div>
-              <div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>
-            </div>
-          </div>
-        </div>
-        <p class="cap" data-sw="Mfano. Faida inaanzisha mazungumzo.">Example. Faida starts the conversation.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= 8:05 am ================= -->
-<section class="g-sun chap" id="c2" data-chap data-stamp="2" data-time-en="8:05 am" data-time-sw="8:05 asubuhi" data-title-en="Answer however suits you." data-title-sw="Jibu kwa njia yako.">
-  <div class="chap__in">
-    <div class="dateline" data-in><span data-sw="8:05 asubuhi">8:05 am</span><small data-sw="Siku moja na Faida">One day with Faida</small></div>
-    <div class="spread spread--flip">
-      <div class="col-text" data-in>
-        <h2 class="display h-chap" data-sw="Jibu kwa njia yako.">Answer however suits you.</h2>
-        <p class="lede" data-sw="Faida inaandika kwanza. Wewe jibu kwa maandishi, ujumbe wa sauti, au kutoka simu ya kawaida. Inaelewa Kiswahili na Kiingereza, jinsi watu wanavyozungumza kweli.">Faida writes first. You reply by text, by voice note, or from a basic phone. It understands English and Kiswahili, the way people really speak.</p>
-        <ul class="index index--ch">
-          <li><h3 class="h-sub" data-sw="WhatsApp">WhatsApp</h3><p data-sw="Maandishi na sauti.">Text and voice notes.</p></li>
-          <li><h3 class="h-sub" data-sw="SMS">SMS</h3><p data-sw="Ujumbe mfupi, kwa simu yoyote.">Short messages, on any phone.</p></li>
-          <li><h3 class="h-sub" data-sw="USSD">USSD</h3><p data-sw="Piga na uchague. Hakuna intaneti inayohitajika.">Dial and choose. No internet needed.</p></li>
-        </ul>
-      </div>
-      <div class="col-media">
-        <div class="phone" data-play role="img" aria-label="Example WhatsApp conversation" data-aria-sw="Mfano wa mazungumzo ya WhatsApp">
-          <div class="phone__screen">
-            <div class="phone__bar"><span class="phone__av"><svg aria-hidden="true"><use href="#mark"/></svg></span><div><b>Faida</b><small data-sw="mtandaoni">online</small></div></div>
-            <div class="phone__msgs">
-              <div class="msg"><span data-sw="Kibali chako cha biashara cha Kisumu kinaisha baada ya siku 9. Hati zako tayari zipo. Nikisasishe na kutuma ombi la <span class=&quot;nb&quot;>M-Pesa</span>? Utaweka PIN yako mwenyewe.">Your Kisumu business permit runs out in 9 days. Your documents are on file. Shall I renew it and send the <span class="nb">M-Pesa</span> request? You enter your own PIN.</span><div class="qr"><span data-sw="NDIYO">YES</span><span data-sw="HAPANA">NO</span></div></div>
-              <div class="msg msg--me msg--voice"><span class="play"></span><span class="wave" data-wave></span><span class="dur">0:04</span><span class="msg__tr" data-sw="“Ndiyo, endelea. Niko dukani.”">“Yes, go ahead. I'm at the shop.”</span></div>
-              <div class="msg" data-sw="Imelipwa. Kibali chako kimesasishwa na risiti imehifadhiwa.">Paid. Your permit is renewed and the receipt is saved.</div>
-              <div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>
-            </div>
-          </div>
-        </div>
-        <p class="cap" data-sw="Mfano. Faida iliona tarehe. Wanjiru alijibu kwa sauti.">Example. Faida spotted the date. Wanjiru answered by voice note.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= 12:30 pm ================= -->
-<section class="g-paper chap" id="c3" data-chap data-stamp="3" data-time-en="12:30 pm" data-time-sw="12:30 mchana" data-title-en="For the people you look after." data-title-sw="Kwa wale unaowajali.">
-  <div class="chap__in">
-    <div class="dateline" data-in><span data-sw="12:30 mchana">12:30 pm</span><small data-sw="Siku moja na Faida">One day with Faida</small></div>
-    <div class="spread spread--wide">
-      <div class="col-text" data-in>
-        <h2 class="display h-chap" data-sw="Kwa wale unaowajali.">For the people you look after.</h2>
-        <p class="lede" data-sw="Ongeza wazazi wako, babu na bibi yako, kwa ruhusa yao. Faida inaangalia manufaa wanayostahili na tarehe zao pia, inakuuliza kwanza, na kuwajulisha kwa njia inayowafaa, hata kwa SMS.">Add your parents and grandparents, with their permission. Faida watches for the benefits they qualify for and the dates they can't miss, asks you first, and keeps them informed in a way that suits them, even by SMS.</p>
-      </div>
-      <div class="col-media">
-        <div class="devices">
-          <div class="phone" data-play role="img" aria-label="Example WhatsApp conversation" data-aria-sw="Mfano wa mazungumzo ya WhatsApp" style="width:min(18rem,100%)">
-            <div class="phone__screen" style="height:30rem">
-              <div class="phone__bar"><span class="phone__av"><svg aria-hidden="true"><use href="#mark"/></svg></span><div><b>Faida</b><small data-sw="mtandaoni">online</small></div></div>
-              <div class="phone__msgs">
-                <div class="msg"><span data-sw="Cucu ametimiza miaka 70. Sasa anastahili Inua Jamii, malipo ya kila mwezi kwa wazee. Niandae usajili wake?">Cucu has turned 70. She now qualifies for Inua Jamii, a monthly cash transfer for older people. Shall I prepare her registration?</span><div class="qr"><span data-sw="Ndiyo, andaa">Yes, prepare it</span><span data-sw="Sio sasa">Not now</span></div></div>
-                <div class="msg msg--me" data-sw="Ndiyo, andaa">Yes, prepare it</div>
-                <div class="msg" data-sw="Iko tayari. Nimemtumia Cucu SMS yenye cha kubeba na mahali pa kwenda Alhamisi.">Ready. I have sent Cucu an SMS with what to bring and where to go on Thursday.</div>
-                <div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>
-              </div>
-            </div>
-          </div>
-          <div class="feat" aria-label="Cucu's basic phone" data-aria-sw="Simu ya kawaida ya Cucu">
-            <div class="feat__screen"><b>SMS · FAIDA</b>Faida: Cucu, unastahili Inua Jamii. Alhamisi, beba kitambulisho chako. Nitakukumbusha.</div>
-            <div class="feat__keys" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          </div>
-        </div>
-        <p class="cap" data-sw="Mfano. Cucu anapata SMS kwa Kiswahili. Hahitaji simu janja.">Example. Cucu gets an SMS in Kiswahili. She needs no smartphone.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= 3:00 pm ================= -->
-<section class="g-paper2 chap" id="c4" data-chap data-stamp="4" data-time-en="3:00 pm" data-time-sw="3:00 mchana" data-title-en="It keeps you in good standing." data-title-sw="Inakuweka katika hali nzuri.">
-  <div class="chap__in">
-    <div class="dateline" data-in><span data-sw="3:00 mchana">3:00 pm</span><small data-sw="Siku moja na Faida">One day with Faida</small></div>
-    <div class="spread spread--flip">
-      <div class="col-text" data-in>
-        <h2 class="display h-chap" data-sw="Inakuweka katika hali nzuri.">It keeps you in good standing.</h2>
-        <p class="lede" data-sw="Kodi, leseni, vibali, michango. Faida inajua kila tarehe ya mwisho kabla yako na kuwasilisha, ndani ya mipaka uliyoweka. Kuwa katika hali nzuri pia kunakuweka ukistahili zabuni, mikopo na ruzuku.">Tax returns, licences, permits, contributions. Faida knows every deadline before you do and does the filing, within the limits you set. Staying current also keeps you eligible for tenders, loans and grants.</p>
-      </div>
-      <div class="col-media" style="justify-items:stretch">
-        <ul class="ledger" id="ledger" role="list">
-          <li><b data-sw="Marejesho ya kodi ya KRA">KRA annual return</b><small data-sw="Risiti imehifadhiwa">Receipt saved</small><span class="chip"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span data-sw="Imewasilishwa">Filed</span></span></li>
-          <li><b data-sw="Kibali cha biashara">Single business permit</b><small data-sw="Risiti imehifadhiwa">Receipt saved</small><span class="chip"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span data-sw="Kimesasishwa">Renewed</span></span></li>
-          <li><b data-sw="Mchango wa SHA">SHA contribution</b><small data-sw="Risiti imehifadhiwa">Receipt saved</small><span class="chip"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span data-sw="Imelipwa">Paid</span></span></li>
-          <li><b data-sw="Leseni ya kuendesha">Driving licence</b><small data-sw="Nitaiandaa na kukuuliza">I will prepare it and ask you</small><span class="chip chip--wait"><span data-sw="Siku 90 zimebaki">Due in 90 days</span></span></li>
-        </ul>
-        <p class="cap" data-sw="Mfano. Wanjiru alitoa ruhusa moja ya kudumu kwa kodi, yenye kikomo. Faida ilifanya mengine.">Example. Wanjiru gave one standing OK for tax, with a limit. Faida did the rest.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= 5:40 pm ================= -->
-<section class="g-sun chap" id="c5" data-chap data-stamp="5" data-time-en="5:40 pm" data-time-sw="5:40 jioni" data-title-en="It follows up so you don't have to." data-title-sw="Inafuatilia ili wewe usifuatilie.">
-  <div class="chap__in">
-    <div class="dateline" data-in><span data-sw="5:40 jioni">5:40 pm</span><small data-sw="Siku moja na Faida">One day with Faida</small></div>
-    <div class="spread">
-      <div class="col-text" data-in>
-        <h2 class="display h-chap" data-sw="Inafuatilia ili wewe usifuatilie.">It follows up so you don't have to.</h2>
-        <p class="lede" data-sw="Ofisi hujibu kwa kuchelewa na kuomba zaidi. Faida inasoma kila jibu, inatuma kinachokosekana, na kukuambia hali ilivyo kwa maneno rahisi. Baada ya NDIYO, inakuweka kwenye mstari: siku za mafunzo, ripoti, marejesho.">Offices reply late and ask for more. Faida reads every reply, sends what's missing and tells you where things stand in plain words. After a yes, it keeps you on track: training days, reports, repayments.</p>
-      </div>
-      <div class="col-media" style="justify-items:stretch">
-        <p class="h-sub" data-sw="Ombi lako la YEDF">Your YEDF application</p>
-        <ol class="timeline" id="timeline">
-          <li><span data-sw="Limetumwa">Sent</span></li>
-          <li><span data-sw="Limepokelewa na YEDF">Received by YEDF</span></li>
-          <li><span data-sw="YEDF iliomba picha ya saluni">YEDF asked for a photo of the salon</span><small data-sw="Ulituma. Faida iliiongeza.">You sent it. Faida added it.</small></li>
-          <li class="is-now"><span data-sw="Linakaguliwa">Under review</span></li>
-          <li class="is-next"><span data-sw="Uamuzi">Decision</span><small data-sw="Nitakujulisha mara moja.">I will tell you the moment it comes.</small></li>
-        </ol>
-        <p class="cap" data-sw="Mfano. Habari zinakujia bila kuuliza. Bado unaweza kuuliza &quot;ombi langu liko wapi?&quot; wakati wowote.">Example. Updates come to you unasked. You can still ask “where is my application?” at any time.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= 9:00 pm : the peak ================= -->
-<section class="g-ink chap peak" id="c6" data-chap data-peak data-time-en="9:00 pm" data-time-sw="9:00 usiku" data-title-en="The day, tallied." data-title-sw="Siku yako, imehesabiwa.">
-  <div class="chap__in">
-    <div class="dateline" data-in><span data-sw="9:00 usiku">9:00 pm</span><small data-sw="Siku moja na Faida">One day with Faida</small></div>
-    <div class="spread spread--flip">
-      <div class="col-text" data-in>
-        <h2 class="display h-hero" data-sw="Siku yako, imehesabiwa.">The day, tallied.</h2>
-        <p class="lede" data-sw="Hivi ndivyo siku ya karatasi inavyokuwa usipohitaji kutafuta chochote. Faida ilileta kila jambo. Ulisema NDIYO mara tatu.">This is a day of paperwork when you never had to go looking. Faida brought every item to you. You said YES three times.</p>
-        <div><a class="btn" data-wa href="https://wa.me/"><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg><span data-sw="Acha Faida ikutafute">Let Faida find you</span></a></div>
-      </div>
-      <div class="col-media">
-        <div class="bigslip">
-          <div class="receipt-wrap">
-            <div class="receipt">
-              <div class="receipt__head">
-                <div class="receipt__brand"><svg aria-hidden="true"><use href="#mark"/></svg>Faida</div>
-                <small data-sw="Siku ya Wanjiru. Mfano, si mtumiaji halisi.">Wanjiru's day. Example, not a real user.</small>
-              </div>
-              <ol class="receipt__lines" id="bigLines">
-                <li><time>6:41</time><span data-sw="Imeomba: mfuko wa vijana Kisumu">Applied: Kisumu youth fund</span><b class="done" data-sw="IMEKAMILIKA">DONE</b></li>
-                <li><time>8:12</time><span data-sw="Imesasishwa: kibali cha biashara">Renewed: business permit</span><b class="done" data-sw="IMEKAMILIKA">DONE</b></li>
-                <li><time>12:35</time><span data-sw="Imeandaliwa: Inua Jamii ya Cucu">Prepared: Cucu's Inua Jamii</span><b class="done" data-sw="IMEKAMILIKA">DONE</b></li>
-                <li><time>3:00</time><span data-sw="Imewasilishwa: marejesho ya KRA">Filed: KRA return</span><b class="done" data-sw="IMEKAMILIKA">DONE</b></li>
-                <li><time>5:48</time><span data-sw="Imetumwa: picha ya saluni kwa YEDF">Sent: salon photo to YEDF</span><b class="done" data-sw="IMEKAMILIKA">DONE</b></li>
-              </ol>
-              <div class="total" id="bigTotal"><b data-sw="Mambo 5 yamekamilika">5 things done</b><span data-sw="Faida ilianzisha yote 5. Ulisema NDIYO mara 3.">Faida started all 5. You said YES 3 times.</span></div>
-            </div>
-          </div>
-          <svg class="stamp--big" id="bigStamp" aria-hidden="true" focusable="false" viewBox="0 0 200 200">
-            <defs><path id="ring2" d="M100,100 m-70,0 a70,70 0 1,1 140,0 a70,70 0 1,1 -140,0"/></defs>
-            <circle cx="100" cy="100" r="95" fill="none" stroke="currentColor" stroke-width="6"/>
-            <circle cx="100" cy="100" r="86" fill="none" stroke="currentColor" stroke-width="2"/>
-            <text font-family="Unbounded, sans-serif" font-weight="800" font-size="14" letter-spacing="1" fill="currentColor"><textPath href="#ring2" textLength="436" lengthAdjust="spacing">IMEKAMILIKA · DONE · IMEKAMILIKA · DONE ·</textPath></text>
-            <path d="M62 104l26 26 52-58" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= THE OTHER DESK ================= -->
-<section class="g-cobalt chap" id="desk" aria-labelledby="desk-title">
-  <div class="chap__in">
-    <div class="dateline" data-in><span data-sw="Upande wa pili wa kaunta">The other side of the counter</span><small data-sw="Kwa yeyote anayetoa kitu kwa watu">For anyone offering something to people</small></div>
-    <div class="spread">
-      <div class="col-text" data-in>
-        <h2 id="desk-title" class="display h-chap" data-sw="Kila ofa ina watu wake.">Every offer has its people.</h2>
-        <p class="lede" data-sw="Ruzuku, kazi, nafasi ya mafunzo, basari, manufaa ambayo wanachama wako wanastahili. Watu inaowalenga mara nyingi hawasikii kamwe. Faida inaziba pengo hilo, kutoka upande wako.">A grant, a job, a training place, a bursary, a benefit your members are owed. The people it's for usually never hear of it. Faida closes that gap, from your side.</p>
-      </div>
-      <div class="col-media" data-in style="justify-items:stretch">
+      <div class="col-media flow" data-in>
         <div class="listing" role="group" aria-label="Example programme listing" data-aria-sw="Mfano wa orodha ya programu">
-          <h3 data-sw="Mfuko wa Maendeleo ya Biashara za Vijana">Youth Enterprise Fund</h3>
+          <h3 data-sw="Mfuko wa Vijana wa Kaunti">County Youth Fund</h3>
           <dl>
-            <div><dt data-sw="Anayestahili">Who qualifies</dt><dd data-sw="Miaka 18 hadi 34 · Wenye biashara · Kaunti ya Kisumu">Ages 18 to 34 · Business owners · Kisumu County</dd></div>
+            <div><dt data-sw="Anayestahili">Who qualifies</dt><dd data-sw="Miaka 18 hadi 35 · Wenye biashara · Wakazi wa kaunti">Ages 18 to 35 · Business owners · County residents</dd></div>
             <div><dt data-sw="Tunachohitaji">What you need</dt><dd data-sw="Kitambulisho na picha ya biashara">ID and a photo of the business</dd></div>
+            <div><dt data-sw="Linafungwa">Closes</dt><dd data-sw="Ijumaa">Friday</dd></div>
           </dl>
-          <p class="listing__faida"><b data-sw="Faida itafanya:">Faida will:</b><span data-sw="kuwajulisha wanaostahili waliokubali, kukusanya hati, na kukutumia maombi yaliyokamilika.">tell eligible people who opted in, collect the documents and send you complete applications.</span></p>
         </div>
-        <p class="cap" data-sw="Mfano wa ofa iliyoorodheshwa.">Example listing.</p>
+        <svg class="flow__arrow icon" aria-hidden="true"><use href="#i-arrow"/></svg>
+        <div class="flow__msg">
+          <div class="msg is-on" data-sw="Habari za asubuhi, Wanjiru. Mfuko wa vijana wa kaunti unafunguliwa leo na unafungwa Ijumaa. Unastahili. Niombe kwa niaba yako?">Good morning, Wanjiru. The county youth fund opens today and closes Friday. You qualify. Shall I apply for you?</div>
+          <p class="cap" data-sw="Mfano. Orodha yako inakuwa ujumbe huu, kwa kila mtu anayestahili.">Example. Your listing becomes this message, for everyone who qualifies.</p>
+        </div>
       </div>
     </div>
     <ul class="desk-list" style="margin-top:var(--sp-8)">
-      <li data-in><h3 class="h-sub" data-sw="Iorodheshe mara moja.">List it once.</h3><p data-sw="Eleza unachotoa, nani anastahili, unahitaji nini na lini kinafungwa. Kwa fomu, kwenye WhatsApp, au unganisha mfumo wako.">Describe what you offer, who qualifies, what you need and when it closes. Through a form, on WhatsApp, or by connecting your system.</p></li>
-      <li data-in><h3 class="h-sub" data-sw="Faida inawatafuta watu wako.">Faida finds your people.</h3><p data-sw="Inawajulisha wanaostahili waliokubali, kwa lugha yao, ikitajwa ni yako. Na kujibu maswali yao ili wafanyakazi wako wasifanye hivyo.">It tells eligible people who opted in, in their language, labelled as yours. It answers their questions so your staff don't have to.</p></li>
-      <li data-in><h3 class="h-sub" data-sw="Wanaostahili kweli.">The people you meant.</h3><p data-sw="Faida inakagua kila mwombaji dhidi ya masharti yako, ili ofa yako iwafikie wale uliowalenga, si wajanja.">Faida checks every applicant against your rules, so your offer reaches the people it was meant for, not the well connected.</p></li>
-      <li data-in><h3 class="h-sub" data-sw="Maombi yanafika yamekamilika.">Applications arrive complete.</h3><p data-sw="Yamekaguliwa, hati zimeambatishwa, na kutumwa kwako au kusajiliwa moja kwa moja kwenye mfumo wako.">Checked, with documents attached, then sent to you or enrolled straight into your system.</p></li>
-      <li data-in><h3 class="h-sub" data-sw="Ona ulichofikia.">See who it reached.</h3><p data-sw="Mwonekano rahisi: nani alijulishwa, nani aliomba, nani alikubaliwa.">A simple view: who was told, who applied, who was approved.</p></li>
-      <li data-in><h3 class="h-sub" data-sw="Itumie kwa njia yako.">Use it your way.</h3><p data-sw="Kwenye WhatsApp ya Faida, au ndani ya njia yako mwenyewe, chini ya jina lako.">On Faida's WhatsApp, or inside your own channel, under your name.</p></li>
+      <li data-in><h3 class="h-sub" data-sw="1. Iorodheshe mara moja.">1. List it once.</h3><p data-sw="Nani anastahili, unahitaji nini, nafasi ngapi, na lini inafungwa. Kwa fomu, kwenye WhatsApp, au unganisha mfumo wako. Faida inaikagua na kukuonyesha itawafikia watu wangapi kabla haijatoka.">Who qualifies, what you need, how many places, and when it closes. Through a form, on WhatsApp, or by connecting your system. Faida checks it and shows you who it would reach before it goes out.</p></li>
+      <li data-in><h3 class="h-sub" data-sw="2. Watu sahihi wanasikia kwanza.">2. The right people hear first.</h3><p data-sw="Ni wale tu wanaotimiza masharti yako na waliokubali kusikia. Kwenye WhatsApp, kwa SMS na USSD kwa simu za kawaida, na kwa fomu ya karatasi au ziara ya ofisini pale programu inapohitaji hivyo. Faida inajibu maswali yao ili wafanyakazi wako wasifanye hivyo.">Only people who meet your rules and chose to hear. On WhatsApp, by SMS and USSD for basic phones, and with a paper form or an office visit where your programme needs one. Faida answers their questions so your staff don&#x27;t have to.</p></li>
+      <li data-in><h3 class="h-sub" data-sw="3. Maombi yanafika yamekamilika.">3. Applications arrive complete.</h3><p data-sw="Yamekaguliwa dhidi ya masharti yako, hati zimeambatishwa, na kutumwa kwako au kuingizwa moja kwa moja kwenye mfumo wako. Ofa yako inawafikia wale uliowalenga, si wajanja.">Checked against your rules, with documents attached, then sent to you or entered straight into your system. Your offer reaches the people it was meant for, not the well connected.</p></li>
     </ul>
-    <ul class="who" data-in>
-      <li data-sw="Programu za taifa">National programmes</li>
-      <li data-sw="Kaunti na mabaraza ya miji">Counties and city councils</li>
-      <li data-sw="SACCO na taasisi za mikopo">SACCOs and MFIs</li>
-      <li data-sw="NGO na wakfu">NGOs and foundations</li>
-      <li data-sw="Vyama vya ushirika">Co-operatives</li>
-      <li data-sw="Waajiri">Employers</li>
-      <li data-sw="Vyuo na watoa mafunzo">Colleges and training providers</li>
-      <li data-sw="Washirika wa maendeleo">Development partners</li>
-    </ul>
-    <p class="fair" data-in data-sw="Haki kwa muundo: watu huchagua kusikia kutoka kwako, ofa huwekewa lebo kila mara, na hakuna anayeweza kulipa kukwepa masharti yako ya kustahili.">Fair by design: people choose to hear from you, offers are always labelled, and no one can pay to skip your eligibility rules.</p>
-    <div style="margin-top:var(--sp-6)" data-in><a class="btn" data-org href="mailto:"><span data-sw="Zungumza nasi">Talk to us</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
   </div>
 </section>
 
-<!-- ================= YOU STAY IN CHARGE ================= -->
-<section class="g-paper chap" id="charge" aria-labelledby="charge-title">
+<!-- ================= RUN THE PROGRAMME ================= -->
+<section class="g-paper2 chap" id="deliver" aria-labelledby="deliver-title">
   <div class="chap__in">
-    <div class="dateline" data-in><span data-sw="Wewe ndiye mwenye uamuzi">You decide</span><small data-sw="Faida inafanya kadri unavyoruhusu">Faida does as much as you allow</small></div>
-    <h2 id="charge-title" class="display h-chap" data-in style="margin-bottom:var(--sp-6)" data-sw="Wewe ndiye mwenye uamuzi.">You stay in charge.</h2>
-    <div class="spread spread--levels">
+    <div class="dateline" data-in><span data-sw="Endesha programu">Run the programme</span><small data-sw="Kutoka usajili hadi kufunga">From enrolment to closure</small></div>
+    <div class="spread">
       <div class="col-text" data-in>
-        <fieldset class="levels">
-          <legend data-sw="Chagua Faida ifanye kiasi gani:">Choose how much Faida does:</legend>
-          <div class="level"><input type="radio" name="lvl" id="lv1" value="1"><label for="lv1"><b data-sw="Niambie">Tell me</b><span data-sw="Faida inakuambia kinachostahili. Wewe unafanya.">Faida tells you what is due. You do it.</span></label></div>
-          <div class="level"><input type="radio" name="lvl" id="lv2" value="2"><label for="lv2"><b data-sw="Iandae">Get it ready</b><span data-sw="Faida inajaza yote. Wewe unawasilisha.">Faida fills everything in. You submit.</span></label></div>
-          <div class="level"><input type="radio" name="lvl" id="lv3" value="3" checked><label for="lv3"><b data-sw="Niulize, kisha ifanye">Ask me, then do it</b><span data-sw="Faida inauliza, unasema NDIYO, Faida inafanya.">Faida asks, you say YES, Faida does it.</span></label></div>
-          <div class="level"><input type="radio" name="lvl" id="lv4" value="4"><label for="lv4"><b data-sw="Ishughulikie">Handle it</b><span data-sw="Faida inafanya peke yake, ndani ya mipaka uliyoweka.">Faida does it alone, within limits you set.</span></label></div>
-        </fieldset>
+        <h2 id="deliver-title" class="display h-chap" data-sw="Endesha programu nzima ndani ya mazungumzo.">Run the whole programme in the conversation.</h2>
+        <p class="lede" data-sw="Programu hupoteza watu kati ya kuchaguliwa na kipindi cha mwisho: ujumbe uliokosa, siku ya mafunzo iliyosahaulika, hati ambayo bado haijaletwa. Faida inamweka kila mshiriki kwenye mstari na timu yako juu ya kila kesi.">Programmes lose people between selection and the last session: a missed message, a forgotten training day, a document still outstanding. Faida keeps each participant on track and your team on top of every case.</p>
+        <ul class="index stages">
+          <li><h3 data-sw="Weka mipangilio">Set up</h3><p data-sw="Makundi lengwa, masharti ya kustahili, maeneo, kiwango cha fedha, ratiba na hati zinazohitajika, mara moja.">Target groups, eligibility rules, locations, funding limits, timelines and required documents, set once.</p></li>
+          <li><h3 data-sw="Pokea na uchague">Intake and selection</h3><p data-sw="Usajili, ridhaa, taarifa za kaya na hati, kwa mazungumzo. Masharti yanatumika, mapungufu yanaonyeshwa, na uchaguzi unaoweza kuueleza.">Registration, consent, household details and documents, collected in conversation. Rules applied, gaps flagged, and a selection you can explain.</p></li>
+          <li><h3 data-sw="Sajili na utoe huduma">Enrol and deliver</h3><p data-sw="Waliochaguliwa wanaambiwa, hatua zinaelezwa, kukubali kunakusanywa. Miadi, mafunzo, ugawaji na rufaa vinapangwa, pamoja na vikumbusho.">Selected applicants told, next steps explained, acceptance collected. Appointments, training, distributions and referrals coordinated, with reminders.</p></li>
+          <li><h3 data-sw="Fuatilia na ufunge">Follow up and close</h3><p data-sw="Kila kesi inafuatiliwa hadi itatuliwe. Mahudhurio, ukamilishaji na matokeo yanarekodiwa. Washiriki wanaambiwa programu inapofungwa, na maoni ya mwisho yanakusanywa.">Every case tracked to resolution. Attendance, completion and outcomes recorded. Participants told when the programme closes, and final feedback collected.</p></li>
+        </ul>
       </div>
-      <div class="col-media" data-in>
-        <div class="phone phone--short" role="group" aria-label="Example message at the chosen level" data-aria-sw="Mfano wa ujumbe kwa kiwango ulichochagua">
+      <div class="col-media" style="justify-items:stretch" data-in>
+        <p class="h-sub" data-sw="Kesi ya Otieno">Otieno&#x27;s case</p>
+        <ol class="timeline">
+          <li><span data-sw="Amechaguliwa">Selected</span><small data-sw="Faida ilimwambia na kueleza hatua zinazofuata.">Faida told him and explained the next steps.</small></li>
+          <li><span data-sw="Amekubali nafasi">Accepted his place</span></li>
+          <li><span data-sw="Siku ya mafunzo 1: alihudhuria">Training day 1: attended</span></li>
+          <li><span data-sw="Siku ya mafunzo 2: hakufika">Training day 2: missed</span><small data-sw="Faida iliuliza kwa nini. Hakuwa na nauli. Kesi imefunguliwa.">Faida asked why. He had no bus fare. A case was opened.</small></li>
+          <li class="is-now"><span data-sw="Msaada wa nauli umeidhinishwa">Fare support approved</span><small data-sw="Timu yako iliamua. Faida ilimwambia.">Your team decided. Faida told him.</small></li>
+          <li class="is-next"><span data-sw="Siku ya mafunzo 3">Training day 3</span><small data-sw="Kikumbusho kitatumwa siku moja kabla.">Reminder goes out the day before.</small></li>
+        </ol>
+        <p class="cap" data-sw="Mfano. Kesi ya mshiriki mmoja, kama timu yako inavyoiona.">Example. One participant&#x27;s case, as your team sees it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FEEDBACK AND ACCOUNTABILITY ================= -->
+<section class="g-sun chap" id="feedback" aria-labelledby="feedback-title">
+  <div class="chap__in">
+    <div class="dateline" data-in><span data-sw="Maoni na uwajibikaji">Feedback and accountability</span><small data-sw="Kwa maneno yao wenyewe">In their own words</small></div>
+    <div class="spread spread--flip">
+      <div class="col-text" data-in>
+        <h2 id="feedback-title" class="display h-chap" data-sw="Uliza ilivyokwenda, kwa jinsi watu wanavyozungumza.">Ask how it went, the way people talk.</h2>
+        <p class="lede" data-sw="Baada ya siku ya mafunzo au ugawaji, Faida inauliza ilivyokwenda. Watu wanajibu kwa maneno yao au kwa ujumbe wa sauti. Lalamiko linakuwa kesi yenye nambari ya kumbukumbu, linamfikia mtu anayeweza kulitatua, na mshiriki anaambiwa matokeo.">After a training day or a distribution, Faida asks how it went. People answer in their own words or by voice note. A concern becomes a case with a reference number, reaches someone who can fix it, and the participant is told the outcome.</p>
+      </div>
+      <div class="col-media">
+        <div class="phone" data-play role="img" aria-label="Example WhatsApp conversation" data-aria-sw="Mfano wa mazungumzo ya WhatsApp">
           <div class="phone__screen">
-            <div class="phone__bar"><span class="phone__av"><svg aria-hidden="true"><use href="#mark"/></svg></span><div><b>Faida</b><small data-sw="Kibali chako cha biashara kinastahili">Your business permit is due</small></div></div>
-            <div class="phone__msgs" aria-live="polite"><div class="msg" id="lvlMsg" style="display:block;opacity:1;transform:none"></div></div>
+            <div class="phone__bar"><span class="phone__av"><svg aria-hidden="true"><use href="#mark"/></svg></span><div><b>Faida</b><small data-sw="mtandaoni">online</small></div></div>
+            <div class="phone__msgs">
+              <div class="msg" data-sw="Mafunzo ya biashara ya leo yalikuwaje? Jibu kwa maneno yako au tuma ujumbe wa sauti.">How was today&#x27;s business training? Reply in your own words or send a voice note.</div>
+              <div class="msg msg--me msg--voice"><span class="play"></span><span class="wave" data-wave></span><span class="dur">0:07</span><span class="msg__tr" data-sw="“Mafunzo yalikuwa mazuri, lakini vitabu viliisha kabla sijapata changu.”">“The training was good, but the workbooks ran out before I got mine.”</span></div>
+              <div class="msg" data-sw="Pole. Nimelipeleka kwa timu ya programu kama lalamiko. Nambari ya kumbukumbu ni FB-2214. Ni wao tu wanaoweza kuliona, na haliathiri nafasi yako.">Sorry about that. I&#x27;ve passed it to the programme team as a concern. Your reference is FB-2214. Only they can see it, and it won&#x27;t affect your place.</div>
+              <div class="msg" data-sw="Habari kuhusu FB-2214: kitabu chako kiko ofisi ya wadi kuanzia Jumatatu. Je, hili limetatua tatizo?">Update on FB-2214: your workbook is at the ward office from Monday. Has this fixed it?<div class="qr"><span data-sw="Ndiyo">Yes</span><span data-sw="Bado">Not yet</span></div></div>
+              <div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>
+            </div>
           </div>
         </div>
-        <p class="cap" data-sw="Mfano. Ujumbe hubadilika kulingana na chaguo lako.">Example. The message changes with your choice.</p>
+        <p class="cap" data-sw="Mfano. Lalamiko moja, kutoka ujumbe wa sauti hadi kutatuliwa.">Example. One concern, from voice note to resolution.</p>
       </div>
     </div>
     <ul class="promises">
-      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-yes"/></svg><span data-sw="Hakuna kinachotumwa bila NDIYO yako, isipokuwa uliporuhusu.">Nothing is sent without your YES, unless you allowed it.</span></li>
-      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg><span data-sw="Faida haioni wala kuomba PIN yako ya M-Pesa au ya benki.">Faida never sees or asks for your <span class="nb">M-Pesa</span> or bank PIN.</span></li>
-      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-stop"/></svg><span data-sw="Sema SITISHA, inasimama. Wakati wowote.">Say STOP and it stops. At any time.</span></li>
-      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-receipt"/></svg><span data-sw="Unapata risiti ya kila inachofanya.">You get a receipt for everything it does.</span></li>
-      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-seal"/></svg><span data-sw="Faida inakuletea tu ofa ilizokagua kuwa ni za kweli.">Faida only brings you offers it has checked are genuine.</span></li>
-      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span data-sw="Taarifa zako zinatumika kwa maombi yako tu, na unaweza kuomba zifutwe.">Your details are used only for your applications, and you can ask for them to be deleted.</span></li>
+      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-scale"/></svg><span data-sw="Maoni hayaathiri kustahili wala kupata huduma.">Feedback never affects eligibility or access to services.</span></li>
+      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-yes"/></svg><span data-sw="Watu wanajua nani anaona majibu yao na yatatumikaje.">People know who sees their answers and how they are used.</span></li>
+      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg><span data-sw="Malalamiko ni ya siri, yenye ufikiaji uliodhibitiwa na hatua za kupandisha.">Grievances are private, with restricted access and escalation rules.</span></li>
+      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span data-sw="Ripoti za ulinzi na udanganyifu zinaenda kwa wafanyakazi walioidhinishwa tu.">Safeguarding and fraud reports go only to authorised staff.</span></li>
+      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-stop"/></svg><span data-sw="Maoni bila jina pale inapowezekana, na mipaka yake ikielezwa.">Anonymous feedback where it&#x27;s possible, with its limits explained.</span></li>
+      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-receipt"/></svg><span data-sw="Kila lalamiko linapata nambari ya kumbukumbu na matokeo.">Every concern gets a reference number and an outcome.</span></li>
     </ul>
   </div>
 </section>
 
-<!-- ================= EVERYTHING ON OFFER ================= -->
-<section class="g-sun chap" id="covered" aria-labelledby="covered-title">
+<!-- ================= FIELD AND LAST MILE ================= -->
+<section class="g-paper chap" id="field" aria-labelledby="field-title">
   <div class="chap__in">
-    <div class="dateline" data-in><span data-sw="Kila kinachotolewa">Everything on offer</span><small data-sw="Kutoka kila chanzo, kaunti zote 47">From every source, in all 47 counties</small></div>
-    <h2 id="covered-title" class="display h-chap" data-in data-sw="Kama kipo, Faida inakijua.">If it's on offer, Faida knows about it.</h2>
-    <p class="lede covered__lede" data-in data-sw="Manufaa mengi Kenya hayadaiwi kwa sababu moja: wale yanaowalenga hawayasikii kamwe. Faida inakusanya kila kinachotolewa, kutoka kwa kila anayetoa, inakilinganisha nawe, na kukishughulikia kwa niaba yako.">Most of what's on offer in Kenya goes unclaimed for one reason: the people it's meant for never hear of it. Faida gathers everything on offer, from everyone offering it, matches it to you, and takes it up for you.</p>
-    <div class="offer">
-      <div class="offer__what" data-in>
-        <h3 class="offer__h" data-sw="Kinachotolewa">What's on offer</h3>
-        <ul class="offer__list">
-          <li><b data-sw="Msaada wa pesa">Cash support</b><span data-sw="wazee, yatima, ulemavu, misaada ya dharura">older people, orphans, disability, relief</span></li>
-          <li><b data-sw="Ruzuku">Grants</b><span data-sw="vijana, wanawake, biashara, kaunti">youth, women, business, county</span></li>
-          <li><b data-sw="Mikopo">Loans</b><span data-sw="mifuko ya serikali, SACCO, elimu">government funds, SACCOs, education</span></li>
-          <li><b data-sw="Basari na udhamini">Bursaries and scholarships</b><span data-sw="wadi, eneo bunge, kaunti, wakfu">ward, constituency, county, foundations</span></li>
-          <li><b data-sw="Mafunzo na mafunzo kazini">Training and internships</b><span data-sw="kozi, uanagenzi, mafunzo mafupi">courses, apprenticeships, bootcamps</span></li>
-          <li><b data-sw="Kazi">Jobs</b><span data-sw="za umma, kaunti, binafsi, ng&#x27;ambo, zote zimekaguliwa">public, county, private, overseas, all checked</span></li>
-          <li><b data-sw="Zabuni">Tenders</b><span data-sw="asilimia 30 kwa vijana, wanawake na walemavu">the 30% set aside for youth, women and PWDs</span></li>
-          <li><b data-sw="Bima ya afya na matibabu">Health cover and care</b><span data-sw="SHA, uchunguzi, uzazi, kampeni">SHA, screening, maternity, campaigns</span></li>
-          <li><b data-sw="Pembejeo za kilimo">Farm inputs</b><span data-sw="mbolea ya ruzuku, mbegu, bima ya mazao na mifugo">subsidised fertiliser, seed, crop and livestock insurance</span></li>
-          <li><b data-sw="Makazi na ardhi">Housing and land</b><span data-sw="nyumba nafuu, hati miliki">affordable housing, title deeds</span></li>
-          <li><b data-sw="Pesa ambazo ni zako">Money that&#x27;s yours</b><span data-sw="mali zisizodaiwa, pensheni, marejesho">unclaimed assets, pensions, refunds</span></li>
-          <li><b data-sw="Manufaa ya wanachama">Member benefits</b><span data-sw="gawio la SACCO, bonasi za ushirika, manufaa ya wafanyakazi">SACCO dividends, co-op bonuses, staff benefits</span></li>
-          <li><b data-sw="Msaada wa kisheria">Legal help</b><span data-sw="msaada wa bure, mirathi, hati">free legal aid, succession, documents</span></li>
-          <li><b data-sw="Sauti yako">Your say</b><span data-sw="vikao vya bajeti ya kaunti, usajili">county budget forums, registration drives</span></li>
-          <li><b data-sw="Zawadi na mashindano">Prizes and accelerators</b><span data-sw="changamoto, mashindano, vituo vya ubunifu">challenges, competitions, incubators</span></li>
-          <li><b data-sw="Hati na wajibu">Papers and obligations</b><span data-sw="vitambulisho, vibali, kodi, usasishaji">IDs, permits, tax, renewals</span></li>
+    <div class="dateline" data-in><span data-sw="Uwanjani">In the field</span><small data-sw="Pale programu inapofanyika ana kwa ana">Where the programme happens in person</small></div>
+    <div class="spread spread--wide">
+      <div class="col-text" data-in>
+        <h2 id="field-title" class="display h-chap" data-sw="Kutoka ujumbe hadi siku ya ugawaji.">From the message to distribution day.</h2>
+        <p class="lede" data-sw="Ugawaji, uchunguzi wa afya na usajili bado hufanyika ana kwa ana. Faida inamwambia kila mshiriki wapi, lini na nini cha kubeba, inawapa maafisa wa uwanjani orodha zao, na kurekodi nani alihudumiwa.">Distributions, screenings and registration drives still happen in person. Faida tells each participant where, when and what to bring, gives field officers their lists, and records who was served.</p>
+        <ul class="ticks">
+          <li data-sw="Tarehe, mahali na hati za ugawaji, kwa kila mshiriki">Distribution dates, places and documents, for each participant</li>
+          <li data-sw="Miadi na mahudhurio">Appointments and attendance</li>
+          <li data-sw="Orodha za washiriki na maelekezo kwa maafisa wa uwanjani">Participant lists and case notes for field officers</li>
+          <li data-sw="Uthibitisho wa utoaji na masuala ambayo hayajatatuliwa">Delivery confirmations and unresolved issues</li>
+          <li data-sw="Kukusanya taarifa bila mtandao, kisha kusawazisha">Offline data capture, synced later</li>
+          <li data-sw="Ugawaji uliokosa na rufaa zilizoshindwa zinapandishwa">Missed distributions and failed referrals escalated</li>
         </ul>
       </div>
-      <div class="offer__who" data-in style="--d:120ms">
-        <h3 class="offer__h" data-sw="Wanaotoa">Who's offering it</h3>
-        <ul class="offer__src">
-          <li data-sw="Serikali ya taifa na mashirika yake">National government and its agencies</li>
-          <li data-sw="Kaunti, mabaraza ya miji na manispaa">Counties, city and municipal councils</li>
-          <li data-sw="Wadi na maeneo bunge">Wards and constituencies</li>
-          <li data-sw="NGO na mashirika ya kidini">NGOs and faith groups</li>
-          <li data-sw="Wakfu na programu za makampuni">Foundations and company programmes</li>
-          <li data-sw="SACCO, benki na kampuni za bima">SACCOs, banks and insurers</li>
-          <li data-sw="Vyama vya ushirika na kilimo biashara">Co-operatives and agribusiness</li>
-          <li data-sw="Waajiri">Employers</li>
-          <li data-sw="Vyuo na watoa mafunzo">Colleges and training providers</li>
-          <li data-sw="Washirika wa maendeleo">Development partners</li>
-          <li data-sw="Kampeni za afya">Health campaigns</li>
-          <li data-sw="Huduma za umma na mashirika ya makazi">Utilities and housing agencies</li>
-        </ul>
-        <p class="offer__more" data-sw="Na yeyote mwingine anayetoa kitu kwa watu.">And anyone else offering something to people.</p>
+      <div class="col-media" data-in>
+        <div class="feat" aria-label="A participant's basic phone" data-aria-sw="Simu ya kawaida ya mshiriki">
+          <div class="feat__screen"><b>SMS · FAIDA</b>Faida: Mbolea ya ruzuku inagawiwa Ijumaa saa 3 asubuhi, ofisi ya chifu. Beba kitambulisho na kadi ya mkulima. Nitakukumbusha Alhamisi.</div>
+          <div class="feat__keys" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <p class="cap" data-sw="Mfano. Mkulima anapata SMS kwa Kiswahili. Hahitaji simu janja.">Example. A farmer gets an SMS in Kiswahili. No smartphone needed.</p>
       </div>
     </div>
-    <div class="offer__foot" data-in>
-      <p><svg class="icon" aria-hidden="true"><use href="#i-seal"/></svg><span data-sw="Kila ofa inakaguliwa kabla haijakufikia. Uliza &quot;hii ni kweli?&quot; kuhusu chochote: tangazo la kazi, ruzuku, ujumbe uliotumiwa.">Every offer is checked before it reaches you. Ask “is this real?” about anything: a job advert, a grant, a message someone forwarded you.</span></p>
-      <a class="textlink" href="#desk"><span data-sw="Unatoa kitu kwa watu? Kiorodheshe mara moja.">Offering something to people? List it once.</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  </div>
+</section>
+
+<!-- ================= PROGRAMME INTELLIGENCE ================= -->
+<section class="g-ink chap" id="learn" aria-labelledby="learn-title">
+  <div class="chap__in">
+    <div class="dateline" data-in><span data-sw="Jifunze na uripoti">Learn and report</span><small data-sw="Kwa timu za programu na wafadhili wao">For programme teams and their funders</small></div>
+    <h2 id="learn-title" class="display h-chap" data-in data-sw="Ona mahali utoaji unakwama.">See where delivery is failing.</h2>
+    <p class="lede learn__lede" data-in data-sw="Faida inahesabu maombi, na pia inakuonyesha mahali mambo yanavunjika. Inajibu maswali ambayo ripoti nyingi haziwezi:">Faida counts applications, and it also shows you where things break. It answers the questions most reports can&#x27;t:</p>
+    <ul class="questions" data-in>
+      <li data-sw="Jamii zipi zinazostahili hazifikiwi?">Which eligible communities aren&#x27;t being reached?</li>
+      <li data-sw="Waombaji wanaacha katika hatua ipi?">Where do applicants give up?</li>
+      <li data-sw="Hati au sharti lipi linasababisha ugumu zaidi?">Which document or requirement causes the most friction?</li>
+      <li data-sw="Je, waliochaguliwa wanapata huduma waliyoahidiwa?">Are selected participants getting the service they were promised?</li>
+      <li data-sw="Malalamiko yapi bado hayajatatuliwa?">Which complaints are still open?</li>
+      <li data-sw="Hatua zipi zinaleta matokeo bora zaidi?">Which interventions lead to better outcomes?</li>
+    </ul>
+    <p class="learn__foot" data-in data-sw="Dashibodi za programu, ufikiaji uliogawanywa kwa wadi, jinsia, umri na ulemavu, na ripoti kwa wafadhili, kutoka taarifa zile zile zinazoendesha programu.">Programme dashboards, reach broken down by ward, gender, age and disability, and funder reports, from the same records that run the programme.</p>
+  </div>
+</section>
+
+<!-- ================= WHO IT'S FOR (matrix §2) ================= -->
+<section class="g-paper2 chap" id="who" aria-labelledby="who-title">
+  <div class="chap__in">
+    <div class="dateline" data-in><span data-sw="Ni kwa ajili ya nani">Who it&#x27;s for</span><small data-sw="Yeyote anayetoa kitu kwa watu">Anyone offering something to people</small></div>
+    <h2 id="who-title" class="display h-chap" data-in style="margin-bottom:var(--sp-6)" data-sw="Watu wako, chochote unachotoa.">Your people, whatever you offer.</h2>
+    <ul class="desk-list">
+      <li data-in><h3 class="h-sub" data-sw="Kaunti, wadi na maeneo bunge">Counties, wards and constituencies</h3><p data-sw="Basari, mifuko ya kaunti, vibali na ushiriki wa umma. Matangazo hutoka kama PDF na kwenye mbao za matangazo, na fomu zinasubiri ofisi za wadi. Faida inamwambia kila mkazi anayestahili, inajaza fomu pamoja naye, na kuwaleta kwenye kikao cha bajeti wale ambao kwa kawaida hukosa.">Bursaries, county funds, permits and public participation. Notices go out as PDFs and on notice boards, and forms wait at ward offices. Faida tells every resident who qualifies, fills in the form with them, and brings people who usually miss the budget forum into it.</p></li>
+      <li data-in><h3 class="h-sub" data-sw="Programu za kitaifa na mashirika">National programmes and agencies</h3><p data-sw="Madirisha ya usajili ya siku chache, nafasi chache kwa kila wadi, maombi ya USSD pekee. Faida inawaambia wanaostahili siku dirisha linapofunguliwa, inawaongoza hatua kwa hatua, na kuwaweka wanafunzi wakihudhuria.">Registration windows of a few days, places capped per ward, USSD-only applications. Faida tells eligible people the day a window opens, walks them through the steps, and keeps trainees attending.</p></li>
+      <li data-in><h3 class="h-sub" data-sw="NGO, wakfu na washirika wa maendeleo">NGOs, foundations and development partners</h3><p data-sw="Wafikie wanaostahili nje ya mtandao wako wa kawaida, endesha usajili, kesi na maoni mahali pamoja, na uwatumie wafadhili takwimu za ufikiaji na matokeo wanazoweza kuziamini.">Reach eligible people outside your usual network, run intake, cases and feedback in one place, and send funders reach and outcome data they can trust.</p></li>
+      <li data-in><h3 class="h-sub" data-sw="SACCO, vyama vya ushirika, benki na kampuni za bima">SACCOs, co-operatives, banks and insurers</h3><p data-sw="Wanachama hawasomi barua. Faida inamwambia kila mwanachama kuhusu gawio, mkopo, bonasi au bima inayomfaa, chini ya jina lako, na kushughulikia usasishaji.">Members don&#x27;t read circulars. Faida tells each member about the dividend, loan, bonus or cover that fits them, under your name, and handles renewals.</p></li>
+      <li data-in><h3 class="h-sub" data-sw="Waajiri, vyuo na watoa mafunzo">Employers, colleges and training providers</h3><p data-sw="Matangazo feki yanatumia jina lako, na ya kweli yanavutia waombaji wengi wasiofaa. Faida inapeleka nafasi kwa wanaotimiza mahitaji yako, inakagua matangazo ambayo watu wanaituma, na kushughulikia usajili na mahudhurio.">Fake adverts use your name, and real ones draw floods of unqualified applicants. Faida sends openings to people who meet your requirements, checks adverts people forward to it, and handles onboarding and attendance.</p></li>
+      <li data-in><h3 class="h-sub" data-sw="Afya, kilimo, makazi na huduma za umma">Health, agriculture, housing and utilities</h3><p data-sw="Uchunguzi wa afya, usajili wa wakulima, pembejeo za msimu, uunganishaji na awamu za nyumba. Faida inawaambia watu lini na wapi, nini cha kubeba, na kuwakumbusha siku moja kabla.">Screenings, farmer registration, seasonal inputs, connections and housing rounds. Faida tells people when and where, what to bring, and reminds them the day before.</p></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= FAIR BY DESIGN ================= -->
+<section class="g-paper chap" id="fair" aria-labelledby="fair-title">
+  <div class="chap__in">
+    <div class="dateline" data-in><span data-sw="Haki kwa muundo">Fair by design</span><small data-sw="Kwa watu unaowahudumia">For the people you serve</small></div>
+    <h2 id="fair-title" class="display h-chap" data-in data-sw="Fursa, kamwe si tangazo.">An opportunity, never an advert.</h2>
+    <ul class="promises">
+      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-yes"/></svg><span data-sw="Watu wanachagua kusikia kutoka kwako, na wanaweza kusimamisha wakati wowote.">People choose to hear from you, and can stop at any time.</span></li>
+      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-tag"/></svg><span data-sw="Kila ofa ina lebo ya anayeitoa.">Every offer is labelled with who is offering it.</span></li>
+      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-scale"/></svg><span data-sw="Ofa zinapangwa kwa kile zinachompa mtu. Hakuna anayeweza kulipa kukwepa masharti yako.">Offers are ranked by what they give the person. Nobody can pay to skip your rules.</span></li>
+      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-seal"/></svg><span data-sw="Kila mwombaji anakaguliwa dhidi ya masharti yako kabla hajakufikia.">Every applicant is checked against your rules before reaching you.</span></li>
+      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span data-sw="Taarifa za washiriki zinatumika kwa programu yako tu, na wanaweza kuomba zifutwe.">Participants&#x27; details are used only for your programme, and they can ask for them to be deleted.</span></li>
+      <li data-in><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg><span data-sw="Faida haimwombi mtu yeyote PIN yake ya M-Pesa au ya benki.">Faida never asks anyone for their <span class="nb">M-Pesa</span> or bank PIN.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= YOUR PEOPLE'S SIDE ================= -->
+<section class="g-sun chap" id="people" aria-labelledby="people-title">
+  <div class="chap__in">
+    <div class="dateline" data-in><span data-sw="Upande wa watu wako">Your people&#x27;s side</span><small data-sw="Faida ileile, mfukoni mwao">The same Faida, in their pocket</small></div>
+    <div class="spread">
+      <div class="col-text" data-in>
+        <h2 id="people-title" class="display h-chap" data-sw="Watu wako wanapata wakala wao wenyewe.">Your people get an agent of their own.</h2>
+        <p class="lede" data-sw="Watu unaowahudumia wanatumia Faida ileile. Inawaambia kila wanachostahili kutoka kila chanzo, inaomba wakisema ndiyo, na kuwaweka kwenye mstari. Programu yako inawafikia pamoja na kila kitu kingine kinachofaa maisha yao.">The people you serve use the same Faida. It tells them everything they qualify for, from every source, applies when they say yes, and keeps them on track. Your programme reaches them alongside everything else that fits their life.</p>
+        <p class="people__pair" data-sw="Wao wanapata risiti. Wewe unapata ripoti.">They get a receipt. You get the report.</p>
+        <div><a class="btn" href="/people"><span data-sw="Ona Faida inavyowafanyia watu">See what Faida does for people</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
+      </div>
+      <div class="col-media" data-in>
+        <div class="receipt-wrap">
+          <div class="receipt receipt--mini">
+            <div class="receipt__head">
+              <div class="receipt__brand"><svg aria-hidden="true"><use href="#mark"/></svg>Faida</div>
+              <small data-sw="Siku ya Wanjiru. Mfano, si mtumiaji halisi.">Wanjiru&#x27;s day. Example, not a real user.</small>
+            </div>
+            <ol class="receipt__lines is-static">
+              <li><time>6:41</time><span data-sw="Imeomba: mfuko wa vijana wa kaunti">Applied: county youth fund</span><b class="done" data-sw="IMEKAMILIKA">DONE</b></li>
+              <li><time>8:12</time><span data-sw="Imesasishwa: kibali cha biashara">Renewed: business permit</span><b class="done" data-sw="IMEKAMILIKA">DONE</b></li>
+              <li><time>12:35</time><span data-sw="Imeandaliwa: Inua Jamii ya Cucu">Prepared: Cucu&#x27;s Inua Jamii</span><b class="done" data-sw="IMEKAMILIKA">DONE</b></li>
+              <li><time>5:48</time><span data-sw="Imerekodiwa: lalamiko la mafunzo">Logged: training concern</span><b class="done" data-sw="IMEKAMILIKA">DONE</b></li>
+            </ol>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -443,17 +322,17 @@
 <!-- ================= FAQ ================= -->
 <section class="g-paper2 chap faq" aria-labelledby="faq-title">
   <div class="chap__in">
-    <div class="dateline" data-in><span data-sw="Maswali ya kawaida">Questions people ask</span></div>
-    <h2 id="faq-title" class="vh" data-sw="Maswali ya kawaida">Questions people ask</h2>
+    <div class="dateline" data-in><span data-sw="Maswali ya taasisi">Questions organisations ask</span></div>
+    <h2 id="faq-title" class="vh" data-sw="Maswali ya taasisi">Questions organisations ask</h2>
     <div data-in>
-      <details><summary><span data-sw="Je, nahitaji kupakua programu?">Do I need to download an app?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Hapana. Ukiwa na WhatsApp una kila kitu. Hata bila simu janja, unaweza kutumia SMS au USSD.">No. If you have WhatsApp, you have everything you need. Even without a smartphone, you can use SMS or USSD.</p></details>
-      <details><summary><span data-sw="Faida inajuaje kinachonifaa?">How does Faida know what fits me?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Unaiambia machache kukuhusu mara moja: unapoishi, kazi yako, familia yako. Faida inalinganisha kila kinachotolewa na kila tarehe na hayo, na kutambua nyakati muhimu kama kumaliza shule au kutimiza miaka 70. Kitu kinapokufaa, inakuandikia. Unaweza kubadilisha au kufuta taarifa hizo wakati wowote.">You tell it a little about yourself once: where you live, your work, your family. Faida checks everything on offer and every deadline against that, and notices moments that open new doors, like finishing school or turning 70. When something fits, it messages you. You can change or delete those details at any time.</p></details>
-      <details><summary><span data-sw="Je, inagharimu kitu?">Does it cost anything?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Kujua kinachokufaa ni bure. Baadhi ya huduma, kama kuwasilisha kwa niaba yako, zinaweza kuwa na ada ndogo, itakayoonyeshwa kabla hujasema NDIYO.">Finding out what fits you is free. Some services, like filing for you, may carry a small fee, always shown before you say YES.</p></details>
-      <details><summary><span data-sw="Je, Faida itafanya mambo bila kuniuliza?">Will Faida do things without asking me?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Ni wewe unayeamua. Kwa chaguo-msingi inakuuliza kabla ya kutuma chochote. Unaweza kusema SITISHA wakati wowote.">You decide. By default it asks before anything is sent. You can say STOP at any time.</p></details>
-      <details><summary><span data-sw="Nimetumiwa tangazo la kazi. Faida inaweza kulikagua?">Someone sent me a job offer. Can Faida check it?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Ndiyo. Litume kwa Faida. Inalilinganisha na njia rasmi za shirika husika na kukuambia wazi kama ni la kweli. Ajira za serikali hazihitaji malipo.">Yes. Forward it to Faida. It checks the offer against the organisation's official channels and tells you plainly whether it is genuine. Government recruitment never asks you to pay.</p></details>
-      <details><summary><span data-sw="Je, kama kitu hakiwezi kufanyika mtandaoni?">What if something can't be done online?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Mengi yanahitaji fomu ya karatasi, msimbo wa USSD au kufika ofisini. Faida inakujazia fomu uichapishe, inakuongoza hatua kwa hatua kwenye msimbo, au kukuambia hasa wapi, lini na nini cha kubeba. Kisha inakukumbusha siku moja kabla.">Many offers need a paper form, a USSD code or a visit. Faida fills in the form for you to print, walks you through the code step by step, or tells you exactly where to go, when, and what to bring. Then it reminds you the day before.</p></details>
-      <details><summary><span data-sw="Je, taarifa zangu ziko salama?">Is my information safe?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Taarifa zako ni siri na zinatumika kwa maombi yako tu. Unaweza kuomba tuzifute wakati wowote.">Your details are private and used only for your own applications. You can ask us to delete them at any time.</p></details>
-      <details><summary><span data-sw="Taasisi yetu ina kitu cha kutoa kwa watu. Tunakiorodheshaje?">Our organisation has something to offer people. How do we list it?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Iwe ni kaunti, wadi, SACCO, NGO, mwajiri au chuo: tuambie unachotoa, nani anastahili na lini kinafungwa, kwa fomu au kwenye WhatsApp. Faida inakithibitisha na kukuonyesha kitawafikia watu wangapi kabla hakijatoka.">Whether you are a county, a ward, a SACCO, an NGO, an employer or a college: tell us what you offer, who qualifies and when it closes, through a form or on WhatsApp. Faida verifies it and shows you who it would reach before it goes out.</p></details>
+      <details><summary><span data-sw="Je, Faida itatujaza maombi mengi kupita kiasi?">Will Faida flood us with applications?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Hapana. Ni wale tu wanaotimiza masharti yako wanaoambiwa, na kila ombi linakaguliwa kabla halijakufikia.">No. Only people who meet your rules are told, and each application is checked before it reaches you.</p></details>
+      <details><summary><span data-sw="Mnajuaje waombaji ni wa kweli?">How do you know applicants are genuine?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Faida inamkagua kila mwombaji dhidi ya masharti yako na hati alizoleta, na kuonyesha chochote kisicholingana. Timu yako ndiyo inafanya uamuzi wa mwisho.">Faida checks each applicant against your rules and the documents they share, and flags anything that doesn&#x27;t match. Your team makes the final decision.</p></details>
+      <details><summary><span data-sw="Je, washiriki wanahitaji simu janja au programu?">Do participants need a smartphone or an app?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Hapana. WhatsApp kwanza, SMS na USSD kwa simu za kawaida, na maafisa wa uwanjani kwa watu wasio na mtandao.">No. WhatsApp first, SMS and USSD for basic phones, and field officers for people who are offline.</p></details>
+      <details><summary><span data-sw="Inafanya kazi na mifumo yetu iliyopo?">Does it work with our existing systems?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Ndiyo. Orodhesha kwa fomu au kwenye WhatsApp, au unganisha mfumo wako ili maombi yaingie moja kwa moja. Ripoti zinaweza kupakuliwa.">Yes. List through a form or on WhatsApp, or connect your system so applications go straight in. Reports can be exported.</p></details>
+      <details><summary><span data-sw="Taarifa za washiriki zinatumikaje?">How is participants&#x27; data used?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Taarifa zinazokusanywa kwa programu yako zinatumika kwa programu yako tu. Washiriki wanatoa ridhaa, wanaambiwa nani anaona majibu yao, na wanaweza kuomba taarifa zao zifutwe.">Data collected for your programme is used only for your programme. Participants give consent, are told who can see their answers, and can ask for their details to be deleted.</p></details>
+      <details><summary><span data-sw="Je, Faida ni mtandao wa matangazo?">Is Faida an advertising network?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Hapana. Kila ofa lazima impe mtu kitu kwa masharti yaliyo wazi: pesa, huduma, nafasi, kazi au haki. Bidhaa za kibiashara zinatoka kwa watoa huduma waliodhibitiwa tu, zinawekewa lebo kila mara, na hazipangwi kwa malipo.">No. Every offer has to give people something on clear terms: money, a service, a place, a job or a right. Commercial products come only from regulated providers, are always labelled, and are never ranked by payment.</p></details>
+      <details><summary><span data-sw="Inagharimu kiasi gani?">What does it cost?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Inategemea ukubwa wa programu na sehemu unazotumia. Tuambie kuhusu yako na tutakutumia bei.">It depends on the size of the programme and which parts you use. Tell us about yours and we&#x27;ll send a quote.</p></details>
+      <details><summary><span data-sw="Tunaweza kuanza kidogo?">Can we start small?</span><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><p data-sw="Ndiyo. Anza na programu moja, au wadi moja, na uongeze zaidi ikifanya kazi.">Yes. Start with one programme, or one ward, and add more when it works.</p></details>
     </div>
   </div>
 </section>
@@ -462,20 +341,21 @@
 <section class="g-ink chap colophon" id="start" aria-label="Start" data-aria-sw="Anza">
   <div class="chap__in">
     <div class="colophon__brand" data-in><svg aria-hidden="true"><use href="#mark"/></svg><span class="display">Faida</span></div>
-    <a class="big-link" data-wa href="https://wa.me/" data-in><span data-sw="Pata Faida WhatsApp">Get Faida on WhatsApp</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-    <a class="big-link" data-org href="mailto:" data-in><span data-sw="Unatoa kitu kwa watu? Kiorodheshe na Faida">Offering something to people? List it with Faida</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    <a class="big-link" data-org href="mailto:" data-in><span data-sw="Tuambie kuhusu programu yako">Tell us about your programme</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    <a class="big-link" href="/people" data-in><span data-sw="Unatafuta kitu chako mwenyewe? Ona unachostahili">Looking for yourself? See what you qualify for</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
     <div class="colophon__small" data-in>
-      <p><strong data-sw="Faida">Faida</strong> · <span data-sw="Imetengenezwa Kenya.">Built in Kenya.</span></p>
-      <p data-sw="Watu na mazungumzo kwenye ukurasa huu ni mifano ya kuonyesha. Masharti ya kila ofa hutoka kwa taasisi inayoitoa.">The people and conversations on this page are examples. The rules for each offer come from the organisation offering it.</p>
+      <p><strong>Faida</strong> · <span data-sw="Imetengenezwa Kenya.">Built in Kenya.</span></p>
+      <p data-sw="Programu, watu, mazungumzo na takwimu kwenye ukurasa huu ni mifano ya kuonyesha. Faida ni huduma huru, si sehemu ya ofisi yoyote ya serikali.">The programmes, people, conversations and figures on this page are examples. Faida is independent and isn&#x27;t part of any government office.</p>
     </div>
   </div>
 </section>
 
 </main>
 
-<div class="sticky-cta" id="sticky"><a class="btn" data-wa href="https://wa.me/"><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg><span data-sw="Pata Faida WhatsApp">Get Faida on WhatsApp</span></a></div>
+<div class="sticky-cta" id="sticky"><a class="btn" data-org href="mailto:"><span data-sw="Tuambie kuhusu programu yako">Tell us about your programme</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
 
 <script>requestAnimationFrame(function(){document.documentElement.classList.add('ready')})</script>
-<script src="/site/app.js" defer></script>
+<script src="/site/config.js"></script>
+<script src="/site/org.js" defer></script>
 </body>
 </html>
