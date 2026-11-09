@@ -1,17 +1,12 @@
-/* Faida landing, v2. No dependencies.
+/* Faida for people (people.html, served at /people). No dependencies.
    One signature move: the receipt. As each moment of Wanjiru's day completes, a line is
    stamped on the slip in the margin; at 9 pm the slip is tallied on stage.
    Everything degrades to a readable static page (no JS, reduced motion). */
 (function () {
   'use strict';
 
-  /* ---------- config: set these before launch ---------- */
-  var CONFIG = {
-    whatsappNumber: '',            // digits only with country code, e.g. '2547XXXXXXXX'
-    whatsappText: { en: 'Hi Faida', sw: 'Habari Faida' },
-    orgEmail: '',                  // e.g. 'partners@yourdomain.co.ke'
-    orgSubject: { en: 'Listing an offer with Faida', sw: 'Kuorodhesha ofa na Faida' }
-  };
+  /* ---------- config: set in /site/config.js before launch ---------- */
+  var CONFIG = window.FAIDA_CONFIG;
 
   var doc = document.documentElement;
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -28,7 +23,7 @@
     else if ((navigator.language || '').toLowerCase().indexOf('sw') === 0) lang = 'sw';
   } catch (e) {}
 
-  var TITLES = { en: 'Faida: before you ask, it is handled', sw: 'Faida: kabla hujauliza, imeshughulikiwa' };
+  var TITLES = { en: 'Faida: find out what you qualify for, on WhatsApp', sw: 'Faida: jua unachostahili, kwenye WhatsApp' };
 
   var LEVELS = {
     1: { en: 'Your business permit expires in 30 days.',

@@ -1,34 +1,48 @@
-# Faida landing page
+# Faida public site
 
 Static HTML, CSS and JavaScript with no build step and no dependencies. It lives
 in [`faida-dashboard/public/site/`](../../faida-dashboard/public/site/) and is
-served at `/` by the dashboard's Next.js app, so the whole product (landing page
-and admin) is one Vercel project. The admin overview is at `/admin`.
+served by the dashboard's Next.js app, so the whole product (site and admin) is
+one Vercel project. Two pages:
+
+| Path | File | For |
+|---|---|---|
+| `/` | `index.html` | **Organisations** (the main target market): reach, intake, running programmes, feedback, field, reporting |
+| `/people` | `people.html` | **People**: "Everything on offer. Faida brings you yours." and one day with Faida |
+
+The admin overview is at `/admin`. Copy for both pages comes from
+[`MESSAGING.md`](MESSAGING.md), which maps the opportunity matrix to each audience.
 
 ```bash
 cd faida-dashboard
 npm install
-ADMIN_PASSWORD=choose-a-password npm run dev   # http://localhost:3001/  (landing)
-                                               # http://localhost:3001/admin (admin, after /login)
+ADMIN_PASSWORD=choose-a-password npm run dev   # http://localhost:3001/        (organisations)
+                                               # http://localhost:3001/people  (people)
+                                               # http://localhost:3001/admin   (admin, after /login)
 ```
 
-The page uses absolute asset paths (`/site/...`), so open it through the dev
+The pages use absolute asset paths (`/site/...`), so open it through the dev
 server rather than as a file.
 
 ## Before launch
 
-Set the contact details at the top of `faida-dashboard/public/site/app.js` (`CONFIG`):
+Set the contact details in `faida-dashboard/public/site/config.js` (`FAIDA_CONFIG`). Both pages read it:
 
 | Setting | What it does |
 |---|---|
 | `whatsappNumber` | Digits only with country code, e.g. `2547XXXXXXXX`. Until set, the button opens WhatsApp's chooser with a pre-filled message. |
-| `orgEmail` | Where "Talk to us" goes (mailto). Until set, it opens a blank email with the subject filled. |
+| `orgEmail` | Where "Tell us about your programme" goes (mailto). Until set, it opens a blank email with the subject filled. |
 
 Then:
 
 - Have a native Kiswahili speaker review every `data-sw` string in `index.html`
-  and the strings in `app.js`.
-- Check the claims in `BRIEF.md` section 7 are true of the product at launch. This page sells the finished product, not today's bot.
+  and `people.html`, and the strings in `app.js` and `org.js`.
+- Check the claims in `BRIEF.md` section 7 are true of the product at launch.
+  Both pages sell the finished product, not today's bot (a decision taken on
+  7 November 2026). The organisations page adds programme delivery, feedback and
+  grievances, field operations and reporting from `docs/PRODUCT_UPDATED2.md`.
+- The figures in the organisations page's programme report are illustrative and
+  labelled as such. Replace them with a real pilot's figures when there is one.
 - Add a privacy page and link it from the footer.
 
 ## Deploy
@@ -46,8 +60,9 @@ Routing, from `next.config.js` and `middleware.ts`:
 
 | Path | What it serves | Auth |
 |---|---|---|
-| `/` | the landing page (`public/site/index.html`, rewritten) | public |
-| `/site/*` | the landing page's CSS, JS and fonts | public |
+| `/` | the organisations page (`public/site/index.html`, rewritten) | public |
+| `/people` | the people page (`public/site/people.html`, rewritten) | public |
+| `/site/*` | the pages' CSS, JS and fonts | public |
 | `/login` | admin sign-in | public |
 | `/admin`, `/benefits`, `/users`, ... | the admin dashboard | admin session |
 
@@ -58,10 +73,15 @@ self-hosted and cached for a year, so no third-party requests are made.
 
 ## How it works
 
-- `public/site/index.html`: all copy, English in the markup, Kiswahili in `data-sw`.
-- `public/site/styles.css`: tokens at the top, then one block per section.
-- `public/site/app.js`: language switch, the receipt (margin slip, chat playback, the 9 pm
-  tally), the consent-level selector, and a small scroll driver.
+- `public/site/index.html` and `people.html`: all copy, English in the markup, Kiswahili in `data-sw`.
+- `public/site/styles.css`: shared by both pages. Tokens at the top, then one block
+  per section; the organisations page's blocks are at the end.
+- `public/site/config.js`: WhatsApp number and organisations email, shared.
+- `public/site/app.js` (people): language switch, the receipt (margin slip, chat
+  playback, the 9 pm tally), the consent-level selector, and a small scroll driver.
+- `public/site/org.js` (organisations): language switch, the programme report that
+  prints and is stamped on the title page, chat playback, and the sticky button.
+- The language choice is shared between the pages.
 - With JavaScript off or reduced motion on, everything is visible and static.
 
 Design reasoning, feeling curve and what was and was not verified: [`BRIEF.md`](BRIEF.md).

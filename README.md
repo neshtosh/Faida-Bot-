@@ -17,13 +17,16 @@ See [`docs/PRODUCT.md`](docs/PRODUCT.md) for the full product doc.
 | Folder | Description |
 |--------|-------------|
 | [`faida-export/`](faida-export/) | The agent's WhatsApp channel and backend (Node.js + Baileys) |
-| [`faida-dashboard/`](faida-dashboard/) | Next.js app: the public landing page at `/` (static, in `public/site/`) and the admin dashboard at `/admin` |
+| [`faida-dashboard/`](faida-dashboard/) | Next.js app: the public site (static, in `public/site/`), with the organisations page at `/` and the people page at `/people`, and the admin dashboard at `/admin` |
 
 ## Docs
 
 - [`docs/PRODUCT.md`](docs/PRODUCT.md) — product vision, delegation model, roadmap
 - [`docs/OPPORTUNITY-MATRIX.md`](docs/OPPORTUNITY-MATRIX.md) — everything Faida can match and take up, and who offers it
 - [`docs/landing/BRIEF.md`](docs/landing/BRIEF.md) — landing page design brief; [`README`](docs/landing/README.md) for run and deploy
+- [`docs/landing/COPY-REVIEW.md`](docs/landing/COPY-REVIEW.md) — copy and presentation review of the landing page, with proposed rewrites
+- [`docs/landing/MESSAGING.md`](docs/landing/MESSAGING.md) — the opportunity matrix mapped to messages for organisations, programme teams and people; the structure of both pages
+- [`.agents/product-marketing.md`](.agents/product-marketing.md) — positioning, audience, objections and voice, read by the marketing skills
 - [`docs/archive/`](docs/archive/) — early build conversations
 
 ## Quick start (agent backend)
@@ -44,7 +47,7 @@ See [`faida-export/README.md`](faida-export/README.md) for full documentation.
 cd faida-dashboard
 cp .env.local.example .env.local   # set SUPABASE_* and ADMIN_PASSWORD
 npm install
-npm run dev                        # http://localhost:3001 (landing page); /admin after signing in with ADMIN_PASSWORD
+npm run dev                        # http://localhost:3001 (organisations), /people, and /admin after signing in
 ```
 
 Database setup: [`faida-export/supabase/migrations/README.md`](faida-export/supabase/migrations/README.md).

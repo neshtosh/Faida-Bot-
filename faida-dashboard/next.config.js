@@ -4,11 +4,14 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ["fs", "path", "pdf-parse", "mammoth"],
   },
-  // The public landing page is a static site in public/site. Serve it at "/".
-  // The admin overview lives at /admin.
+  // The public site is static, in public/site: the organisations page at "/" and the
+  // people page at "/people". The admin overview lives at /admin.
   async rewrites() {
     return {
-      beforeFiles: [{ source: "/", destination: "/site/index.html" }],
+      beforeFiles: [
+        { source: "/", destination: "/site/index.html" },        // organisations (main page)
+        { source: "/people", destination: "/site/people.html" }, // people
+      ],
     };
   },
   async headers() {
