@@ -1,6 +1,6 @@
 # Plain-language audit: the public site
 
-> **Status:** v1 · 9 November 2026
+> **Status:** v1.1 · 10 November 2026. All 24 findings applied; see §6 for what still needs sign-off. (v1: 9 November)
 > **Method:** the *Universal Plain-Language Editor* skill (supplied by the team):
 > context first, findings sorted by impact, each finding classified, a
 > recommendation per finding, and whether it can be done now or needs
@@ -428,3 +428,40 @@ see what it will send, including any declaration, and confirm it."
 All the "now" items can be applied in one pass without changing any decision
 already made. The "confirm" items need the named owner before the copy can say
 anything stronger than the cautious wording proposed here.
+
+---
+
+## 6. Applied on 10 November 2026
+
+All findings were applied to `index.html`, `people.html`, `org.js` and
+`config.js`, in English and Kiswahili. F4 was also fixed in the bot. Where a
+finding needed confirmation, the cautious wording from this audit was used, not
+a stronger claim. Those items are marked **sign-off needed**: the wording is
+live, but the named owner still has to confirm it's true.
+
+| Finding | What changed | Status |
+|---|---|---|
+| F1 reach | Hero: "among everyone who uses it"; counties: "residents who qualify and have chosen to hear"; new FAQ "How many people in our area can Faida reach?" (no numbers) | Done. Real reach numbers still to come |
+| F2 data | Same rule on both pages: an organisation sees your details only when you apply to it, and reports show totals, never names | **Sign-off needed** (data protection, legal) |
+| F3 PIN | "Never asks for your M-Pesa PIN" | Done |
+| F4 commands | Bot: STOP / SITISHA / UNSUBSCRIBE outside a form turn reminders off; inside a form STOP still cancels the form; NOT NOW / SIO SASA / SI SASA / LATER / BAADAYE acknowledged; the "reminders on" reply now mentions STOP / SITISHA. 4 new tests, 44/44 pass. Kiswahili page now says "futa data yangu" | Done |
+| F5 partner promises | "Programmes on Faida agree that feedback never affects eligibility…"; "Your team responds, and Faida tells the participant"; chats: "Only the people handling it can see it" | **Sign-off needed** (partner terms) |
+| F6 policies | "checked by the Faida team before it reaches you". The advertising and ranking rules are kept as stated | **Sign-off needed** (written listing and commercial policy) |
+| F7 free | "Free to find out" at every button; promise rewritten around fees shown first | Done. Pricing still to be decided |
+| F8 vocabulary | "concerns" for issues; "formal grievances follow your grievance procedure" | Done |
+| F9 accessibility | Conversations are `role="group"`, so screen readers read every message (checked with an accessibility snapshot); `lang="sw"` on the Kiswahili SMS examples. The board of example offers stays an image with a summary label, since it's a looping decoration | Done |
+| F10 acronyms | NYOTA, HELB, KUCCPS, NCPWD, e-GP glossed; "TVET college" → "Technical college"; "PWDs" → "people with disabilities" | Done. The NYOTA gloss needs an SME check |
+| F11, F12 | 3:00 pm and 6:40 am paragraphs rewritten | Done |
+| F13 | "what they qualify for, from many sources"; 6:40 am no longer says "everything" | Done |
+| F14 audience | Hero eyebrow covers wards, community groups and co-ops; "NGOs, community and faith groups, foundations and development partners" | Done. Scope still to be confirmed |
+| F15 structure | "Who it's for" moved to straight after "How Faida works"; the three parts link to their sections | Done |
+| F16 contact | Email (and an optional organisations WhatsApp, `orgWhatsapp`) shown as text once set in `config.js` | Done. Address and response time still to come |
+| F17–F20 | Smartphone answer, neutral gap scene, absolutes softened, EXAMPLE tag on the report card | Done |
+| F21 Kiswahili | "programme" is now *mpango / mipango* on both pages; *programu* is kept only for "app" | Done. Native speaker to confirm |
+| F22–F24 | Circular promise fixed, dangling link fixed, button labels aligned, story continuity (Wanjiru is also on a YEDF course), and a new promise: "You see what Faida will send in your name before it goes" | Done |
+
+Checks after the changes:
+- No console errors at 320–1440px.
+- No horizontal scroll in either language.
+- Reduced motion and no-JavaScript still work.
+- The contact line appears in both languages once configured.

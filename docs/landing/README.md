@@ -32,6 +32,9 @@ Set the contact details in `faida-dashboard/public/site/config.js` (`FAIDA_CONFI
 |---|---|
 | `whatsappNumber` | Digits only with country code, e.g. `2547XXXXXXXX`. Until set, the button opens WhatsApp's chooser with a pre-filled message. |
 | `orgEmail` | Where "Tell us about your programme" goes (mailto). Until set, it opens a blank email with the subject filled. |
+| `orgWhatsapp` | Optional. A WhatsApp number for organisations, digits only. Shown next to the email. |
+
+Once `orgEmail` is set, the organisations page also shows the address (and `orgWhatsapp`, if set) as text under the closing links, because `mailto` does nothing in many webmail setups.
 
 Then:
 

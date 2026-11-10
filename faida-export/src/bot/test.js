@@ -306,6 +306,51 @@ async function runFlowTests() {
     expect(updated.remindersOptIn).toBe(false);
   });
 
+  await test("STOP outside a form turns off proactive messages", async () => {
+    const stopUser = "test-stop-001";
+    createSession(stopUser);
+    let sess = await getOrCreate(stopUser);
+    await handleMessage(stopUser, "REMINDERS ON", sess);
+    sess = await getOrCreate(stopUser);
+    const reply = replyText(await handleMessage(stopUser, "STOP", sess));
+    expect(reply).toContain("reminders turned OFF");
+    const updated = await getOrCreate(stopUser);
+    expect(updated.remindersOptIn).toBe(false);
+  });
+
+  await test("SITISHA outside a form turns off proactive messages", async () => {
+    const stopUser = "test-stop-002";
+    createSession(stopUser);
+    let sess = await getOrCreate(stopUser);
+    await handleMessage(stopUser, "REMINDERS ON", sess);
+    sess = await getOrCreate(stopUser);
+    await handleMessage(stopUser, "sitisha", sess);
+    const updated = await getOrCreate(stopUser);
+    expect(updated.remindersOptIn).toBe(false);
+  });
+
+  await test("STOP inside a form cancels the form, not the reminders", async () => {
+    const sess = {
+      step: "application", language: "en", profile: {}, lastMatches: [], remindersOptIn: true,
+      application: { benefitId: "yedf-loan", currentFieldIndex: 0, templateId: "loans-personal", answers: {}, startedAt: 1, completedApps: [] },
+    };
+    const { updates } = processMessage("stop", sess);
+    expect(updates.remindersOptIn === false).toBe(false);
+    expect(updates.step === "application").toBe(false);
+  });
+
+  await test("NOT NOW is acknowledged and changes nothing", async () => {
+    const nnUser = "test-notnow-001";
+    createSession(nnUser);
+    let sess = await getOrCreate(nnUser);
+    await handleMessage(nnUser, "REMINDERS ON", sess);
+    sess = await getOrCreate(nnUser);
+    const reply = replyText(await handleMessage(nnUser, "Not now", sess));
+    expect(reply).toContain("not now");
+    const updated = await getOrCreate(nnUser);
+    expect(updated.remindersOptIn).toBe(true);
+  });
+
   await test("CHAT without API key shows unavailable message", async () => {
     const chatUser = "test-chat-001";
     createSession(chatUser);
