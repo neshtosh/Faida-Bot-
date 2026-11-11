@@ -483,3 +483,4 @@ main > section, main > header { overflow-x: clip; }
 .dateline > span { flex: 0 1 auto; }
 /* people page, phones: the hero stamp sat under the EN/SW switch; line it up with the brand row instead */
 @media (max-width: 899px) { .stamp { bottom: auto; top: -5.4rem; width: 5rem; } }
+.trio h3 a::after { margin-left: 0.35em; }
