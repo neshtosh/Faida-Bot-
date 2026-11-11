@@ -93,6 +93,11 @@ const FEEDBACK_TRIGGERS = ["feedback", "maoni", "kadiria"];
 const NEAREST_TRIGGERS = ["nearest", "office", "ofisi"];
 const REMINDERS_ON_TRIGGERS = ["reminders on", "reminder on", "kumbusho on"];
 const REMINDERS_OFF_TRIGGERS = ["reminders off", "reminder off", "kumbusho off"];
+// STOP / SITISHA outside a form turn off messages Faida starts (the website promises
+// "Say STOP and it stops"). Inside a form, STOP keeps its meaning: cancel the form.
+const STOP_TRIGGERS = ["stop", "sitisha", "unsubscribe"];
+// NOT NOW / SIO SASA: skip the current suggestion (the website's quick reply).
+const NOT_NOW_TRIGGERS = ["not now", "sio sasa", "si sasa", "later", "baadaye"];
 const CHAT_TRIGGERS = ["chat", "ask", "ai", "uliza", "msaidizi"];
 const OPPORTUNITIES_TRIGGERS = ["opportunities", "fursa", "latest", "new grants"];
 const REFRESH_TRIGGERS = ["refresh", "update", "sasisha"];
@@ -395,6 +400,7 @@ function isStructuredCommand(input) {
   if (SHARE_TRIGGERS.includes(input) || RESULTS_TRIGGERS.includes(input)) return true;
   if (FEEDBACK_TRIGGERS.includes(input) || NEAREST_TRIGGERS.includes(input)) return true;
   if (REMINDERS_ON_TRIGGERS.includes(input) || REMINDERS_OFF_TRIGGERS.includes(input)) return true;
+  if (STOP_TRIGGERS.includes(input) || NOT_NOW_TRIGGERS.includes(input)) return true;
   if (CHAT_TRIGGERS.includes(input) || OPPORTUNITIES_TRIGGERS.includes(input)) return true;
   if (REFRESH_TRIGGERS.includes(input) || PDF_TRIGGERS.includes(input)) return true;
   if (SUBMIT_TRIGGERS.includes(input) || START_TRIGGERS.includes(input)) return true;
@@ -696,11 +702,15 @@ function processMessage(text, session, meta = {}) {
     };
   }
 
-  if (REMINDERS_OFF_TRIGGERS.includes(input)) {
+  if (REMINDERS_OFF_TRIGGERS.includes(input) || STOP_TRIGGERS.includes(input)) {
     return {
       reply: msgs().remindersOff(),
       updates: { ...baseUpdates, remindersOptIn: false },
     };
+  }
+
+  if (NOT_NOW_TRIGGERS.includes(input)) {
+    return { reply: msgs().notNow(), updates: baseUpdates };
   }
 
   // ── Application flow global commands ────────────────────────

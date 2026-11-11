@@ -464,3 +464,12 @@ body.org { --m: 0rem; }
 .ledger li { grid-template-columns: minmax(0, 1fr) auto; }
 main > section, main > header { overflow-x: clip; }
 @media (max-width: 420px) { .chip { white-space: normal; text-align: center; } }
+
+/* v3.1: plain-language audit fixes */
+.sheet .receipt__head { position: relative; }
+.sheet__tag { position: absolute; top: -0.35rem; right: -0.25rem; padding: 0.2rem 0.5rem; border-radius: 4px; background: var(--ink); color: var(--sun); font-style: normal; font-family: var(--font-display); font-weight: 800; font-size: 0.7rem; letter-spacing: 0.08em; transform: rotate(6deg); }
+.trio h3 a { color: inherit; text-decoration: none; }
+.trio h3 a:hover, .trio h3 a:focus-visible { text-decoration: underline; }
+.trio h3 a::after { content: " ↓"; color: var(--cobalt); }
+.org-contact { margin-top: var(--sp-5); font-weight: 600; }
+.org-contact a { color: var(--sun); overflow-wrap: anywhere; }

@@ -26,6 +26,7 @@ See [`docs/PRODUCT.md`](docs/PRODUCT.md) for the full product doc.
 - [`docs/landing/BRIEF.md`](docs/landing/BRIEF.md) — landing page design brief; [`README`](docs/landing/README.md) for run and deploy
 - [`docs/landing/COPY-REVIEW.md`](docs/landing/COPY-REVIEW.md) — copy and presentation review of the landing page, with proposed rewrites
 - [`docs/landing/MESSAGING.md`](docs/landing/MESSAGING.md) — the opportunity matrix mapped to messages for organisations, programme teams and people; the structure of both pages
+- [`docs/landing/PLAIN-LANGUAGE-AUDIT.md`](docs/landing/PLAIN-LANGUAGE-AUDIT.md) — plain-language audit of both pages: findings by impact, with what can be fixed now and what needs a decision
 - [`.agents/product-marketing.md`](.agents/product-marketing.md) — positioning, audience, objections and voice, read by the marketing skills
 - [`docs/archive/`](docs/archive/) — early build conversations
 

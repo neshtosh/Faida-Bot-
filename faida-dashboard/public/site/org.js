@@ -22,7 +22,7 @@
 
   var TITLES = {
     en: 'Faida for organisations: reach the people your programmes are meant for',
-    sw: 'Faida kwa taasisi: wafikie watu ambao programu zako zinawalenga'
+    sw: 'Faida kwa taasisi: wafikie watu ambao mipango yako inawalenga'
   };
 
   function wireLinks() {
@@ -30,6 +30,19 @@
     $$('[data-wa]').forEach(function (a) { a.href = wa; a.target = '_blank'; a.rel = 'noopener'; });
     var mail = 'mailto:' + CONFIG.orgEmail + '?subject=' + encodeURIComponent(CONFIG.orgSubject[lang]);
     $$('[data-org]').forEach(function (a) { a.href = mail; });
+    // show the address and WhatsApp as text too: mailto does nothing in many webmail setups
+    var contact = $('[data-org-contact]');
+    if (contact && CONFIG.orgEmail) {
+      var em = $('[data-org-email]', contact);
+      em.href = mail; em.textContent = CONFIG.orgEmail;
+      contact.hidden = false;
+      if (CONFIG.orgWhatsapp) {
+        var w = $('[data-org-wa]', contact);
+        w.href = 'https://wa.me/' + CONFIG.orgWhatsapp; w.target = '_blank'; w.rel = 'noopener';
+        w.textContent = '+' + CONFIG.orgWhatsapp;
+        $('[data-org-wa-wrap]', contact).hidden = false;
+      }
+    }
   }
 
   function applyLang(l, silent) {
