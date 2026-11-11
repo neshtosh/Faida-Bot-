@@ -133,6 +133,11 @@ sun and cobalt, four grounds, Unbounded.
   works over SMS and USSD; files and pays on a user's behalf; manages family
   accounts; supports standing mandates with limits; never sees PINs; deletes data
   on request; enrols users into partner systems; "All 47 counties".
+- **Organisations signing people up** (added 11 November 2026): list import,
+  field-officer sign-up by phone number, and a first message that names the
+  organisation and asks the person to confirm (YES), with STOP ending it. It also
+  needs a lawful basis and data-sharing agreement for organisation-supplied lists,
+  and a check of WhatsApp's opt-in rules. See `PLAIN-LANGUAGE-AUDIT.md` §7.
 - "Every offer is checked before it reaches you", "Faida only brings you offers
   it has checked are genuine" and "Ask 'is this real?'" need a working
   verification process at launch.

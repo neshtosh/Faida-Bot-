@@ -1,6 +1,6 @@
 # Plain-language audit: the public site
 
-> **Status:** v1.1 · 10 November 2026. All 24 findings applied; see §6 for what still needs sign-off. (v1: 9 November)
+> **Status:** v1.3 · 11 November 2026. All 24 findings applied (§6); addendum on organisations signing people up, applied (§7). (v1: 9 November)
 > **Method:** the *Universal Plain-Language Editor* skill (supplied by the team):
 > context first, findings sorted by impact, each finding classified, a
 > recommendation per finding, and whether it can be done now or needs
@@ -465,3 +465,175 @@ Checks after the changes:
 - No horizontal scroll in either language.
 - Reduced motion and no-JavaScript still work.
 - The contact line appears in both languages once configured.
+
+---
+
+## 7. Addendum (11 November 2026): organisations signing people up
+
+> **Request:** the site is missing one statement. Organisations can sign people
+> up for their programme themselves, and those people only have to reply to
+> Faida. This section audits where and how to say it, with the same skill. No
+> page copy has changed yet.
+>
+> **Applied (11 November 2026):** placements 1 to 6 below are live on both
+> pages, in English and Kiswahili, including the meta description. The product
+> and legal dependencies (F29) and the Kiswahili check (F28) remain open, and
+> the launch list in `BRIEF.md` §7 now includes them.
+
+### 7.1 What the statement has to carry
+
+| Element | Why it matters |
+|---|---|
+| **Who acts:** the organisation (or its field officers) signs people up | Organisations are the main buyers. This is a second route in, alongside "Faida finds people among its users" |
+| **How:** from a list it already holds (members, beneficiaries, residents), or in person (a baraza, a ward office, a distribution day) | Makes it concrete for a SACCO with a member list and for a county with a registration drive |
+| **What the person does:** reply. No app, no forms, no office visit to start | This is the point the user asked for. Say it in one short sentence |
+| **Consent:** each person confirms with one reply before Faida messages them about the programme | Without this, the statement contradicts "People choose to hear from you" (Fair by design). It also contradicts what the people page says about trust, and it risks breaking the Data Protection Act and WhatsApp's opt-in rules |
+| **Who added them:** Faida's first message names the organisation | People who get an unexpected WhatsApp about money will assume it's a scam unless they can see who added them |
+
+### 7.2 Findings
+
+#### F25. The capability is missing, and it changes the reach story · C · Now (copy), Confirm (product)
+
+After F1, the hero says Faida reaches "the people who qualify among everyone who
+uses it". That's accurate, but it leaves the reader thinking reach depends on
+Faida's user base. Signing up your own people answers that limit directly. It's
+the strongest missing line for organisations.
+
+#### F26. Adding it unchanged would contradict "Fair by design" · L, V · Now
+
+Current: "People choose to hear from you, and can stop at any time." If
+organisations can sign people up, that's only true if each person confirms.
+Change it to: **"People confirm before they hear from you, and can stop at any
+time."**
+
+#### F27. People who were signed up need an explanation on the people page · C, P · Now (copy), Confirm (product)
+
+Someone added by their SACCO gets a message from a number they never contacted.
+The people page has to answer "Why did Faida message me?". The first message
+itself (a product decision) has to name the organisation and ask the person to
+confirm.
+
+#### F28. Words: "sign up", not "onboard" or "enrol" · L · Now; Kiswahili to confirm
+
+- **"Bring on board" / "onboard":** an idiom and internal jargon. Avoid it on
+  the page.
+- **"Enrol":** already means *after selection* on the organisations page
+  ("Enrolled: 388", "Enrol and deliver"). Using it for signing people up would
+  blur two different steps.
+- **Use "sign up"** for adding people to Faida and your programme's list, and
+  keep "enrol" for selected participants.
+- **Kiswahili:** "Waliosajiliwa" already translates "Enrolled". For "sign up",
+  use *kuwaongeza* ("add them"), and keep *usajili / kusajili* for enrolment.
+  `[CONFIRM: native speaker]`
+
+#### F29. Product and legal dependencies · P, V · Confirm
+
+- **Not built yet.** The dashboard only lists bot users. There's no list
+  import, no field-officer sign-up, and no first-contact confirmation.
+  - Add these to the launch list in `BRIEF.md` §7, since the page sells the
+    finished product.
+  - Pick the bot reply that confirms; YES is the obvious choice. STOP already
+    works.
+- **Lawful basis.** An organisation passing its members' or beneficiaries'
+  numbers to Faida needs a lawful basis and a data-sharing agreement under the
+  Data Protection Act 2019. `[CONFIRM: legal]`
+- **WhatsApp opt-in.** WhatsApp Business rules require opt-in before
+  business-initiated messages. Check whether an organisation's list counts as
+  opt-in, or whether the first contact should be an SMS, or a field officer
+  saying "reply to this number". `[CONFIRM: WhatsApp policy]`
+
+### 7.3 Where to say it, and proposed wording
+
+In priority order. Each item lists the English, then the Kiswahili for native
+review.
+
+**1. Organisations page, Reach and intake: a new step between 1 and 2** (the
+core statement).
+
+> **2. Sign up the people you already serve.**
+> Add them from a member or beneficiary list, or let your field officers sign
+> people up at a baraza or a ward office. Faida's first message says you added
+> them and asks them to confirm. To apply, all they do is reply, on WhatsApp,
+> by SMS or by USSD.
+
+SW:
+> **2. Waongeze watu unaowahudumia tayari.**
+> Waongeze kutoka orodha ya wanachama au wanufaika, au waache maafisa wako wa
+> uwanjani wawaongeze kwenye baraza au ofisi ya wadi. Ujumbe wa kwanza wa
+> Faida unasema wewe ndiye uliyewaongeza na kuwaomba wathibitishe. Ili
+> kuomba, wanachohitaji ni kujibu tu, kwenye WhatsApp, kwa SMS au kwa USSD.
+
+The existing steps 2 and 3 become 3 and 4. Step 3 ("The right people hear
+first") still holds, because it covers both routes.
+
+**2. Organisations page, hero lede: the first sentence** (makes the reach story
+complete where buyers read first).
+
+Current: "Faida finds the people who qualify among everyone who uses it, and
+tells them on WhatsApp before your window closes."
+
+Proposed: **"Sign up the people you serve, and Faida finds others who qualify
+among everyone who uses it. It tells them on WhatsApp before your window
+closes, and to apply, all they do is reply."**
+
+SW: "Waongeze watu unaowahudumia, na Faida inawatafuta wengine wanaostahili
+miongoni mwa wote wanaoitumia. Inawaambia kwenye WhatsApp kabla dirisha lako
+halijafungwa, na ili kuomba, wanachohitaji ni kujibu tu."
+
+The meta description should be updated to match.
+
+**3. Organisations page, Fair by design (F26).**
+
+"People confirm before they hear from you, and can stop at any time." · SW:
+"Watu wanathibitisha kabla ya kusikia kutoka kwako, na wanaweza kusimamisha
+wakati wowote."
+
+**4. Organisations page, FAQ.**
+- **New: "Can we sign people up ourselves?"**
+  "Yes. Add them from a list you already hold, such as members, beneficiaries
+  or residents, or have field officers sign people up in person. Each person
+  confirms with one reply before Faida messages them about your programme. They
+  need no app and no forms: they reply on WhatsApp or by SMS, or use USSD."
+- **Update "How many people in our area can Faida reach?"** Add: "You can also
+  sign up the people you already serve, so your reach doesn't depend only on
+  who uses Faida today."
+
+**5. People page, FAQ: new "Faida messaged me, but I never signed up. Why?"** (F27).
+
+> "An organisation you deal with, such as your county, your SACCO or an NGO,
+> may have added your number for one of its programmes. Faida's first message
+> says who added you. Reply YES to continue, or STOP and you won't hear from
+> Faida again. Faida never asks for money or your M-Pesa PIN."
+
+SW: "Taasisi unayohusiana nayo, kama kaunti yako, SACCO yako au NGO, huenda
+imeongeza namba yako kwa mmoja wa mipango yake. Ujumbe wa kwanza wa Faida
+unasema nani alikuongeza. Jibu NDIYO kuendelea, au SITISHA na hutasikia
+kutoka kwa Faida tena. Faida haikuombi pesa wala PIN yako ya M-Pesa kamwe."
+
+**6. Supporting lines (optional, lower priority).**
+- **Organisations page, "How Faida works" chain:** "You list a programme once
+  and sign up the people you serve. Faida reaches them, and others who qualify.
+  They apply by replying. You run the programme. Faida follows up on delivery
+  and outcomes."
+- **Organisations page, In the field:** add a tick: "Field officers sign people
+  up on the spot, with just a phone number."
+- **Who it's for, SACCOs:** "…Sign up your members once, and Faida tells each
+  one about the dividend, loan, bonus or cover that fits them…"
+- **People page, the organisations teaser:** add "Your county, SACCO or NGO can
+  also sign you up. All you do is reply."
+- **People page, "Do I need to download an app?":** add "Whether you message
+  Faida first or an organisation signs you up, all you do is reply."
+
+### 7.4 Recommended order
+
+| Step | Items | Who |
+|---|---|---|
+| 1 | Placements 1, 3, 4 and 5 together. The statement, the fairness fix and the people page explanation must ship as a set, or the pages contradict each other | Editor |
+| 2 | Placement 2 (hero), then 6 | Editor |
+| 3 | First-message design (names the organisation, YES to confirm), list import and field sign-up | Product and engineering |
+| 4 | Lawful basis, data-sharing agreement, WhatsApp opt-in | Legal |
+| 5 | Kiswahili: *kuwaongeza* vs *kusajili* | Native speaker |
+
+**Also set:** the organisations email is now `ian_warutere@gartsafrica.com` in
+`faida-dashboard/public/site/config.js`. Once merged, it appears as text and as
+the mailto target on the organisations page.
