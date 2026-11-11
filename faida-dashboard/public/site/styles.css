@@ -473,3 +473,13 @@ main > section, main > header { overflow-x: clip; }
 .trio h3 a::after { content: " ↓"; color: var(--cobalt); }
 .org-contact { margin-top: var(--sp-5); font-weight: 600; }
 .org-contact a { color: var(--sun); overflow-wrap: anywhere; }
+
+/* v3.2: phones. Tap targets of at least 44px for text links and section links. */
+.textlink { min-height: 2.75rem; }
+.title__brand { min-height: 2.75rem; }
+.trio h3 a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+/* section labels: on narrow screens the subtitle wraps below instead of squeezing into a column */
+.dateline { flex-wrap: wrap; row-gap: 2px; }
+.dateline > span { flex: 0 1 auto; }
+/* people page, phones: the hero stamp sat under the EN/SW switch; line it up with the brand row instead */
+@media (max-width: 899px) { .stamp { bottom: auto; top: -5.4rem; width: 5rem; } }
