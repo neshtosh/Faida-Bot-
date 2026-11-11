@@ -1,6 +1,6 @@
 # Plain-language audit: the public site
 
-> **Status:** v1.2 · 11 November 2026. All 24 findings applied (§6); addendum on organisations signing people up (§7). (v1: 9 November)
+> **Status:** v1.3 · 11 November 2026. All 24 findings applied (§6); addendum on organisations signing people up, applied (§7). (v1: 9 November)
 > **Method:** the *Universal Plain-Language Editor* skill (supplied by the team):
 > context first, findings sorted by impact, each finding classified, a
 > recommendation per finding, and whether it can be done now or needs
@@ -474,6 +474,11 @@ Checks after the changes:
 > up for their programme themselves, and those people only have to reply to
 > Faida. This section audits where and how to say it, with the same skill. No
 > page copy has changed yet.
+>
+> **Applied (11 November 2026):** placements 1 to 6 below are live on both
+> pages, in English and Kiswahili, including the meta description. The product
+> and legal dependencies (F29) and the Kiswahili check (F28) remain open, and
+> the launch list in `BRIEF.md` §7 now includes them.
 
 ### 7.1 What the statement has to carry
 
