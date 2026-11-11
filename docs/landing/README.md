@@ -85,6 +85,11 @@ self-hosted and cached for a year, so no third-party requests are made.
 - `public/site/org.js` (organisations): language switch, the programme report that
   prints and is stamped on the title page, chat playback, and the sticky button.
 - The language choice is shared between the pages.
+- **The EN / SW switch is removed for now (11 November 2026).** Both pages always show
+  English, even for visitors with a saved Kiswahili choice or a Kiswahili phone
+  setting. The Kiswahili copy is kept in the `data-sw` attributes. To bring the switch
+  back, restore the `.lang` markup in both pages (it is in git history) and set
+  `LANG_SWITCH = true` in `app.js` and `org.js`.
 - With JavaScript off or reduced motion on, everything is visible and static.
 
 Design reasoning, feeling curve and what was and was not verified: [`BRIEF.md`](BRIEF.md).

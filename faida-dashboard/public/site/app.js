@@ -16,12 +16,18 @@
   if (reduce) doc.classList.add('rm');
 
   /* ---------- language ---------- */
+  // The EN / SW switch is removed for now (11 November 2026): the pages always show
+  // English. The Kiswahili stays in the data-sw attributes. To bring the switch back,
+  // restore the .lang markup and set LANG_SWITCH to true.
+  var LANG_SWITCH = false;
   var lang = 'en';
-  try {
-    var saved = localStorage.getItem('faida-lang');
-    if (saved === 'sw' || saved === 'en') lang = saved;
-    else if ((navigator.language || '').toLowerCase().indexOf('sw') === 0) lang = 'sw';
-  } catch (e) {}
+  if (LANG_SWITCH) {
+    try {
+      var saved = localStorage.getItem('faida-lang');
+      if (saved === 'sw' || saved === 'en') lang = saved;
+      else if ((navigator.language || '').toLowerCase().indexOf('sw') === 0) lang = 'sw';
+    } catch (e) {}
+  }
 
   var TITLES = { en: 'Faida: find out what you qualify for, on WhatsApp', sw: 'Faida: jua unachostahili, kwenye WhatsApp' };
 
@@ -158,8 +164,10 @@
     stickyEl.classList.toggle('is-on', hb < vh * 0.25 && st > vh * 0.55 && !inDay && !inCharge);
 
     var down = y > lastY + 4, up = y < lastY - 4;
-    if (window.innerWidth < 900 && y > vh * 0.5) { if (down) langEl.classList.add('is-away'); else if (up) langEl.classList.remove('is-away'); }
-    else langEl.classList.remove('is-away');
+    if (langEl) {
+      if (window.innerWidth < 900 && y > vh * 0.5) { if (down) langEl.classList.add('is-away'); else if (up) langEl.classList.remove('is-away'); }
+      else langEl.classList.remove('is-away');
+    }
     if (down || up) lastY = y;
   }
   function request() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
